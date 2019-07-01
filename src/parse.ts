@@ -1,5 +1,5 @@
-import { AnySchema, Block, Inline, Line, Schema, Tag } from "./schema";
 import { Tree } from "ts-tree";
+import { AnySchema, Block, Inline, Line, Schema, Tag } from "./schema";
 
 const LB = /\r\n|\n|\r/;
 const LINE_PARTS = /^(\t*)[\t ]*(#([^ \[]+)(?: |$))?(.*)/;

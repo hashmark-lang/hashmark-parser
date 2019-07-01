@@ -1,4 +1,4 @@
- import { Tree } from "ts-tree";
+import { Tree } from "ts-tree";
 
 export interface Tag {
 	name: string;
