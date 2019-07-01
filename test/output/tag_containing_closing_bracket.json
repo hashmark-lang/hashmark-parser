@@ -1,0 +1,11 @@
+[
+	{
+		"tag": {
+			"name": "tag]"
+		},
+		"head": [
+			"This should not cause an error"
+		],
+		"children": []
+	}
+]

@@ -1,0 +1,3 @@
+CR.hm text eol=cr
+CRLF.hm text eol=crlf
+LF.hm text eol=lf

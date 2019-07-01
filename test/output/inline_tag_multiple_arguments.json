@@ -1,0 +1,23 @@
+[
+	{
+		"tag": {
+			"name": "default"
+		},
+		"head": [
+			{
+				"tag": {
+					"name": "link"
+				},
+				"arguments": [
+					[
+						"Example"
+					],
+					[
+						"www.example.com"
+					]
+				]
+			}
+		],
+		"children": []
+	}
+]

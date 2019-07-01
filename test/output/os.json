@@ -1,0 +1,63 @@
+[
+	{
+		"tag": {
+			"name": "document"
+		},
+		"head": ["Operating Systems"],
+		"children": [
+			{
+				"tag": {
+					"name": "author"
+				},
+				"head": ["Matthieu Bovel"],
+				"children": []
+			},
+			{
+				"tag": {
+					"name": "published"
+				},
+				"head": ["now"],
+				"children": []
+			},
+			{
+				"tag": {
+					"name": "section"
+				},
+				"head": ["Introduction"],
+				"children": [
+					{
+						"tag": {
+							"name": "def"
+						},
+						"head": ["Operating System"],
+						"children": [
+							{
+								"tag": {
+									"name": "abbr"
+								},
+								"head": ["OS"],
+								"children": []
+							},
+							{
+								"tag": {
+									"name": "default"
+								},
+								"head": [
+									"An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications."
+								],
+								"children": []
+							}
+						]
+					},
+					{
+						"tag": {
+							"name": "def"
+						},
+						"head": ["Privileged mode"],
+						"children": []
+					}
+				]
+			}
+		]
+	}
+]

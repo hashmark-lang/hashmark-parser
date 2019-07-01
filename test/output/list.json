@@ -1,0 +1,39 @@
+[
+	{
+		"tag": {
+			"name": "document"
+		},
+		"head": ["Title"],
+		"children": [
+			{
+				"tag": {
+					"name": "list"
+				},
+				"head": [],
+				"children": [
+					{
+						"tag": {
+							"name": "default"
+						},
+						"head": ["Banana"],
+						"children": []
+					},
+					{
+						"tag": {
+							"name": "default"
+						},
+						"head": ["Pear"],
+						"children": []
+					},
+					{
+						"tag": {
+							"name": "default"
+						},
+						"head": ["Apple"],
+						"children": []
+					}
+				]
+			}
+		]
+	}
+]

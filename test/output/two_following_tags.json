@@ -1,0 +1,19 @@
+[
+	{
+		"tag": {
+			"name": "tag"
+		},
+		"head": [
+			{
+				"tag": {
+					"name": "tag"
+				},
+				"arguments": [
+					[]
+				]
+			},
+			" is not an error"
+		],
+		"children": []
+	}
+]

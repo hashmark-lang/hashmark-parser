@@ -1,0 +1,21 @@
+[
+	{
+		"tag": {
+			"name": "section"
+		},
+		"head": [
+			"Introduction"
+		],
+		"children": [
+			{
+				"tag": {
+					"name": "default"
+				},
+				"head": [
+					"Hello World"
+				],
+				"children": []
+			}
+		]
+	}
+]

@@ -1,0 +1,18 @@
+[
+	{
+		"tag": {
+			"name": "tag"
+		},
+		"head": [
+			"lorem ",
+			{
+				"tag": {
+					"name": "dolphin"
+				},
+				"arguments": []
+			},
+			" ipsum"
+		],
+		"children": []
+	}
+]

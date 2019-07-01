@@ -1,0 +1,24 @@
+[
+	{
+		"tag": {
+			"name": "default"
+		},
+		"head": [
+			"]",
+			" ",
+			"][",
+			" test ",
+			{
+				"tag": {
+					"name": "tag"
+				},
+				"arguments": [
+					[
+						"inline"
+					]
+				]
+			}
+		],
+		"children": []
+	}
+]

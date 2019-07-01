@@ -1,0 +1,25 @@
+[
+	{
+		"tag": {
+			"name": "document"
+		},
+		"head": ["Document"],
+		"children": [
+			{
+				"tag": {
+					"name": "definition"
+				},
+				"head": ["Def"],
+				"children": [
+					{
+						"tag": {
+							"name": "default"
+						},
+						"head": ["Lorem"],
+						"children": []
+					}
+				]
+			}
+		]
+	}
+]

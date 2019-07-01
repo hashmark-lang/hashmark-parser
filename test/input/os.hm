@@ -1,0 +1,12 @@
+#document Operating Systems
+	#author Matthieu Bovel
+	#published now
+
+	#section Introduction
+
+		#def Operating System
+			#abbr OS
+
+			An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications.
+
+		#def Privileged mode

@@ -1,0 +1,46 @@
+[
+	{
+		"tag": {
+			"name": "doc"
+		},
+		"head": ["Doc"],
+		"children": [
+			{
+				"tag": {
+					"name": "tag"
+				},
+				"head": ["Tag"],
+				"children": [
+					{
+						"tag": {
+							"name": "default"
+						},
+						"head": ["Hello"],
+						"children": []
+					},
+					{
+						"tag": {
+							"name": "default"
+						},
+						"head": ["World"],
+						"children": []
+					}
+				]
+			},
+			{
+				"tag": {
+					"name": "foo"
+				},
+				"head": ["Foo"],
+				"children": []
+			},
+			{
+				"tag": {
+					"name": "bar"
+				},
+				"head": ["Bar"],
+				"children": []
+			}
+		]
+	}
+]

@@ -1,0 +1,22 @@
+[
+	{
+		"tag": {
+			"name": "tag"
+		},
+		"head": [
+			"text ",
+			{
+				"tag": {
+					"name": "inline"
+				},
+				"arguments": [
+					[
+						"attr"
+					]
+				]
+			},
+			" text"
+		],
+		"children": []
+	}
+]

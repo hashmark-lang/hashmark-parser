@@ -1,0 +1,39 @@
+[
+	{
+		"tag": {
+			"name": "tag\\#"
+		},
+		"head": [],
+		"children": []
+	},
+	{
+		"tag": {
+			"name": "default"
+		},
+		"head": [
+			{
+				"tag": {
+					"name": "tag\\"
+				},
+				"arguments": [
+					[]
+				]
+			}
+		],
+		"children": []
+	},
+	{
+		"tag": {
+			"name": "tag\\\\"
+		},
+		"head": [],
+		"children": []
+	},
+	{
+		"tag": {
+			"name": "ta\\g"
+		},
+		"head": [],
+		"children": []
+	}
+]
