@@ -2,7 +2,7 @@
 	"extends": "tslint:recommended",
 	"rules": {
 		"indent": [true, "tabs", 4],
-		"array-type": [true, "array"],
+		"array-type": [true, "array-simple"],
 		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 		"member-access": [true, "no-public"],
 		"arrow-parens": false,

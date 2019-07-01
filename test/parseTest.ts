@@ -1,6 +1,6 @@
-import { FileInfos, filesIn } from "./util";
-import { parse } from "../src/parse";
 import * as assert from "assert";
+import { parse } from "../src/parse";
+import { FileInfos, filesIn } from "./util";
 
 describe("parse()", () => {
 	for (const output of filesIn("test/output", ".json")) {
