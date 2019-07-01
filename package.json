@@ -10,9 +10,6 @@
 		"type": "git",
 		"url": "https://github.com/hashmark-lang/hashmark-parser.git"
 	},
-	"dependencies": {
-		"ts-tree": "0.1.8"
-	},
 	"devDependencies": {
 		"@types/benchmark": "^1.0.31",
 		"@types/mocha": "^5.2.7",

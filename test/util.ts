@@ -1,4 +1,3 @@
-import * as assert from "assert";
 import { readdirSync, readFileSync } from "fs";
 
 export class FileInfos {
