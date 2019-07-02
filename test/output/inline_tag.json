@@ -1,20 +1,21 @@
-[
-	{
-		"tag": {
-			"name": "default"
-		},
-		"head": [
-			{
-				"tag": {
-					"name": "cite"
-				},
-				"arguments": [
-					[
-						"id"
-					]
-				]
-			}
-		],
-		"children": []
-	}
-]
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "_default",
+			"head": [
+				{
+					"tag": "cite",
+					"arguments": [
+						[
+							"id"
+						]
+					],
+					"closed": true
+				}
+			],
+			"children": []
+		}
+	],
+	"head": []
+}

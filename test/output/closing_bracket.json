@@ -1,24 +1,25 @@
-[
-	{
-		"tag": {
-			"name": "default"
-		},
-		"head": [
-			"]",
-			" ",
-			"][",
-			" test ",
-			{
-				"tag": {
-					"name": "tag"
-				},
-				"arguments": [
-					[
-						"inline"
-					]
-				]
-			}
-		],
-		"children": []
-	}
-]
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "_default",
+			"head": [
+				"]",
+				" ",
+				"][",
+				" test ",
+				{
+					"tag": "tag",
+					"arguments": [
+						[
+							"inline"
+						]
+					],
+					"closed": true
+				}
+			],
+			"children": []
+		}
+	],
+	"head": []
+}

@@ -7,7 +7,7 @@ describe("parse()", () => {
 		it(`works with ${output.name}`, () => {
 			const input = new FileInfos("test/input", output.name, ".hm");
 			assert.strictEqual(
-				JSON.stringify(parse(input.content).children, null, "\t"),
+				JSON.stringify(parse(input.content), null, "\t"),
 				JSON.stringify(JSON.parse(output.content), null, "\t")
 			);
 		});

@@ -1,19 +1,20 @@
-[
-	{
-		"tag": {
-			"name": "tag"
-		},
-		"head": [
-			{
-				"tag": {
-					"name": "tag"
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "tag",
+			"head": [
+				{
+					"tag": "tag",
+					"arguments": [
+						[]
+					],
+					"closed": true
 				},
-				"arguments": [
-					[]
-				]
-			},
-			" is not an error"
-		],
-		"children": []
-	}
-]
+				" is not an error"
+			],
+			"children": []
+		}
+	],
+	"head": []
+}

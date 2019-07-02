@@ -1,39 +1,34 @@
-[
-	{
-		"tag": {
-			"name": "tag\\#"
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "tag\\#",
+			"head": [],
+			"children": []
 		},
-		"head": [],
-		"children": []
-	},
-	{
-		"tag": {
-			"name": "default"
+		{
+			"tag": "_default",
+			"head": [
+				{
+					"tag": "tag\\",
+					"arguments": [
+						[]
+					],
+					"closed": false
+				}
+			],
+			"children": []
 		},
-		"head": [
-			{
-				"tag": {
-					"name": "tag\\"
-				},
-				"arguments": [
-					[]
-				]
-			}
-		],
-		"children": []
-	},
-	{
-		"tag": {
-			"name": "tag\\\\"
+		{
+			"tag": "tag\\\\",
+			"head": [],
+			"children": []
 		},
-		"head": [],
-		"children": []
-	},
-	{
-		"tag": {
-			"name": "ta\\g"
-		},
-		"head": [],
-		"children": []
-	}
-]
+		{
+			"tag": "ta\\g",
+			"head": [],
+			"children": []
+		}
+	],
+	"head": []
+}

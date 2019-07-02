@@ -1,11 +1,13 @@
-[
-	{
-		"tag": {
-			"name": "default"
-		},
-		"head": [
-			"Hello World"
-		],
-		"children": []
-	}
-]
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "_default",
+			"head": [
+				"Hello World"
+			],
+			"children": []
+		}
+	],
+	"head": []
+}
