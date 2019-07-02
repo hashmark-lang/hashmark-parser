@@ -1,18 +1,19 @@
-[
-	{
-		"tag": {
-			"name": "tag"
-		},
-		"head": [
-			"lorem ",
-			{
-				"tag": {
-					"name": "dolphin"
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "tag",
+			"head": [
+				"lorem ",
+				{
+					"tag": "dolphin",
+					"arguments": [],
+					"closed": false
 				},
-				"arguments": []
-			},
-			" ipsum"
-		],
-		"children": []
-	}
-]
+				" ipsum"
+			],
+			"children": []
+		}
+	],
+	"head": []
+}

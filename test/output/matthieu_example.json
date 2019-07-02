@@ -1,46 +1,50 @@
-[
-	{
-		"tag": {
-			"name": "doc"
-		},
-		"head": ["Doc"],
-		"children": [
-			{
-				"tag": {
-					"name": "tag"
-				},
-				"head": ["Tag"],
-				"children": [
-					{
-						"tag": {
-							"name": "default"
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "doc",
+			"head": [
+				"Doc"
+			],
+			"children": [
+				{
+					"tag": "tag",
+					"head": [
+						"Tag"
+					],
+					"children": [
+						{
+							"tag": "_default",
+							"head": [
+								"Hello"
+							],
+							"children": []
 						},
-						"head": ["Hello"],
-						"children": []
-					},
-					{
-						"tag": {
-							"name": "default"
-						},
-						"head": ["World"],
-						"children": []
-					}
-				]
-			},
-			{
-				"tag": {
-					"name": "foo"
+						{
+							"tag": "_default",
+							"head": [
+								"World"
+							],
+							"children": []
+						}
+					]
 				},
-				"head": ["Foo"],
-				"children": []
-			},
-			{
-				"tag": {
-					"name": "bar"
+				{
+					"tag": "foo",
+					"head": [
+						"Foo"
+					],
+					"children": []
 				},
-				"head": ["Bar"],
-				"children": []
-			}
-		]
-	}
-]
+				{
+					"tag": "bar",
+					"head": [
+						"Bar"
+					],
+					"children": []
+				}
+			]
+		}
+	],
+	"head": []
+}

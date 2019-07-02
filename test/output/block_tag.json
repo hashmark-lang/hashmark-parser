@@ -1,21 +1,21 @@
-[
-	{
-		"tag": {
-			"name": "section"
-		},
-		"head": [
-			"Introduction"
-		],
-		"children": [
-			{
-				"tag": {
-					"name": "default"
-				},
-				"head": [
-					"Hello World"
-				],
-				"children": []
-			}
-		]
-	}
-]
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "section",
+			"head": [
+				"Introduction"
+			],
+			"children": [
+				{
+					"tag": "_default",
+					"head": [
+						"Hello World"
+					],
+					"children": []
+				}
+			]
+		}
+	],
+	"head": []
+}

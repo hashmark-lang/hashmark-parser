@@ -1,39 +1,41 @@
-[
-	{
-		"tag": {
-			"name": "document"
-		},
-		"head": ["Title"],
-		"children": [
-			{
-				"tag": {
-					"name": "list"
-				},
-				"head": [],
-				"children": [
-					{
-						"tag": {
-							"name": "default"
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "document",
+			"head": [
+				"Title"
+			],
+			"children": [
+				{
+					"tag": "list",
+					"head": [],
+					"children": [
+						{
+							"tag": "_default",
+							"head": [
+								"Banana"
+							],
+							"children": []
 						},
-						"head": ["Banana"],
-						"children": []
-					},
-					{
-						"tag": {
-							"name": "default"
+						{
+							"tag": "_default",
+							"head": [
+								"Pear"
+							],
+							"children": []
 						},
-						"head": ["Pear"],
-						"children": []
-					},
-					{
-						"tag": {
-							"name": "default"
-						},
-						"head": ["Apple"],
-						"children": []
-					}
-				]
-			}
-		]
-	}
-]
+						{
+							"tag": "_default",
+							"head": [
+								"Apple"
+							],
+							"children": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"head": []
+}

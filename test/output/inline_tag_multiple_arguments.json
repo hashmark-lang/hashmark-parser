@@ -1,23 +1,24 @@
-[
-	{
-		"tag": {
-			"name": "default"
-		},
-		"head": [
-			{
-				"tag": {
-					"name": "link"
-				},
-				"arguments": [
-					[
-						"Example"
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "_default",
+			"head": [
+				{
+					"tag": "link",
+					"arguments": [
+						[
+							"Example"
+						],
+						[
+							"www.example.com"
+						]
 					],
-					[
-						"www.example.com"
-					]
-				]
-			}
-		],
-		"children": []
-	}
-]
+					"closed": true
+				}
+			],
+			"children": []
+		}
+	],
+	"head": []
+}

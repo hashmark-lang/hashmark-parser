@@ -1,25 +1,29 @@
-[
-	{
-		"tag": {
-			"name": "document"
-		},
-		"head": ["Document"],
-		"children": [
-			{
-				"tag": {
-					"name": "definition"
-				},
-				"head": ["Def"],
-				"children": [
-					{
-						"tag": {
-							"name": "default"
-						},
-						"head": ["Lorem"],
-						"children": []
-					}
-				]
-			}
-		]
-	}
-]
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "document",
+			"head": [
+				"Document"
+			],
+			"children": [
+				{
+					"tag": "definition",
+					"head": [
+						"Def"
+					],
+					"children": [
+						{
+							"tag": "_default",
+							"head": [
+								"Lorem"
+							],
+							"children": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"head": []
+}
