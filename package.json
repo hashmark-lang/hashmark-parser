@@ -13,6 +13,9 @@
 		"type": "git",
 		"url": "https://github.com/hashmark-lang/hashmark-parser.git"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"bin": {
 		"hmparse": "dist/src/cli.js"
 	},
