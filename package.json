@@ -2,8 +2,8 @@
 	"name": "hashmark-parser",
 	"description": "Hashmark parser",
 	"version": "0.0.0",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "dist/src/index.js",
+	"types": "dist/src/index.d.ts",
 	"license": "MIT",
 	"author": "Matthieu Bovel <matthieu@bovel.net>",
 	"contributors": [
@@ -39,7 +39,7 @@
 		"tslint:fix": "tslint --project tsconfig.json --fix",
 		"build": "tsc",
 		"test": "mocha --config .mocharc.json",
-		"preversion": "npm run format:check && npm run tslint",
+		"preversion": "npm run format:check && npm run tslint && npm test",
 		"postversion": "git push && git push --tags",
 		"benchmark": "node --require ts-node/register benchmarks/parseBenchmark.ts test/input/bigfile.hm"
 	}
