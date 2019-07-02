@@ -1,5 +1,6 @@
 src
 test
+benchmark
 demo
 .gitattributes
 .prettierrc.json
