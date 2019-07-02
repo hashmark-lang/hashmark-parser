@@ -24,7 +24,7 @@ export default function parse(input: string): Block {
 	const stack = [root];
 	let current = root;
 	for (const line of input.split(LB)) {
-		const [_, indent, tagName, lineContent] = LINE_PARTS.exec(line)!;
+		const [_, indent, tagText, tagName, lineContent] = LINE_PARTS.exec(line)!;
 		if (!tagName && !lineContent) continue;
 		for (let i = 0; i < depth - indent.length; ++i) stack.pop();
 		current = last(stack);
