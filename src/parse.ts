@@ -1,12 +1,12 @@
-type Line = Array<string | Inline>;
+export type Line = Array<string | Inline>;
 
-interface Block {
+export interface Block {
 	tag: string;
 	head: Line;
 	children: Block[];
 }
 
-interface Inline {
+export interface Inline {
 	tag: string;
 	arguments: Line[];
 	closed: boolean;
