@@ -1,5 +1,5 @@
 {
-	"name": "hashmark-parser",
+	"name": "@hashmark/parser",
 	"description": "Hashmark parser",
 	"version": "0.0.1",
 	"main": "dist/src/index.js",
