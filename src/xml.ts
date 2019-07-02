@@ -1,6 +1,6 @@
 import { Block, Inline, Line } from "./parse";
 
-export default function toXML(root: Block): string {
+export function toXML(root: Block): string {
 	return xmlTag(
 		removeHashtag(root.tag),
 		xmlTag("head", lineToXML(root.head)),

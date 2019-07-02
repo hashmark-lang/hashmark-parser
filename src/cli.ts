@@ -4,8 +4,8 @@ import chalk from "chalk";
 import * as program from "commander";
 import * as fs from "fs";
 import { version } from "../package.json";
-import parse, { Block } from "./parse";
-import toXML from "./xml";
+import { Block, parse } from "./parse";
+import { toXML } from "./xml";
 
 interface Args {
 	input?: string;

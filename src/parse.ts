@@ -18,7 +18,7 @@ const INLINE_TOKEN = /(\\.|\${1,2}[^$]*\${1,2}|\*[^*]*\*|#(?:[^ \[]+)\[?|]\[|])/
 const TAG = /#([^ \[]+)\[?/;
 const ESCAPED = ["\\", "]", "[", "#"];
 
-export default function parse(input: string): Block {
+export function parse(input: string): Block {
 	let depth = 0;
 	const root: Block = { tag: "root", children: [], head: [] };
 	const stack = [root];

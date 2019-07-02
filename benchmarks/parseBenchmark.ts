@@ -1,6 +1,6 @@
 import { Event, Suite } from "benchmark";
 import * as fs from "fs";
-import parse from "../src/parse";
+import { parse } from "../src/parse";
 
 /* tslint:disable:no-console */
 if (process.argv.length !== 3) {
