@@ -37,6 +37,6 @@
 		"test": "mocha",
 		"preversion": "npm run format:check && npm run tslint && npm test",
 		"postversion": "git push && git push --tags",
-		"benchmark": "node --require ts-node/register benchmarks/parseBenchmark.ts test/input/bigfile.hm"
+		"benchmark": "node --require ts-node/register benchmark/parseBenchmark.ts test/input/bigfile.hm"
 	}
 }
