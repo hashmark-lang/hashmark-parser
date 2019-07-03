@@ -16,13 +16,6 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"bin": {
-		"hmparse": "dist/src/cli.js"
-	},
-	"dependencies": {
-		"chalk": "^2.4.2",
-		"commander": "^2.20.0"
-	},
 	"devDependencies": {
 		"@types/benchmark": "^1.0.31",
 		"@types/mocha": "^5.2.7",
