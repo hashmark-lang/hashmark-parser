@@ -1,16 +1,4 @@
-export type Line = Array<string | Inline>;
-
-export interface Block {
-	tag: string;
-	head: Line;
-	children: Block[];
-}
-
-export interface Inline {
-	tag: string;
-	arguments: Line[];
-	closed: boolean;
-}
+import { Block, Inline, Line } from "./ast";
 
 const LB = /\r\n|\n|\r/;
 const LINE_PARTS = /^(\t*)[\t ]*(?:#([^ \[]+)(?: |$))?(.*)/;
