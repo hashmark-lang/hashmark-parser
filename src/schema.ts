@@ -9,7 +9,7 @@ export interface Schema {
 }
 
 export const defaultSchema = {
-	inlineDelimiters: ["**", "*", "__", "_", "$$", "$", "`"],
+	inlineDelimiters: { "`": "code" },
 
 	getDefault(parentName: string) {
 		return "default";

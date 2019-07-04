@@ -1,0 +1,22 @@
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "_default",
+			"head": [
+				"Hello ",
+				{
+					"tag": "code",
+					"arguments": [
+						[
+							"world"
+						]
+					],
+					"closed": true
+				}
+			],
+			"children": []
+		}
+	],
+	"head": []
+}
