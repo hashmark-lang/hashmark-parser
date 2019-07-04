@@ -9,8 +9,6 @@ if (process.argv.length !== 3) {
 
 const input: string = fs.readFileSync(process.argv[2], { encoding: "utf-8" });
 
-console.log(JSON.stringify(parse(input)));
-
 // add tests
 new Suite("os")
 	.add("parse all", () => {
