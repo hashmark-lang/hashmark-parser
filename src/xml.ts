@@ -1,4 +1,4 @@
-import { Block, Inline, Line } from "./parse";
+import { Block, Inline, Line } from "./ast";
 
 export function toXML(root: Block): string {
 	return xmlTag(
