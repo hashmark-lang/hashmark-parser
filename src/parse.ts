@@ -19,20 +19,29 @@ const INLINE_TOKENS = [
 	// $1: escaped ('\\', '[', ']' or '#')
 	/\\(.)/
 ];
-const INLINE = generateInlineRegex(defaultSchema);
+const enum INLINE_TOKEN {
+	text,
+	tagName,
+	openArg,
+	nextArg,
+	closeArg,
+	escaped,
+	_size
+}
 
 export function parse(input: string, schema: Schema = defaultSchema): Block {
 	let depth = 0;
 	const root: Block = { tag: "root", children: [], head: [] };
 	const stack = [root];
 	let current = root;
+	const parseLine = makeParseLine(schema);
 	for (const line of input.split(LB)) {
 		const [_, indent, tagName, lineContent] = LINE_PARTS.exec(line)!;
 		if (!tagName && !lineContent) continue;
 		for (let i = 0; i < depth - indent.length; ++i) stack.pop();
 		current = last(stack);
 		const tag = tagName || "_default";
-		const head = parseLine(lineContent, schema);
+		const head = parseLine(lineContent);
 		const block = { tag, head, children: [] };
 		current.children.push(block);
 		stack.push(block);
@@ -41,62 +50,55 @@ export function parse(input: string, schema: Schema = defaultSchema): Block {
 	return root;
 }
 
-enum TOKEN {
-	text,
-	tagName,
-	openArg,
-	nextArg,
-	closeArg,
-	escaped
-}
+function makeParseLine(schema: Schema): (input: string) => Line {
+	const TOKEN_COUNT = INLINE_TOKEN._size + schema.customTokens.length;
+	const INLINE = generateInlineRegex(schema);
 
-const BUILTIN_TOKENS_COUNT = Object.keys(TOKEN).length / 2;
-const TOKEN_COUNT = BUILTIN_TOKENS_COUNT + defaultSchema.customTokens.length;
-
-export function parseLine(input: string, schema: Schema): Line {
-	const root: Line = [];
-	const inlineStack: Inline[] = [];
-	let current: Line = root;
-	let inInline = false;
-	const tokens = input.split(INLINE);
-	for (let i = 0; i < tokens.length; ++i) {
-		const token = tokens[i];
-		if (!token) continue;
-		switch (i % TOKEN_COUNT) {
-			case TOKEN.text:
-			case TOKEN.escaped:
-				current.push(token);
-				break;
-			case TOKEN.tagName:
-				const inlineAst = { tag: token, arguments: [], closed: false };
-				inlineStack.push(inlineAst);
-				current.push(inlineAst);
-				inInline = true;
-				break;
-			case TOKEN.openArg:
-			case TOKEN.nextArg:
-				if (inInline) {
-					current = appendArg(last(inlineStack));
-				} else {
+	return (input: string): Line => {
+		const root: Line = [];
+		const inlineStack: Inline[] = [];
+		let current: Line = root;
+		let inInline = false;
+		const tokens = input.split(INLINE);
+		for (let i = 0; i < tokens.length; ++i) {
+			const token = tokens[i];
+			if (!token) continue;
+			switch (i % TOKEN_COUNT) {
+				case INLINE_TOKEN.text:
+				case INLINE_TOKEN.escaped:
 					current.push(token);
-				}
-				break;
-			case TOKEN.closeArg:
-				if (inInline) {
-					inlineStack.pop()!.closed = true;
-					inInline = inlineStack.length > 0;
-					current = inInline ? last(last(inlineStack).arguments) : root;
-				} else {
-					current.push(token);
-				}
-				break;
-			default:
-				const tag = schema.customTokens[i - BUILTIN_TOKENS_COUNT].tag;
-				current.push({ tag, arguments: [[token]], closed: true });
-				break;
+					break;
+				case INLINE_TOKEN.tagName:
+					const inlineAst = { tag: token, arguments: [], closed: false };
+					inlineStack.push(inlineAst);
+					current.push(inlineAst);
+					inInline = true;
+					break;
+				case INLINE_TOKEN.openArg:
+				case INLINE_TOKEN.nextArg:
+					if (inInline) {
+						current = appendArg(last(inlineStack));
+					} else {
+						current.push(token);
+					}
+					break;
+				case INLINE_TOKEN.closeArg:
+					if (inInline) {
+						inlineStack.pop()!.closed = true;
+						inInline = inlineStack.length > 0;
+						current = inInline ? last(last(inlineStack).arguments) : root;
+					} else {
+						current.push(token);
+					}
+					break;
+				default:
+					const tag = schema.customTokens[i - INLINE_TOKEN._size].tag;
+					current.push({ tag, arguments: [[token]], closed: true });
+					break;
+			}
 		}
-	}
-	return root;
+		return root;
+	};
 }
 
 function generateInlineRegex(schema: Schema): RegExp {
