@@ -1,7 +1,5 @@
 {
     "require": "ts-node/register",
     "extension": "ts",
-	"file": [
-	    "test/parseTest.ts"
-    ]
+    "spec": "test/**/*Test.ts"
 }

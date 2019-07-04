@@ -34,7 +34,7 @@
 		"tslint": "tslint --project tsconfig.json",
 		"tslint:fix": "tslint --project tsconfig.json --fix",
 		"build": "tsc",
-		"test": "mocha --config .mocharc.json",
+		"test": "mocha",
 		"preversion": "npm run format:check && npm run tslint && npm test",
 		"postversion": "git push && git push --tags",
 		"benchmark": "node --require ts-node/register benchmarks/parseBenchmark.ts test/input/bigfile.hm"
