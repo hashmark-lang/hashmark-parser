@@ -17,8 +17,7 @@ const INLINE_TOKENS = [
 	// $1: closeArg (']')
 	/(])/,
 	// $1: escaped ('\\', '[', ']' or '#')
-	/\\(.)/,
-	/($)/
+	/\\(.)/
 ];
 const INLINE = generateInlineRegex(defaultSchema);
 
@@ -42,55 +41,59 @@ export function parse(input: string, schema: Schema = defaultSchema): Block {
 	return root;
 }
 
+enum TOKEN {
+	text,
+	tagName,
+	openArg,
+	nextArg,
+	closeArg,
+	escaped
+}
+
+const BUILTIN_TOKENS_COUNT = Object.keys(TOKEN).length / 2;
+const TOKEN_COUNT = BUILTIN_TOKENS_COUNT + defaultSchema.customTokens.length;
+
 export function parseLine(input: string, schema: Schema): Line {
 	const root: Line = [];
 	const inlineStack: Inline[] = [];
 	let current: Line = root;
 	let inInline = false;
-	INLINE.lastIndex = 0;
-	while (INLINE.lastIndex < input.length) {
-		const [
-			_,
-			text,
-			tagName,
-			openArg,
-			nextArg,
-			closeArg,
-			escaped,
-			end,
-			...customMatches
-		] = INLINE.exec(input)!;
-
-		if (text) current.push(text);
-
-		if (tagName) {
-			const inlineAst = { tag: tagName, arguments: [], closed: false };
-			inlineStack.push(inlineAst);
-			current.push(inlineAst);
-			inInline = true;
-			if (openArg) current = appendArg(inlineAst);
-		} else if (nextArg) {
-			if (inInline) {
-				current = appendArg(last(inlineStack));
-			} else {
-				current.push(nextArg);
-			}
-		} else if (closeArg) {
-			if (inInline) {
-				inlineStack.pop()!.closed = true;
-				inInline = inlineStack.length > 0;
-				current = inInline ? last(last(inlineStack).arguments) : root;
-			} else {
-				current.push(closeArg);
-			}
-		} else if (escaped) {
-			current.push(escaped);
-		} else if (end === undefined) {
-			const i = customMatches.findIndex(_ => _ !== undefined);
-			const tag = schema.customTokens[i].tag;
-			const arg = [customMatches[i]];
-			const inlineAst = { tag, arguments: [arg], closed: true };
-			current.push(inlineAst);
+	const tokens = input.split(INLINE);
+	for (let i = 0; i < tokens.length; ++i) {
+		const token = tokens[i];
+		if (!token) continue;
+		switch (i % TOKEN_COUNT) {
+			case TOKEN.text:
+			case TOKEN.escaped:
+				current.push(token);
+				break;
+			case TOKEN.tagName:
+				const inlineAst = { tag: token, arguments: [], closed: false };
+				inlineStack.push(inlineAst);
+				current.push(inlineAst);
+				inInline = true;
+				break;
+			case TOKEN.openArg:
+			case TOKEN.nextArg:
+				if (inInline) {
+					current = appendArg(last(inlineStack));
+				} else {
+					current.push(token);
+				}
+				break;
+			case TOKEN.closeArg:
+				if (inInline) {
+					inlineStack.pop()!.closed = true;
+					inInline = inlineStack.length > 0;
+					current = inInline ? last(last(inlineStack).arguments) : root;
+				} else {
+					current.push(token);
+				}
+				break;
+			default:
+				const tag = schema.customTokens[i - BUILTIN_TOKENS_COUNT].tag;
+				current.push({ tag, arguments: [[token]], closed: true });
+				break;
 		}
 	}
 	return root;
@@ -100,7 +103,7 @@ function generateInlineRegex(schema: Schema): RegExp {
 	const customRegexps = schema.customTokens.map(_ => _.regex);
 	const tokens = [...INLINE_TOKENS, ...customRegexps];
 	const tokensUnion = tokens.map(_ => `(?:${_.source})`).join("|");
-	return new RegExp(`(.*?)(?:${tokensUnion})`, "g");
+	return new RegExp(tokensUnion, "g");
 }
 
 function last(str: string): string;
