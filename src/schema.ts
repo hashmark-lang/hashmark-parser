@@ -1,7 +1,7 @@
 import { Block, Line } from "./ast";
 
 export interface Schema {
-	inlineDelimiters: { [delimiter: string]: string };
+	customTokens: Array<{ regex: RegExp; tag: string }>;
 	getDefault(parentName: string): string;
 	validateBlock(tree: Block): Error[];
 	validateLine(tree: Line): Error[];
@@ -9,7 +9,20 @@ export interface Schema {
 }
 
 export const defaultSchema = {
-	inlineDelimiters: { "`": "code" },
+	customTokens: [
+		{
+			regex: /`(.*?)`/,
+			tag: "code"
+		},
+		{
+			regex: /\*(.*?)\*/,
+			tag: "emphasis"
+		},
+		{
+			regex: /_(.*?)_/,
+			tag: "strong"
+		}
+	],
 
 	getDefault(parentName: string) {
 		return "default";
