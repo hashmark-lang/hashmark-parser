@@ -25,7 +25,7 @@ export const defaultSchema = {
 	],
 
 	getDefault(parentName: string) {
-		return "default";
+		return "_default";
 	},
 
 	isRaw(name: string): boolean {
