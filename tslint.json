@@ -11,6 +11,7 @@
 		"semicolon": [true, "always", "ignore-bound-class-methods"],
 		"curly": [true, "ignore-same-line"],
 		"member-ordering": false,
-		"object-literal-sort-keys": false
+		"object-literal-sort-keys": false,
+		"no-default-export": true
 	}
 }
