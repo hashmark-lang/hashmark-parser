@@ -108,9 +108,7 @@ function generateInlineRegex(schema: Schema): RegExp {
 	return new RegExp(tokensUnion, "g");
 }
 
-function last(str: string): string;
-function last<T>(array: T[]): T;
-function last(seq: any): any {
+function last<T>(seq: { [index: number]: T; length: number }): T {
 	return seq[seq.length - 1];
 }
 
