@@ -1,119 +1,120 @@
 import { Block, Inline, Line } from "./ast";
+import { compileLexer, Lexer, TokensDefinition } from "./compileLexer";
 import { defaultSchema, Schema } from "./schema";
+import { last } from "./utils";
 
-const LB = /\r\n|\n|\r/;
-// e.g. '	#name Hello world'
-// $1: indent ('\t')
-// $2: tagName ('name')
-// $3: lineContent (Hello world)
-const LINE_PARTS = /^(\t*)[\t ]*(?:#([^ \[]+)(?: |$))?(.*)/;
-const INLINE_TOKENS = [
-	// e.g. '#name['
-	// $1: tagName ('name')
-	// $2: openArg ('[')
-	/#([^ \[]+)(\[)?/,
-	// $1: nextArg(`][`)
-	/(]\[)/,
-	// $1: closeArg (']')
-	/(])/,
-	// $1: escaped ('\\', '[', ']' or '#')
-	/\\(.)/
-];
-const enum INLINE_TOKEN {
-	text,
-	tagName,
-	openArg,
-	nextArg,
-	closeArg,
-	escaped,
-	_size
+export const enum InlineToken {
+	Text,
+	Escaped,
+	OpenTag,
+	ArgSeparator,
+	CloseTag
 }
 
-export function parse(input: string, schema: Schema = defaultSchema): Block {
-	let depth = 0;
-	const root: Block = { tag: "root", children: [], head: [] };
-	const stack = [root];
-	let current = root;
-	const parseLine = makeParseLine(schema);
-	for (const line of input.split(LB)) {
-		const [_, indent, tagName, lineContent] = LINE_PARTS.exec(line)!;
-		if (!tagName && !lineContent) continue;
-		for (let i = 0; i < depth - indent.length; ++i) stack.pop();
-		current = last(stack);
-		const tag = tagName || schema.getDefault(current.tag);
-		const head = parseLine(lineContent);
-		const block = { tag, head, children: [] };
-		current.children.push(block);
-		stack.push(block);
-		depth = indent.length + 1;
+export function parse(input: string) {
+	return new Parser(defaultSchema).parse(input);
+}
+
+export class Parser {
+	private readonly lineRegex = /(?:\r\n|\n|\r|^)(\t*)(?:#([^ \[\r\n]+)(?: |$))?(.*)/gm;
+	private readonly lexLine: Lexer;
+
+	constructor(private schema: Schema) {
+		this.lexLine = compileLexer(
+			([
+				{
+					type: InlineToken.Escaped,
+					regex: /\\(.)/
+				},
+				{
+					type: InlineToken.OpenTag,
+					regex: /#([^ \[]+)(\[)?/
+				},
+				{
+					type: InlineToken.ArgSeparator,
+					regex: /]\[/
+				},
+				{
+					type: InlineToken.CloseTag,
+					regex: /]/
+				}
+			] as TokensDefinition[]).concat(
+				schema.customTokens.map(_ => ({
+					type: _.tag,
+					regex: _.regex
+				}))
+			),
+			InlineToken.Text
+		);
 	}
-	return root;
-}
 
-function makeParseLine(schema: Schema): (input: string) => Line {
-	const TOKEN_COUNT = INLINE_TOKEN._size + schema.customTokens.length;
-	const INLINE = generateInlineRegex(schema);
+	parse(input: string): Block {
+		let depth = 0;
+		const root: Block = { tag: "root", children: [], head: [] };
+		const stack = [root];
+		let current = root;
+		for (const [_, indent, tagName, lineContent] of input.matchAll(this.lineRegex)) {
+			if (!tagName && !lineContent) continue;
+			for (let i = 0; i < depth - indent.length; ++i) stack.pop();
+			current = last(stack);
+			const tag = tagName || this.schema.getDefault(current.tag);
+			const head = this.parseLine(lineContent);
+			const block = { tag, head, children: [] };
+			current.children.push(block);
+			stack.push(block);
+			depth = indent.length + 1;
+		}
+		return root;
+	}
 
-	return (input: string): Line => {
+	parseLine(input: string): Line {
+		if (!input) return [];
 		const root: Line = [];
 		const inlineStack: Inline[] = [];
 		let current: Line = root;
-		let inInline = false;
-		const tokens = input.split(INLINE);
-		for (let i = 0; i < tokens.length; ++i) {
-			const token = tokens[i];
-			if (!token) continue;
-			switch (i % TOKEN_COUNT) {
-				case INLINE_TOKEN.text:
-				case INLINE_TOKEN.escaped:
-					current.push(token);
+		for (const token of this.lexLine(input)) {
+			switch (token.type) {
+				case InlineToken.Text:
+					current.push(token.value);
 					break;
-				case INLINE_TOKEN.tagName:
-					const inlineAst = { tag: token, arguments: [], closed: false };
-					inlineStack.push(inlineAst);
+				case InlineToken.Escaped:
+					current.push(token.matches[0]!);
+					break;
+				case InlineToken.OpenTag:
+					const inlineAst = { tag: token.matches[0]!, arguments: [], closed: false };
 					current.push(inlineAst);
-					inInline = true;
-					break;
-				case INLINE_TOKEN.openArg:
-				case INLINE_TOKEN.nextArg:
-					if (inInline) {
-						current = appendArg(last(inlineStack));
+					if (!token.matches[1]) {
+						break;
 					} else {
-						current.push(token);
+						inlineStack.push(inlineAst);
+					}
+				case InlineToken.ArgSeparator:
+					if (inlineStack.length > 0) {
+						const arg: Line = [];
+						last(inlineStack).arguments.push(arg);
+						current = arg;
+					} else {
+						current.push(token.value);
 					}
 					break;
-				case INLINE_TOKEN.closeArg:
-					if (inInline) {
+				case InlineToken.CloseTag:
+					if (inlineStack.length > 0) {
+						// `inlineStack.pop()` cannot be null because inInline === true
 						inlineStack.pop()!.closed = true;
-						inInline = inlineStack.length > 0;
-						current = inInline ? last(last(inlineStack).arguments) : root;
+						current = inlineStack.length ? last(last(inlineStack).arguments) : root;
 					} else {
-						current.push(token);
+						current.push(token.value);
 					}
 					break;
 				default:
-					const tag = schema.customTokens[i - INLINE_TOKEN._size].tag;
-					current.push({ tag, arguments: [[token]], closed: true });
+					current.push({
+						tag: token.type as string,
+						arguments: [[token.matches[0]!]],
+						closed: true
+					});
 					break;
 			}
 		}
 		return root;
-	};
-}
-
-function generateInlineRegex(schema: Schema): RegExp {
-	const customRegexps = schema.customTokens.map(_ => _.regex);
-	const tokens = [...INLINE_TOKENS, ...customRegexps];
-	const tokensUnion = tokens.map(_ => `(?:${_.source})`).join("|");
-	return new RegExp(tokensUnion, "g");
-}
-
-function last<T>(seq: { [index: number]: T; length: number }): T {
-	return seq[seq.length - 1];
-}
-
-function appendArg(inlineAst: Inline): Line {
-	const arg: Line = [];
-	inlineAst.arguments.push(arg);
-	return arg;
+	}
 }
