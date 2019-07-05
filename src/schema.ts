@@ -1,14 +1,19 @@
 import { Block, Line } from "./ast";
 
+export const enum Reserved {
+	rootTag = "root",
+	defaultTag = "_default"
+}
+
 export interface Schema {
 	customTokens: Array<{ regex: RegExp; tag: string }>;
-	getDefault(parentName: string): string;
+	getDefault(parentName: string): string | undefined;
 	validateBlock(tree: Block): Error[];
 	validateLine(tree: Line): Error[];
 	isRaw(name: string): boolean;
 }
 
-export const defaultSchema = {
+export const defaultSchema: Schema = {
 	customTokens: [
 		{
 			regex: /`(.*?)`/,
@@ -25,7 +30,7 @@ export const defaultSchema = {
 	],
 
 	getDefault(parentName: string) {
-		return "_default";
+		return undefined;
 	},
 
 	isRaw(name: string): boolean {

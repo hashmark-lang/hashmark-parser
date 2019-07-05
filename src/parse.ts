@@ -1,6 +1,6 @@
 import { Block, Inline, Line } from "./ast";
 import { compileLexer, Lexer, TokensDefinition } from "./compileLexer";
-import { defaultSchema, Schema } from "./schema";
+import { defaultSchema, Reserved, Schema } from "./schema";
 import { last } from "./utils";
 
 export const enum InlineToken {
@@ -50,14 +50,14 @@ export class Parser {
 
 	parse(input: string): Block {
 		let depth = 0;
-		const root: Block = { tag: "root", children: [], head: [] };
+		const root: Block = { tag: Reserved.rootTag, children: [], head: [] };
 		const stack = [root];
 		let current = root;
 		for (const [_, indent, tagName, lineContent] of input.matchAll(this.lineRegex)) {
 			if (!tagName && !lineContent) continue;
 			for (let i = 0; i < depth - indent.length; ++i) stack.pop();
 			current = last(stack);
-			const tag = tagName || this.schema.getDefault(current.tag);
+			const tag = tagName || this.schema.getDefault(current.tag) || Reserved.defaultTag;
 			const head = this.parseLine(lineContent);
 			const block = { tag, head, children: [] };
 			current.children.push(block);
