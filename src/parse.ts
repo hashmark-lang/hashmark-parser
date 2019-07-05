@@ -40,7 +40,7 @@ export function parse(input: string, schema: Schema = defaultSchema): Block {
 		if (!tagName && !lineContent) continue;
 		for (let i = 0; i < depth - indent.length; ++i) stack.pop();
 		current = last(stack);
-		const tag = tagName || "_default";
+		const tag = tagName || schema.getDefault(current.tag);
 		const head = parseLine(lineContent);
 		const block = { tag, head, children: [] };
 		current.children.push(block);
