@@ -34,8 +34,8 @@
 		"typescript": "^3.5.2"
 	},
 	"scripts": {
-		"format": "prettier --write {src,test}/**/*.ts *.json",
-		"format:check": "prettier --check {src,test}/**/*.ts *.json",
+		"format": "prettier --write {src,test,benchmark}/**/*.ts *.json",
+		"format:check": "prettier --check {src,test,benchmark}/**/*.ts *.json",
 		"tslint": "tslint --project tsconfig.json",
 		"tslint:fix": "tslint --project tsconfig.json --fix",
 		"build": "tsc",
