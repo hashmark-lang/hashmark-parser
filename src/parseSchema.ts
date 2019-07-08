@@ -106,7 +106,29 @@ export class ParsedSchema implements Schema {
 	}
 
 	validateBlock(tree: Block): Error[] {
-		throw new Error("Method not implemented.");
+		const schema = this.index.get(tree.tag);
+		const errors: Error[] = [];
+		if (schema === undefined) {
+			return [new Error(`Unknown tag ${tree.tag}`)];
+		}
+		if (!this.isBlockSchema(schema)) {
+			return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
+		}
+		const childTags = tree.children.map(child => child.tag);
+		const childCount = countOccurrences(childTags);
+
+		// Check for occurrence counts
+		for (const [tag, cardinality] of schema.content.entries()) {
+			const count = childCount.get(tag) || 0;
+			if (!this.validCount(count, cardinality)) {
+				errors.push(
+					new Error(
+						`Saw ${count} occurrences of ${tag}, but the schema wants ${cardinality} in ${tree.tag}`
+					)
+				);
+			}
+		}
+		return errors;
 	}
 
 	validateLine(tree: Array<string | Inline>): Error[] {
@@ -134,4 +156,26 @@ export class ParsedSchema implements Schema {
 	private isBlockSchema(elem: ElementSchema): elem is BlockSchema {
 		return (elem as BlockSchema).content !== undefined;
 	}
+
+	private validCount(count: number, cardinality: Cardinality): boolean {
+		switch (cardinality) {
+			case Cardinality.One:
+				return count === 1;
+			case Cardinality.OneOrMore:
+				return count >= 1;
+			case Cardinality.Optional:
+				return count === 0 || count === 1;
+			case Cardinality.ZeroOrMore:
+				return count >= 0;
+		}
+	}
+}
+
+function countOccurrences<T>(arr: T[]): Map<T, number> {
+	const map = new Map<T, number>();
+	for (const item of arr) {
+		const count = map.get(item) || 0;
+		map.set(item, count + 1);
+	}
+	return map;
 }
