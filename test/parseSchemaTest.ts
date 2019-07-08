@@ -10,47 +10,43 @@ function loadSchema(fileName: string): ParsedSchema {
 }
 
 describe("ParsedSchema", () => {
-	describe("schema_blocks.hm", () => {
-		const simpleSchema = loadSchema("schema_blocks.hm");
+	describe("isRawBlock()", () => {
+		const inlinesSchema = loadSchema("schema_inlines.hm");
+		const blocksSchema = loadSchema("schema_blocks.hm");
 
-		it("has a default of 'child' for 'parent'", () => {
-			assert.equal(simpleSchema.getDefault("parent"), "child");
+		it("returns true for blocks marked as raw in the schema", () => {
+			assert.isTrue(blocksSchema.isRawBlock("child"));
 		});
 
-		it("has no default for 'child'", () => {
-			assert.isUndefined(simpleSchema.getDefault("child"));
+		it("returns false for blocks not marked as raw in the schema", () => {
+			assert.isFalse(blocksSchema.isRawBlock("parent"));
+			assert.isFalse(blocksSchema.isRawBlock("root"));
 		});
 
-		it("says 'child' is raw", () => {
-			assert.isTrue(simpleSchema.isRawBlock("child"));
-		});
-
-		it("does not say 'parent' is raw", () => {
-			assert.isFalse(simpleSchema.isRawBlock("parent"));
-		});
-
-		it("does not says an unknown element is raw", () => {
-			assert.isFalse(simpleSchema.isRawBlock("unknown"));
+		it("returns false for inline tags", () => {
+			assert.isFalse(inlinesSchema.isRawBlock("url"));
+			assert.isFalse(inlinesSchema.isRawBlock("bold"));
 		});
 	});
 
-	describe("schema_inlines.hm", () => {
+	describe("isRawArg()", () => {
 		const inlinesSchema = loadSchema("schema_inlines.hm");
 
-		it("does not say an inline block is raw", () => {
-			assert.isFalse(inlinesSchema.isRawBlock("url"));
-		});
-
-		it("says the first argument of 'url' is raw", () => {
+		it("returns true when the argument is marked as raw in the schema", () => {
 			assert.isTrue(inlinesSchema.isRawArg("url", 0));
 		});
 
-		it("does not say the second argument of 'url' is raw", () => {
+		it("returns false when the argument is not marked as raw in the schema", () => {
 			assert.isFalse(inlinesSchema.isRawArg("url", 1));
 		});
 
-		it("does not say an non-existant argument of 'url' is raw", () => {
+		it("returns false when the argument is not defined in the schema", () => {
 			assert.isFalse(inlinesSchema.isRawArg("url", 123));
+		});
+
+		it("returns false for block tags", () => {
+			assert.isFalse(inlinesSchema.isRawArg("paragraph", 0));
+			assert.isFalse(inlinesSchema.isRawArg("paragraph", 1));
 		});
 	});
 
