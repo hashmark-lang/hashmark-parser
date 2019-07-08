@@ -44,6 +44,10 @@ describe("ParsedSchema", () => {
 			assert.isFalse(inlinesSchema.isRawArg("url", 123));
 		});
 
+		it("throws an error when the argument index is negative", () => {
+			assert.throws(() => inlinesSchema.isRawArg("url", -1));
+		});
+
 		it("returns false for block tags", () => {
 			assert.isFalse(inlinesSchema.isRawArg("paragraph", 0));
 			assert.isFalse(inlinesSchema.isRawArg("paragraph", 1));

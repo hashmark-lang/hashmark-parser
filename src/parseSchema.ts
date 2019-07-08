@@ -143,7 +143,7 @@ export class ParsedSchema implements Schema {
 		return false;
 	}
 
-	isRawArg(name: string, index: number) {
+	isRawArg(name: string, index: number): boolean {
 		const schema = this.index.get(name);
 		if (schema && !this.isBlockSchema(schema)) {
 			if (index < schema.length) {
