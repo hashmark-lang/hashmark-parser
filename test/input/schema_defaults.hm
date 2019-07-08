@@ -1,0 +1,16 @@
+#block root
+	#default top
+	#content
+		top
+
+#block top
+	#default mid
+	#content
+		mid
+
+#block mid
+	#default bottom
+	#content
+		bottom
+
+#block bottom
