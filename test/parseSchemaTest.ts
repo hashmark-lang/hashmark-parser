@@ -54,6 +54,23 @@ describe("ParsedSchema", () => {
 		});
 	});
 
+	describe("getDefault()", () => {
+		const defaultsSchema = loadSchema("schema_defaults.hm");
+
+		it("returns the default defined in the schema", () => {
+			assert.strictEqual(defaultsSchema.getDefault("root"), "top");
+			assert.strictEqual(defaultsSchema.getDefault("top"), "mid");
+		});
+
+		it("returns undefined if no default is defined in the schema", () => {
+			assert.isUndefined(defaultsSchema.getDefault("bottom"));
+		});
+
+		it("returns undefined for unknown elements", () => {
+			assert.isUndefined(defaultsSchema.getDefault("unknown"));
+		});
+	});
+
 	describe("validateBlock()", () => {
 		const cardinalities = [
 			{
