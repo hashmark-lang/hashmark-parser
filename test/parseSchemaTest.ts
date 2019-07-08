@@ -128,6 +128,13 @@ describe("ParsedSchema", () => {
 						}
 					});
 				}
+
+				it("does not allow any unknown elements", () => {
+					const file = `#unknown element`;
+					const errors = schema.validateBlock(parse(file));
+					const expected = test.allowed.includes(0) ? 1 : 2;
+					assert.lengthOf(errors, expected);
+				});
 			});
 		}
 	});
