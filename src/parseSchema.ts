@@ -117,7 +117,7 @@ export class ParsedSchema implements Schema {
 		const childTags = tree.children.map(child => child.tag);
 		const childCount = countOccurrences(childTags);
 
-		// Check for occurrence counts
+		// Check each cardinality rule:
 		for (const [tag, cardinality] of schema.content.entries()) {
 			const count = childCount.get(tag) || 0;
 			if (!this.validCount(count, cardinality)) {
@@ -128,6 +128,14 @@ export class ParsedSchema implements Schema {
 				);
 			}
 		}
+
+		// Check for disallowed tags:
+		for (const tag of childTags) {
+			if (!schema.content.has(tag)) {
+				errors.push(new Error(`Tag ${tag} is not allowed in ${tree.tag}`));
+			}
+		}
+
 		return errors;
 	}
 
