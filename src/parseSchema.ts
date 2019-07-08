@@ -11,22 +11,27 @@ enum SchemaTags {
 	Arg = "arg"
 }
 
+enum Cardinality {
+	ZeroOrMore = "zeroOrMore",
+	OneOrMore = "oneOrMore",
+	One = "one",
+	Optional = "optional"
+}
+
 type ElementSchema = InlineSchema | BlockSchema;
 
 type InlineSchema = Array<{
 	raw: boolean;
-	content: Set<CardinalityRule>;
+	content: CardinalityRules;
 }>;
 
 interface BlockSchema {
 	raw: boolean;
-	content: Set<CardinalityRule>;
+	content: CardinalityRules;
 	defaultElem: string | undefined;
 }
 
-interface CardinalityRule {
-	[name: string]: "oneOrMore" | "zeroOrMore" | "optional" | "one";
-}
+type CardinalityRules = Map<string, Cardinality>;
 
 export class ParsedSchema implements Schema {
 	private index: Map<string, ElementSchema> = new Map();
@@ -51,9 +56,7 @@ export class ParsedSchema implements Schema {
 		const raw = this.isRaw(element);
 		const defaultElem = queryChildren(element, SchemaTags.Default);
 		const contentBlock = queryChildren(element, SchemaTags.Content);
-		const content = contentBlock
-			? this.parseCardinalityRules(contentBlock)
-			: new Set<CardinalityRule>();
+		const content = contentBlock ? this.parseCardinalityRules(contentBlock) : new Map();
 		return {
 			content,
 			raw,
@@ -68,13 +71,17 @@ export class ParsedSchema implements Schema {
 		}));
 	}
 
-	private parseCardinalityRules(parent: Block): Set<CardinalityRule> {
-		const rules = parent.children.map(rule => {
-			const cardinality = rule.tag !== Reserved.defaultTag ? rule.tag : "zeroOrMore";
+	private parseCardinalityRules(parent: Block): CardinalityRules {
+		const rules: CardinalityRules = new Map();
+		for (const rule of parent.children) {
+			const cardinality =
+				rule.tag === Reserved.defaultTag
+					? Cardinality.ZeroOrMore
+					: (rule.tag as Cardinality);
 			const name = this.getHeadString(rule);
-			return { name, cardinality } as CardinalityRule;
-		});
-		return new Set(rules);
+			rules.set(name, cardinality);
+		}
+		return rules;
 	}
 
 	private getHeadString(block: Block): string {
