@@ -65,10 +65,12 @@ export class ParsedSchema implements Schema {
 	}
 
 	private parseInlineSchema(element: Block): InlineSchema {
-		return queryAllChildren(element, SchemaTags.Arg).map(arg => ({
-			raw: this.isRaw(arg),
-			content: this.parseCardinalityRules(arg)
-		}));
+		return queryAllChildren(element, SchemaTags.Arg).map(arg => {
+			const raw = this.isRaw(arg);
+			const contentBlock = queryChildren(arg, SchemaTags.Content);
+			const content = contentBlock ? this.parseCardinalityRules(contentBlock) : new Map();
+			return { raw, content };
+		});
 	}
 
 	private parseCardinalityRules(parent: Block): CardinalityRules {
