@@ -3,7 +3,7 @@ import { Block, getHeadString, query, queryAll, queryAllChildren, queryChildren 
 import { parse } from "../src/parse";
 import { readInputFile } from "./util";
 
-describe("query", () => {
+describe("ast", () => {
 	const bigFile = parse(readInputFile("bigfile.hm"));
 	const doc = query(bigFile, "document") as Block;
 	const os = parse(readInputFile("os.hm"));
