@@ -30,3 +30,10 @@ export function query(ast: Block, tag: string): Block | undefined {
 export function queryChildren(ast: Block, tag: string): Block | undefined {
 	return ast.children.find(b => b.tag === tag);
 }
+
+export function getHeadString(block: Block): string {
+	if (block.head.some(x => typeof x !== "string")) {
+		throw new Error("problem"); // TODO do better than this later
+	}
+	return (block.head as string[]).join("");
+}

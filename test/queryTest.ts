@@ -1,19 +1,13 @@
 import { assert } from "chai";
-import { Block, Inline, query, queryAll, queryAllChildren, queryChildren } from "../src/ast";
+import { Block, getHeadString, query, queryAll, queryAllChildren, queryChildren } from "../src/ast";
 import { parse } from "../src/parse";
 import { readInputFile } from "./util";
-
-function getHead(block: Block | undefined): string | Inline | undefined {
-	if (block) {
-		return block.head[0];
-	}
-	return undefined;
-}
 
 describe("query", () => {
 	const bigFile = parse(readInputFile("bigfile.hm"));
 	const doc = query(bigFile, "document") as Block;
 	const os = parse(readInputFile("os.hm"));
+	const list = parse(readInputFile("list.hm"));
 
 	describe("queryAll()", () => {
 		it("finds all descendants", () => {
@@ -37,25 +31,37 @@ describe("query", () => {
 
 	describe("query()", () => {
 		it("finds the first child element", () => {
-			const document = query(bigFile, "document");
+			const document = query(bigFile, "document")!;
 			assert.notEqual(document, undefined);
-			assert.strictEqual(getHead(document), "Big file");
+			assert.strictEqual(getHeadString(document), "Big file");
 		});
 
 		it("finds the first descendant", () => {
-			const def = query(os, "def");
-			assert.strictEqual(getHead(def), "Operating System");
+			const def = query(os, "def")!;
+			assert.strictEqual(getHeadString(def), "Operating System");
 		});
 	});
 
 	describe("queryChildren()", () => {
 		it("finds the first matching child", () => {
-			const section = queryChildren(doc, "section");
-			assert.strictEqual(getHead(section), "1");
+			const section = queryChildren(doc, "section")!;
+			assert.strictEqual(getHeadString(section), "1");
 		});
 
 		it("does not find lower descendants", () => {
-			assert.strictEqual(queryChildren(bigFile, "section"), undefined);
+			assert.isUndefined(queryChildren(bigFile, "section"));
+		});
+	});
+
+	describe("getHeadString()", () => {
+		it("returns the head string if the head is a single string", () => {
+			const author = query(bigFile, "author")!;
+			assert.strictEqual(getHeadString(author), "Matthieu Bovel");
+		});
+
+		it("returns an empty string when there is no head", () => {
+			const listBlock = query(list, "list")!;
+			assert.strictEqual(getHeadString(listBlock), "");
 		});
 	});
 });
