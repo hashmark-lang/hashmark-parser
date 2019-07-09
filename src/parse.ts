@@ -11,8 +11,8 @@ export const enum InlineToken {
 	CloseTag
 }
 
-export function parse(input: string) {
-	return new Parser(defaultSchema).parse(input);
+export function parse(input: string, schema: Schema = defaultSchema) {
+	return new Parser(schema).parse(input);
 }
 
 export class Parser {
