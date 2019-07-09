@@ -41,7 +41,7 @@ export class Parser {
 			] as TokensDefinition[]).concat(
 				schema.customTokens.map(_ => ({
 					type: _.tag,
-					regex: _.regex
+					regex: new RegExp(_.start.source + "(.*)" + _.end.source)
 				}))
 			),
 			InlineToken.Text

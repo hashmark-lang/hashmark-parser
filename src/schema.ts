@@ -5,8 +5,14 @@ export const enum Reserved {
 	defaultTag = "_default"
 }
 
+export interface CustomToken {
+	tag: string;
+	start: RegExp;
+	end: RegExp;
+}
+
 export interface Schema {
-	customTokens: Array<{ regex: RegExp; tag: string }>;
+	customTokens: CustomToken[];
 	getDefault(parentName: string): string | undefined;
 	validateBlock(tree: Block): Error[];
 	validateLine(tree: Line): Error[];
@@ -17,15 +23,18 @@ export interface Schema {
 export const defaultSchema: Schema = {
 	customTokens: [
 		{
-			regex: /`(.*?)`/,
+			start: /`/,
+			end: /`/,
 			tag: "code"
 		},
 		{
-			regex: /\*(.*?)\*/,
+			start: /\*/,
+			end: /\*/,
 			tag: "emphasis"
 		},
 		{
-			regex: /_(.*?)_/,
+			start: /_/,
+			end: /_/,
 			tag: "strong"
 		}
 	],
