@@ -122,7 +122,9 @@ export class ParsedSchema implements Schema {
 			return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
 		}
 		const childTags = tree.children.map(child => child.tag);
-		return this.validateCardinalityRules(schema.content, tree.tag, childTags);
+		const errors = this.validateCardinalityRules(schema.content, tree.tag, childTags);
+		const childErrors = tree.children.flatMap(child => this.validateBlock(child));
+		return errors.concat(childErrors);
 	}
 
 	validateLine(line: Array<string | Inline>): Error[] {
