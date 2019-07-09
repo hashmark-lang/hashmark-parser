@@ -11,7 +11,6 @@ function getHead(block: Block | undefined): string | Inline | undefined {
 }
 
 describe("query", () => {
-	const os = parse(readInputFile("os.hm"));
 	const bigFile = parse(readInputFile("bigfile.hm"));
 	const doc = query(bigFile, "document") as Block;
 	const os = parse(readInputFile("os.hm"));

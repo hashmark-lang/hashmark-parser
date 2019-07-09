@@ -10,7 +10,8 @@ export interface Schema {
 	getDefault(parentName: string): string | undefined;
 	validateBlock(tree: Block): Error[];
 	validateLine(tree: Line): Error[];
-	isRaw(name: string): boolean;
+	isRawBlock(name: string): boolean;
+	isRawArg(name: string, index: number): boolean;
 }
 
 export const defaultSchema: Schema = {
@@ -33,7 +34,11 @@ export const defaultSchema: Schema = {
 		return undefined;
 	},
 
-	isRaw(name: string): boolean {
+	isRawBlock(name: string): boolean {
+		return name === "raw";
+	},
+
+	isRawArg(name: string, index: number): boolean {
 		return name === "raw";
 	},
 
