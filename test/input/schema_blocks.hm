@@ -1,0 +1,11 @@
+#block root
+	#content
+		parent
+
+#block parent
+	#default child
+	#content
+		child
+
+#block child
+	#raw

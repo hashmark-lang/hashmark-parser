@@ -1,0 +1,20 @@
+#block root
+	#content
+		paragraph
+
+#block paragraph
+	#head
+		url
+
+#inline url
+	#arg
+		#raw
+	#arg
+		#content
+			bold
+
+#inline bold
+	#sugar
+		#start *
+		#end *
+	#arg
