@@ -71,35 +71,40 @@ describe("ParsedSchema", () => {
 		});
 	});
 
-	describe("validateBlock()", () => {
-		const cardinalities = [
-			{
-				name: "implicit zeroOrMore",
-				cardinality: undefined,
-				allowed: [0, 1, 2]
-			},
-			{
-				name: "explicit zeroOrMore",
-				cardinality: "zeroOrMore",
-				allowed: [0, 1, 2]
-			},
-			{
-				name: "optional",
-				cardinality: "optional",
-				allowed: [0, 1]
-			},
-			{
-				name: "oneOrMore",
-				cardinality: "oneOrMore",
-				allowed: [1, 2]
-			},
-			{
-				name: "one",
-				cardinality: "one",
-				allowed: [1]
-			}
-		];
+	interface CardinalityDescription {
+		name: string;
+		cardinality: string | undefined;
+		allowed: number[];
+	}
+	const cardinalities: CardinalityDescription[] = [
+		{
+			name: "implicit zeroOrMore",
+			cardinality: undefined,
+			allowed: [0, 1, 2]
+		},
+		{
+			name: "explicit zeroOrMore",
+			cardinality: "zeroOrMore",
+			allowed: [0, 1, 2]
+		},
+		{
+			name: "optional",
+			cardinality: "optional",
+			allowed: [0, 1]
+		},
+		{
+			name: "oneOrMore",
+			cardinality: "oneOrMore",
+			allowed: [1, 2]
+		},
+		{
+			name: "one",
+			cardinality: "one",
+			allowed: [1]
+		}
+	];
 
+	describe("validateBlock()", () => {
 		function makeSchema(cardinality: string | undefined): ParsedSchema {
 			const rule = cardinality ? `#${cardinality} element` : "element";
 			const schema = hm`
@@ -113,13 +118,16 @@ describe("ParsedSchema", () => {
 		for (const test of cardinalities) {
 			describe(test.name, () => {
 				const schema = makeSchema(test.cardinality);
+
 				for (let i = 0; i <= 2; ++i) {
 					const allowed = test.allowed.includes(i);
 					it(`${allowed ? "allows" : "does not allow"} ${i} elements`, () => {
 						const file = Array(i)
 							.fill("#element hello")
 							.join("\n");
+
 						const errors = schema.validateBlock(parse(file));
+
 						const message = "Did not validate the following file correctly:\n" + file;
 						if (allowed) {
 							assert.isEmpty(errors, message);
@@ -135,6 +143,55 @@ describe("ParsedSchema", () => {
 					const expected = test.allowed.includes(0) ? 1 : 2;
 					assert.lengthOf(errors, expected);
 				});
+			});
+		}
+	});
+
+	describe("validateLine()", () => {
+		function makeSchema(cardinality: string | undefined): ParsedSchema {
+			const rule = cardinality ? `#${cardinality} bold` : "bold";
+			const schema = hm`
+			#block title
+				#head
+					inline
+			#inline inline
+				#arg
+					#content
+						${rule}
+				#arg
+					#raw
+			#inline bold
+				#arg`;
+			return new ParsedSchema(schema);
+		}
+
+		for (const test of cardinalities) {
+			describe(test.name, () => {
+				const schema = makeSchema(test.cardinality);
+				for (let i = 0; i <= 2; ++i) {
+					const allowed = test.allowed.includes(i);
+					it(`${allowed ? "allows" : "does not allow"} ${i} elements`, () => {
+						const bolds = Array(i)
+							.fill("#bold[test]")
+							.join(" ");
+						const file = `#title #inline[hello ${bolds} world][test]`;
+						const root = parse(file);
+						const line = root.children[0].head;
+
+						const errors = schema.validateLine(line);
+
+						const message =
+							`Did not validate the following file correctly:\n\n${file}\n\n` +
+							`Got the following errors: \n${errors
+								.map(err => "\t- " + err.message)
+								.join("\n")}\n\n`;
+						if (allowed) {
+							assert.isEmpty(errors, message);
+						} else {
+							assert.isNotEmpty(errors, message);
+						}
+					});
+				}
 			});
 		}
 	});

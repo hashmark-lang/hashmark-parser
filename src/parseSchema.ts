@@ -10,7 +10,6 @@ enum SchemaTags {
 	Content = "content",
 	Arg = "arg"
 }
-
 enum Cardinality {
 	ZeroOrMore = "zeroOrMore",
 	OneOrMore = "oneOrMore",
@@ -19,18 +18,16 @@ enum Cardinality {
 }
 
 type ElementSchema = InlineSchema | BlockSchema;
-
-type InlineSchema = Array<{
+type InlineSchema = ArgSchema[];
+interface ArgSchema {
 	raw: boolean;
 	content: CardinalityRules;
-}>;
-
+}
 interface BlockSchema {
 	raw: boolean;
 	content: CardinalityRules;
 	defaultElem: string | undefined;
 }
-
 type CardinalityRules = Map<string, Cardinality>;
 
 export class ParsedSchema implements Schema {
@@ -109,7 +106,6 @@ export class ParsedSchema implements Schema {
 
 	validateBlock(tree: Block): Error[] {
 		const schema = this.index.get(tree.tag);
-		const errors: Error[] = [];
 		if (schema === undefined) {
 			return [new Error(`Unknown tag ${tree.tag}`)];
 		}
@@ -117,32 +113,61 @@ export class ParsedSchema implements Schema {
 			return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
 		}
 		const childTags = tree.children.map(child => child.tag);
-		const childCount = countOccurrences(childTags);
+		return this.validateCardinalityRules(schema.content, tree.tag, childTags);
+	}
 
-		// Check each cardinality rule:
-		for (const [tag, cardinality] of schema.content.entries()) {
+	validateLine(line: Array<string | Inline>): Error[] {
+		const inlines = line.filter(x => typeof x !== "string") as Inline[];
+		return inlines.flatMap(inline => this.validateInline(inline));
+	}
+
+	private validateCardinalityRules(
+		rules: CardinalityRules,
+		parent: string,
+		childTags: string[]
+	): Error[] {
+		const childCount = countOccurrences(childTags);
+		const cardinalityErrors: Error[] = [];
+		for (const [tag, cardinality] of rules.entries()) {
 			const count = childCount.get(tag) || 0;
 			if (!this.validCount(count, cardinality)) {
-				errors.push(
+				cardinalityErrors.push(
 					new Error(
-						`Saw ${count} occurrences of ${tag}, but the schema wants ${cardinality} in ${tree.tag}`
+						`Saw ${count} occurrences of ${tag}, but the schema wants ${cardinality} in ${parent}`
 					)
 				);
 			}
 		}
-
-		// Check for disallowed tags:
-		for (const tag of childTags) {
-			if (!schema.content.has(tag)) {
-				errors.push(new Error(`Tag ${tag} is not allowed in ${tree.tag}`));
-			}
-		}
-
-		return errors;
+		const disallowedErrors = childTags
+			.filter(tag => !rules.has(tag))
+			.map(tag => new Error(`Tag ${tag} is not allowed in ${parent}`));
+		return cardinalityErrors.concat(disallowedErrors);
 	}
 
-	validateLine(tree: Array<string | Inline>): Error[] {
-		throw new Error("Method not implemented.");
+	private validateInline(inline: Inline): Error[] {
+		const schema = this.index.get(inline.tag);
+		if (schema === undefined) {
+			return [new Error(`Unknown inline tag ${inline.tag}`)];
+		}
+		if (this.isBlockSchema(schema)) {
+			return [new Error(`Expected ${inline.tag} to be used as a block tag`)];
+		}
+		if (inline.arguments.length !== schema.length) {
+			return [
+				new Error(`Expected ${schema.length} arguments, but got ${inline.arguments.length}`)
+			];
+		}
+		return inline.arguments.flatMap((arg, index) =>
+			this.validateArg(schema[index], inline.tag, arg)
+		);
+	}
+
+	private validateArg(schema: ArgSchema, parent: string, arg: Array<string | Inline>): Error[] {
+		const inlines = arg.filter(x => typeof x !== "string") as Inline[];
+		const childTags = inlines.map(inline => inline.tag);
+		const childErrors = this.validateCardinalityRules(schema.content, parent, childTags);
+		const descendantErrors = inlines.flatMap(inline => this.validateInline(inline));
+		return childErrors.concat(descendantErrors);
 	}
 
 	isRawBlock(name: string): boolean {
