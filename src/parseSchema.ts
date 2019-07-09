@@ -1,4 +1,4 @@
-import { Block, Inline, queryAllChildren, queryChildren } from "./ast";
+import { Block, getHeadString, Inline, queryAllChildren, queryChildren } from "./ast";
 import { Reserved, Schema } from "./schema";
 
 enum SchemaTags {
@@ -41,7 +41,7 @@ export class ParsedSchema implements Schema {
 	}
 
 	private parseSchemaElement(element: Block): void {
-		const name = this.getHeadString(element);
+		const name = getHeadString(element);
 		if (element.tag === SchemaTags.Block) {
 			this.index.set(name, this.parseBlockSchema(element));
 		} else if (element.tag === SchemaTags.Inline) {
@@ -57,7 +57,7 @@ export class ParsedSchema implements Schema {
 		return {
 			content,
 			raw,
-			defaultElem: defaultElem && this.getHeadString(defaultElem)
+			defaultElem: defaultElem && getHeadString(defaultElem)
 		};
 	}
 
@@ -77,17 +77,10 @@ export class ParsedSchema implements Schema {
 				rule.tag === Reserved.defaultTag
 					? Cardinality.ZeroOrMore
 					: (rule.tag as Cardinality);
-			const name = this.getHeadString(rule);
+			const name = getHeadString(rule);
 			rules.set(name, cardinality);
 		}
 		return rules;
-	}
-
-	private getHeadString(block: Block): string {
-		if (block.head.some(x => typeof x !== "string")) {
-			throw new Error("problem"); // TODO do better than this later
-		}
-		return (block.head as string[]).join("");
 	}
 
 	private isRaw(block: Block): boolean {
