@@ -138,7 +138,8 @@ describe("ParsedSchema", () => {
 					const file = `#unknown element`;
 					const errors = schema.validateBlock(parse(file));
 					const expected = test.allowed.includes(0) ? 1 : 2;
-					assert.lengthOf(errors, expected);
+					const message = errors.map(e => e.message).join("\n");
+					assert.lengthOf(errors, expected, message);
 				});
 			});
 		}

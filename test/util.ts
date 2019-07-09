@@ -5,10 +5,12 @@ import { parse } from "../src/parse";
 
 export class FileInfos {
 	readonly path: string;
-	readonly content: string;
 	constructor(readonly dir: string, readonly name: string, readonly extension: string) {
 		this.path = path.join(dir, name + extension);
-		this.content = readFileSync(this.path).toString();
+	}
+
+	get content(): string {
+		return readFileSync(this.path).toString();
 	}
 }
 
