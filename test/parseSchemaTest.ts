@@ -10,10 +10,11 @@ function loadSchema(fileName: string): ParsedSchema {
 }
 
 describe("ParsedSchema", () => {
-	describe("isRawBlock()", () => {
-		const inlinesSchema = loadSchema("schema_inlines.hm");
-		const blocksSchema = loadSchema("schema_blocks.hm");
+	const inlinesSchema = loadSchema("schema_inlines.hm");
+	const blocksSchema = loadSchema("schema_blocks.hm");
+	const defaultsSchema = loadSchema("schema_defaults.hm");
 
+	describe("isRawBlock()", () => {
 		it("returns true for blocks marked as raw in the schema", () => {
 			assert.isTrue(blocksSchema.isRawBlock("child"));
 		});
@@ -30,8 +31,6 @@ describe("ParsedSchema", () => {
 	});
 
 	describe("isRawArg()", () => {
-		const inlinesSchema = loadSchema("schema_inlines.hm");
-
 		it("returns true when the argument is marked as raw in the schema", () => {
 			assert.isTrue(inlinesSchema.isRawArg("url", 0));
 		});
@@ -55,8 +54,6 @@ describe("ParsedSchema", () => {
 	});
 
 	describe("getDefault()", () => {
-		const defaultsSchema = loadSchema("schema_defaults.hm");
-
 		it("returns the default defined in the schema", () => {
 			assert.strictEqual(defaultsSchema.getDefault("root"), "top");
 			assert.strictEqual(defaultsSchema.getDefault("top"), "mid");
@@ -194,5 +191,29 @@ describe("ParsedSchema", () => {
 				}
 			});
 		}
+	});
+
+	describe("customTokens", () => {
+		it("is empty when no sugar is defined", () => {
+			assert.isEmpty(blocksSchema.customTokens);
+		});
+
+		it("only contains the defined sugar", () => {
+			const boldSugar = inlinesSchema.customTokens.find(c => c.tag === "bold")!;
+			assert.notStrictEqual(boldSugar, undefined);
+			assert.lengthOf(inlinesSchema.customTokens, 1);
+		});
+
+		it(".start contains a RegExp corresponding to the specified start character", () => {
+			const boldSugar = inlinesSchema.customTokens.find(c => c.tag === "bold")!;
+			assert.notStrictEqual(boldSugar, undefined);
+			assert.strictEqual(boldSugar.start.source, "\\*");
+		});
+
+		it(".end contains a RegExp corresponding to the specified end character", () => {
+			const boldSugar = inlinesSchema.customTokens.find(c => c.tag === "bold")!;
+			assert.notStrictEqual(boldSugar, undefined);
+			assert.strictEqual(boldSugar.end.source, "\\*");
+		});
 	});
 });

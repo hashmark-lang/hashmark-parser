@@ -1,5 +1,6 @@
 import { Block, getHeadString, Inline, queryAllChildren, queryChildren } from "./ast";
-import { Reserved, Schema } from "./schema";
+import { CustomToken, Reserved, Schema } from "./schema";
+import { countOccurrences, escapeRegExp } from "./utils";
 
 enum SchemaTags {
 	Root = "root",
@@ -8,7 +9,10 @@ enum SchemaTags {
 	Default = "default",
 	Raw = "raw",
 	Content = "content",
-	Arg = "arg"
+	Arg = "arg",
+	Sugar = "sugar",
+	Start = "start",
+	End = "end"
 }
 enum Cardinality {
 	ZeroOrMore = "zeroOrMore",
@@ -32,11 +36,13 @@ type CardinalityRules = Map<string, Cardinality>;
 
 export class ParsedSchema implements Schema {
 	private index: Map<string, ElementSchema> = new Map();
+	customTokens: CustomToken[];
 
 	constructor(schemaRoot: Block) {
 		if (schemaRoot.tag !== Reserved.rootTag) {
 			throw new Error(`Expected schema ${Reserved.rootTag}, got ${schemaRoot.tag}`);
 		}
+		this.customTokens = [];
 		schemaRoot.children.forEach(child => this.parseSchemaElement(child));
 	}
 
@@ -46,6 +52,18 @@ export class ParsedSchema implements Schema {
 			this.index.set(name, this.parseBlockSchema(element));
 		} else if (element.tag === SchemaTags.Inline) {
 			this.index.set(name, this.parseInlineSchema(element));
+			const sugar = queryChildren(element, SchemaTags.Sugar);
+			if (sugar) {
+				const start = queryChildren(sugar, SchemaTags.Start);
+				const end = queryChildren(sugar, SchemaTags.End);
+				if (start && end) {
+					this.customTokens.push({
+						tag: name,
+						start: escapeRegExp(getHeadString(start)),
+						end: escapeRegExp(getHeadString(end))
+					});
+				}
+			}
 		}
 	}
 
@@ -86,8 +104,6 @@ export class ParsedSchema implements Schema {
 	private isRaw(block: Block): boolean {
 		return Boolean(queryChildren(block, SchemaTags.Raw));
 	}
-
-	customTokens: Array<{ regex: RegExp; tag: string }>;
 
 	getDefault(parentName: string): string | undefined {
 		const element = this.index.get(parentName);
@@ -197,13 +213,4 @@ export class ParsedSchema implements Schema {
 				return count >= 0;
 		}
 	}
-}
-
-function countOccurrences<T>(arr: T[]): Map<T, number> {
-	const map = new Map<T, number>();
-	for (const item of arr) {
-		const count = map.get(item) || 0;
-		map.set(item, count + 1);
-	}
-	return map;
 }
