@@ -148,7 +148,7 @@ export class ParsedSchema implements Schema {
 			}
 		}
 		const disallowedErrors = childTags
-			.filter(tag => !rules.has(tag))
+			.filter(tag => this.index.has(tag) && !rules.has(tag))
 			.map(tag => new Error(`Tag ${tag} is not allowed in ${parent}`));
 		return cardinalityErrors.concat(disallowedErrors);
 	}
