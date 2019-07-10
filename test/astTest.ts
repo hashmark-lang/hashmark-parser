@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { Block, getHeadString, query, queryAll, queryAllChildren, queryChildren } from "../src/ast";
 import { parse } from "../src/parse";
-import { readInputFile } from "./util";
+import { readInputFile } from "./utils";
 
 describe("ast", () => {
 	const bigFile = parse(readInputFile("bigfile.hm"));

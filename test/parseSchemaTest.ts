@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { parse } from "../src/parse";
 import { ParsedSchema } from "../src/parseSchema";
-import { hm, readInputFile } from "./util";
+import { hm, readInputFile } from "./utils";
 
 function loadSchema(fileName: string): ParsedSchema {
 	const file = readInputFile(fileName);

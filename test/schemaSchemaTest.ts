@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { readFileSync } from "fs";
 import { parse } from "../src/parse";
 import { ParsedSchema } from "../src/parseSchema";
-import { filesIn } from "./util";
+import { filesIn } from "./utils";
 
 function errorsToString(errors: Error[]): string {
 	return "\n\t" + errors.map(e => "- " + e.message).join("\n\t") + "\n";

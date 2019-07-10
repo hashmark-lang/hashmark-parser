@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { parse } from "../src/parse";
-import { FileInfo, filesIn } from "./util";
+import { FileInfo, filesIn } from "./utils";
 
 describe("parse()", () => {
 	for (const output of filesIn("test/output/parse", ".json")) {
