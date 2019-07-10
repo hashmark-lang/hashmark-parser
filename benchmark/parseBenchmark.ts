@@ -1,8 +1,8 @@
+/* tslint:disable:no-console */
 import { Event, Suite } from "benchmark";
 import { parse } from "../src/parse";
 
 if (process.argv.length !== 3) {
-	/* tslint:disable:no-console */
 	console.error("Usage: node benchmark/parseBenchmark.ts [input]");
 }
 
@@ -10,6 +10,7 @@ const N_CHILDREN = 10;
 const MAX_DEPTH = 3;
 
 const LINE_CONTENT =
+	// tslint:disable-next-line:max-line-length
 	"#tag Lorem \\# ipsum #tag[dolor *sit* amet, consectetur] adipiscing elit. #tag[Integer convallis nec turpis] quis \\[ ullamcorper. _Integer_ ultricies velit accumsan volutpat viverra. Nulla et nibh \\# sed nisl interdum \\[ fringilla \\[ id in leo. #tag[Integer laoreet leo mi, _non_ accumsan] diam sodales eu. Praesent sagittis _efficitur_ turpis, non ullamcorper velit dictum ac. _In_ hac habitasse #tag[platea #tag[dictumst]. Donec molestie #tag[#tag[#tag[eros] a nisi] elementum]], eu eleifend velit #tag[blandit]. #tag[Maecenas] ac neque in sapien tempus \\\\ ullamcorper quis vel magna. Morbi sed justo quis orci mattis dapibus. #tag Nulla #tag[tristique] elit magna.\n";
 
 function generateBenchmarkInput(indent = "", depth = 0): string {
@@ -45,8 +46,7 @@ new Suite("compare")
 	.add("String.matchAll", () => {
 		for (const token of input.matchAll(
 			/(?:((?:\r\n|\n|\r|^)(\t*)[\t ]*(?:#([^ \[\r\n]+)(?: |$))?)|(#([^ \[]+)(\[)?)|(]\[)|(\[)|(\\(.)))/g
-		)) {
-		}
+		));
 	})
 	.add("Iterate through chars", () => {
 		const SHARP = "#";
