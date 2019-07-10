@@ -9,7 +9,7 @@ export class FileInfos {
 		this.path = path.join(dir, name + extension);
 	}
 
-	get content(): string {
+	readContent(): string {
 		return readFileSync(this.path).toString();
 	}
 }
