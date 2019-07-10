@@ -2,10 +2,6 @@
 import { Event, Suite } from "benchmark";
 import { parse } from "../src/parse";
 
-if (process.argv.length !== 3) {
-	console.error("Usage: node benchmark/parseBenchmark.ts [input]");
-}
-
 const N_CHILDREN = 10;
 const MAX_DEPTH = 3;
 
