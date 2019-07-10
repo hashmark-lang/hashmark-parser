@@ -20,7 +20,7 @@ describe("schema-schema.hm", () => {
 
 	for (const file of filesIn("test/input", ".hm")) {
 		if (file.name.startsWith("schema_")) {
-			const schema = parse(file.content, schemaSchema);
+			const schema = parse(file.readContent(), schemaSchema);
 			it("validates " + file.name + file.extension, () => {
 				const errors = schemaSchema.validateBlock(schema);
 				assert.isEmpty(errors, errorsToString(errors));
