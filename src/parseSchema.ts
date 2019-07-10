@@ -44,76 +44,27 @@ export class ParsedSchema implements Schema {
 		if (schemaRoot.tag !== Reserved.rootTag) {
 			throw new Error(`Expected schema ${Reserved.rootTag}, got ${schemaRoot.tag}`);
 		}
-		schemaRoot.children.forEach(child => this.parseSchemaElement(child));
-	}
 
-	private parseSchemaElement(element: Block): void {
-		const name = getHeadString(element);
-		if (element.tag === SchemaTags.Block) {
-			this.blocks.set(name, this.parseBlockSchema(element));
-		} else if (element.tag === SchemaTags.Inline) {
-			this.inlines.set(name, this.parseInlineSchema(element));
-			const sugar = queryChildren(element, SchemaTags.Sugar);
-			if (sugar) {
-				const start = queryChildren(sugar, SchemaTags.Start);
-				const end = queryChildren(sugar, SchemaTags.End);
-				if (start && end) {
-					this.customTokens.push({
-						tag: name,
-						start: escapeRegExp(getHeadString(start)),
-						end: escapeRegExp(getHeadString(end))
-					});
-				}
+		for (const element of schemaRoot.children) {
+			const name = getHeadString(element);
+			if (element.tag === SchemaTags.Block) {
+				this.blocks.set(name, parseBlockSchema(element));
+			} else if (element.tag === SchemaTags.Inline) {
+				this.inlines.set(name, parseInlineSchema(element));
+				const customToken = parseInlineSugar(element, name);
+				if (customToken) this.customTokens.push(customToken);
 			}
 		}
 	}
 
-	private parseBlockSchema(element: Block): BlockSchema {
-		const raw = this.isRaw(element);
-		const defaultElem = queryChildren(element, SchemaTags.Default);
-		const contentBlock = queryChildren(element, SchemaTags.Content);
-		const content = contentBlock ? this.parseCardinalityRules(contentBlock) : new Map();
-		return {
-			content,
-			raw,
-			defaultElem: defaultElem && getHeadString(defaultElem)
-		};
-	}
-
-	private parseInlineSchema(element: Block): InlineSchema {
-		return queryAllChildren(element, SchemaTags.Arg).map(arg => {
-			const raw = this.isRaw(arg);
-			const contentBlock = queryChildren(arg, SchemaTags.Content);
-			const content = contentBlock ? this.parseCardinalityRules(contentBlock) : new Map();
-			return { raw, content };
-		});
-	}
-
-	private parseCardinalityRules(parent: Block): CardinalityRules {
-		const rules: CardinalityRules = new Map();
-		for (const rule of parent.children) {
-			const cardinality =
-				rule.tag === Reserved.defaultTag
-					? Cardinality.ZeroOrMore
-					: (rule.tag as Cardinality);
-			const name = getHeadString(rule);
-			rules.set(name, cardinality);
-		}
-		return rules;
-	}
-
-	private isRaw(block: Block): boolean {
-		return Boolean(queryChildren(block, SchemaTags.Raw));
-	}
-
 	getDefault(parentName: string): string | undefined {
 		const element = this.blocks.get(parentName);
-		return element ? element.defaultElem : undefined;
+		return element && element.defaultElem;
 	}
 
 	validateBlock(tree: Block): Error[] {
 		const schema = this.blocks.get(tree.tag);
-		if (schema === undefined) {
+		if (!schema) {
 			if (this.inlines.has(tree.tag)) {
 				return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
 			}
@@ -155,7 +106,7 @@ export class ParsedSchema implements Schema {
 
 	private validateInline(inline: Inline): Error[] {
 		const schema = this.inlines.get(inline.tag);
-		if (schema === undefined) {
+		if (!schema) {
 			if (this.blocks.has(inline.tag)) {
 				return [new Error(`Expected ${inline.tag} to be used as a block tag`)];
 			}
@@ -204,4 +155,54 @@ export class ParsedSchema implements Schema {
 				return count >= 0;
 		}
 	}
+}
+
+function parseBlockSchema(element: Block): BlockSchema {
+	const defaultElem = queryChildren(element, SchemaTags.Default);
+	const contentBlock = queryChildren(element, SchemaTags.Content);
+	return {
+		content: contentBlock ? parseCardinalityRules(contentBlock) : new Map(),
+		raw: isRaw(element),
+		defaultElem: defaultElem && getHeadString(defaultElem)
+	};
+}
+
+function parseInlineSchema(element: Block): InlineSchema {
+	return queryAllChildren(element, SchemaTags.Arg).map(arg => {
+		const raw = isRaw(arg);
+		const contentBlock = queryChildren(arg, SchemaTags.Content);
+		const content = contentBlock ? parseCardinalityRules(contentBlock) : new Map();
+		return { raw, content };
+	});
+}
+
+function parseInlineSugar(element: Block, name: string): CustomToken | undefined {
+	const sugar = queryChildren(element, SchemaTags.Sugar);
+	if (sugar) {
+		const start = queryChildren(sugar, SchemaTags.Start);
+		const end = queryChildren(sugar, SchemaTags.End);
+		if (start && end) {
+			return {
+				tag: name,
+				start: escapeRegExp(getHeadString(start)),
+				end: escapeRegExp(getHeadString(end))
+			};
+		}
+	}
+	return undefined;
+}
+
+function parseCardinalityRules(parent: Block): CardinalityRules {
+	const rules: CardinalityRules = new Map();
+	for (const rule of parent.children) {
+		const cardinality =
+			rule.tag === Reserved.defaultTag ? Cardinality.ZeroOrMore : (rule.tag as Cardinality);
+		const name = getHeadString(rule);
+		rules.set(name, cardinality);
+	}
+	return rules;
+}
+
+function isRaw(block: Block): boolean {
+	return Boolean(queryChildren(block, SchemaTags.Raw));
 }
