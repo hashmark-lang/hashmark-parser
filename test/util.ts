@@ -3,7 +3,7 @@ import * as path from "path";
 import { Block } from "../src/ast";
 import { parse } from "../src/parse";
 
-export class FileInfos {
+export class FileInfo {
 	readonly path: string;
 	constructor(readonly dir: string, readonly name: string, readonly extension: string) {
 		this.path = path.join(dir, name + extension);
@@ -14,10 +14,10 @@ export class FileInfos {
 	}
 }
 
-export function* filesIn(dir: string, extension: string): IterableIterator<FileInfos> {
+export function* filesIn(dir: string, extension: string): IterableIterator<FileInfo> {
 	for (const file of readdirSync(dir)) {
 		if (file.endsWith(extension)) {
-			yield new FileInfos(dir, file.slice(0, -extension.length), extension);
+			yield new FileInfo(dir, file.slice(0, -extension.length), extension);
 		}
 	}
 }
