@@ -1,46 +1,43 @@
 import { Block, Inline, Line } from "./ast";
 
 export function toXML(root: Block): string {
-	return xmlTag(
-		removeHashtag(root.tag),
-		xmlTag("head", lineToXML(root.head)),
-		xmlTag("children", ...root.children.map(toXML))
-	);
+	const children = root.children.map(toXML);
+	if (root.head.length > 0) {
+		children.unshift(xmlTag("head", true, lineToXML(root.head)));
+	}
+	return xmlTag(root.tag, false, ...children);
 }
 
 function inlineToXML(inline: Inline): string {
-	return xmlTagWithAttrs(
-		removeHashtag(inline.tag),
-		{ closed: inline.closed },
-		xmlTag("arguments", ...inline.arguments.map(lineToXML))
-	);
+	const singleArg = inline.arguments.length <= 1;
+	const args = singleArg
+		? inline.arguments.flatMap(lineToXML) // No <arg> for single inline arg
+		: inline.arguments.map(arg => xmlTag("arg", true, lineToXML(arg))); // <arg> for multiple args
+	return xmlTag(inline.tag, singleArg, ...args);
 }
 
 function lineToXML(line: Line): string {
-	return line.map(value => (typeof value === "string" ? value : inlineToXML(value))).join("");
-}
-
-function removeHashtag(tag: string): string {
-	return tag.replace("#", "");
-}
-
-function xmlTag(name: string, ...children: string[]): string {
-	return xmlTagWithAttrs(name, {}, ...children);
-}
-
-function xmlTagWithAttrs(
-	name: string,
-	attributes: { [attr: string]: any } = {},
-	...children: string[]
-): string {
-	const attrs = Object.entries(attributes)
-		.map(([attr, value]) => ` ${attr}="${value}"`)
+	return line
+		.map(value => (typeof value === "string" ? escapeXML(value) : inlineToXML(value)))
 		.join("");
+}
+
+function xmlTag(name: string, inline: boolean, ...children: string[]): string {
 	if (children.length === 0) {
-		return `<${name}${attrs}/>`;
+		return `<${name}/>`;
 	} else {
-		return `<${name}${attrs}>\n${indent(children)}\n</${name}>`;
+		const content = inline ? children : "\n" + indent(children) + "\n";
+		return `<${name}>${content}</${name}>`;
 	}
+}
+
+function escapeXML(str: string): string {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
 }
 
 function indent(lines: string[]): string {

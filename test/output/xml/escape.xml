@@ -1,0 +1,14 @@
+<root>
+	<_default>
+		<head>Lorem # Ipsum</head>
+	</_default>
+	<_default>
+		<head># Lorem Ipsum</head>
+	</_default>
+	<_default>
+		<head>Lorem Ispum #</head>
+	</_default>
+	<_default>
+		<head>\ # [ ]</head>
+	</_default>
+</root>
