@@ -21,37 +21,38 @@ enum Cardinality {
 	Optional = "optional"
 }
 
-type ElementSchema = InlineSchema | BlockSchema;
 type InlineSchema = ArgSchema[];
 interface ArgSchema {
 	raw: boolean;
 	content: CardinalityRules;
 }
+
 interface BlockSchema {
 	raw: boolean;
 	content: CardinalityRules;
 	defaultElem: string | undefined;
 }
+
 type CardinalityRules = Map<string, Cardinality>;
 
 export class ParsedSchema implements Schema {
-	private index: Map<string, ElementSchema> = new Map();
-	customTokens: CustomToken[];
+	private blocks: Map<string, BlockSchema> = new Map();
+	private inlines: Map<string, InlineSchema> = new Map();
+	customTokens: CustomToken[] = [];
 
 	constructor(schemaRoot: Block) {
 		if (schemaRoot.tag !== Reserved.rootTag) {
 			throw new Error(`Expected schema ${Reserved.rootTag}, got ${schemaRoot.tag}`);
 		}
-		this.customTokens = [];
 		schemaRoot.children.forEach(child => this.parseSchemaElement(child));
 	}
 
 	private parseSchemaElement(element: Block): void {
 		const name = getHeadString(element);
 		if (element.tag === SchemaTags.Block) {
-			this.index.set(name, this.parseBlockSchema(element));
+			this.blocks.set(name, this.parseBlockSchema(element));
 		} else if (element.tag === SchemaTags.Inline) {
-			this.index.set(name, this.parseInlineSchema(element));
+			this.inlines.set(name, this.parseInlineSchema(element));
 			const sugar = queryChildren(element, SchemaTags.Sugar);
 			if (sugar) {
 				const start = queryChildren(sugar, SchemaTags.Start);
@@ -106,20 +107,17 @@ export class ParsedSchema implements Schema {
 	}
 
 	getDefault(parentName: string): string | undefined {
-		const element = this.index.get(parentName);
-		if (element && this.isBlockSchema(element)) {
-			return element.defaultElem;
-		}
-		return undefined;
+		const element = this.blocks.get(parentName);
+		return element ? element.defaultElem : undefined;
 	}
 
 	validateBlock(tree: Block): Error[] {
-		const schema = this.index.get(tree.tag);
+		const schema = this.blocks.get(tree.tag);
 		if (schema === undefined) {
+			if (this.inlines.has(tree.tag)) {
+				return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
+			}
 			return [new Error(`Unknown tag ${tree.tag}`)];
-		}
-		if (!this.isBlockSchema(schema)) {
-			return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
 		}
 		const childTags = tree.children.map(child => child.tag);
 		const errors = this.validateCardinalityRules(schema.content, tree.tag, childTags);
@@ -150,18 +148,18 @@ export class ParsedSchema implements Schema {
 			}
 		}
 		const disallowedErrors = childTags
-			.filter(tag => this.index.has(tag) && !rules.has(tag))
+			.filter(tag => (this.blocks.has(tag) || this.inlines.has(tag)) && !rules.has(tag))
 			.map(tag => new Error(`Tag ${tag} is not allowed in ${parent}`));
 		return cardinalityErrors.concat(disallowedErrors);
 	}
 
 	private validateInline(inline: Inline): Error[] {
-		const schema = this.index.get(inline.tag);
+		const schema = this.inlines.get(inline.tag);
 		if (schema === undefined) {
+			if (this.blocks.has(inline.tag)) {
+				return [new Error(`Expected ${inline.tag} to be used as a block tag`)];
+			}
 			return [new Error(`Unknown inline tag ${inline.tag}`)];
-		}
-		if (this.isBlockSchema(schema)) {
-			return [new Error(`Expected ${inline.tag} to be used as a block tag`)];
 		}
 		if (inline.arguments.length !== schema.length) {
 			return [
@@ -182,25 +180,16 @@ export class ParsedSchema implements Schema {
 	}
 
 	isRawBlock(name: string): boolean {
-		const schema = this.index.get(name);
-		if (schema && this.isBlockSchema(schema)) {
-			return schema.raw;
-		}
-		return false;
+		const schema = this.blocks.get(name);
+		return schema ? schema.raw : false;
 	}
 
 	isRawArg(name: string, index: number): boolean {
-		const schema = this.index.get(name);
-		if (schema && !this.isBlockSchema(schema)) {
-			if (index < schema.length) {
-				return schema[index].raw;
-			}
+		const schema = this.inlines.get(name);
+		if (schema && index < schema.length) {
+			return schema[index].raw;
 		}
 		return false;
-	}
-
-	private isBlockSchema(elem: ElementSchema): elem is BlockSchema {
-		return (elem as BlockSchema).content !== undefined;
 	}
 
 	private validCount(count: number, cardinality: Cardinality): boolean {
