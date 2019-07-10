@@ -13,7 +13,10 @@ export interface Inline {
 }
 
 export function queryAll(ast: Block, tag: string): Block[] {
-	return queryAllChildren(ast, tag).concat(ast.children.flatMap(child => queryAll(child, tag)));
+	return ast.children.flatMap(child => {
+		const descendants = queryAll(child, tag);
+		return child.tag === tag ? [child, ...descendants] : descendants;
+	});
 }
 
 export function queryAllChildren(ast: Block, tag: string): Block[] {
@@ -21,10 +24,12 @@ export function queryAllChildren(ast: Block, tag: string): Block[] {
 }
 
 export function query(ast: Block, tag: string): Block | undefined {
-	return (
-		queryChildren(ast, tag) ||
-		ast.children.reduce((found, child) => found || query(child, tag), undefined)
-	);
+	for (const child of ast.children) {
+		if (child.tag === tag) return child;
+		const childResult = query(child, tag);
+		if (childResult) return childResult;
+	}
+	return undefined;
 }
 
 export function queryChildren(ast: Block, tag: string): Block | undefined {

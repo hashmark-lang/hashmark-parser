@@ -8,6 +8,7 @@ describe("ast", () => {
 	const doc = query(bigFile, "document") as Block;
 	const os = parse(readInputFile("os.hm"));
 	const list = parse(readInputFile("list.hm"));
+	const dfs = parse(readInputFile("dfs.hm"));
 
 	describe("queryAll()", () => {
 		it("finds all descendants", () => {
@@ -16,6 +17,17 @@ describe("ast", () => {
 
 		it("returns an empty list if no descendants match", () => {
 			assert.isEmpty(queryAll(doc, "unknown"));
+		});
+
+		it("finds descendants in document order", () => {
+			const bars = queryAll(dfs, "bar")!;
+			assert.notStrictEqual(bars, undefined);
+			const heads = bars.map(getHeadString);
+			assert.deepStrictEqual(heads, ["1", "2"]);
+		});
+
+		it("does not return the query node", () => {
+			assert.isEmpty(queryAll(doc, "document"));
 		});
 	});
 
@@ -26,6 +38,17 @@ describe("ast", () => {
 
 		it("returns an empty list if no child matches", () => {
 			assert.isEmpty(queryAllChildren(bigFile, "section"));
+		});
+
+		it("finds children in document order", () => {
+			const sections = queryAllChildren(doc, "section")!;
+			const heads = sections.map(getHeadString);
+			const expected = Array.from({ length: 9 }, (_, index) => String(index + 1));
+			assert.deepStrictEqual(heads, expected);
+		});
+
+		it("does not return the query node", () => {
+			assert.isEmpty(queryAllChildren(doc, "document"));
 		});
 	});
 
@@ -40,6 +63,17 @@ describe("ast", () => {
 			const def = query(os, "def")!;
 			assert.strictEqual(getHeadString(def), "Operating System");
 		});
+
+		it("finds the first node in document order", () => {
+			const bar = query(dfs, "bar")!;
+			const head = getHeadString(bar);
+			assert.notEqual(bar, undefined);
+			assert.strictEqual(head, "1");
+		});
+
+		it("does not return the query node", () => {
+			assert.isUndefined(query(doc, "document"));
+		});
 	});
 
 	describe("queryChildren()", () => {
@@ -50,6 +84,10 @@ describe("ast", () => {
 
 		it("does not find lower descendants", () => {
 			assert.isUndefined(queryChildren(bigFile, "section"));
+		});
+
+		it("does not return the query node", () => {
+			assert.isUndefined(queryChildren(doc, "document"));
 		});
 	});
 
