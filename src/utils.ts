@@ -9,7 +9,7 @@ export function escapeRegExp(regexp: string): RegExp {
 	return new RegExp(escaped);
 }
 
-export function last<T>(seq: { [index: number]: T; length: number }): T {
+export function last<T>(seq: ArrayLike<T>): T {
 	return seq[seq.length - 1];
 }
 
