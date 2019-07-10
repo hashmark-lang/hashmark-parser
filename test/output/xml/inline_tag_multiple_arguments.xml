@@ -1,0 +1,8 @@
+<root>
+	<_default>
+		<head><link>
+			<arg>Example</arg>
+			<arg>www.example.com</arg>
+		</link></head>
+	</_default>
+</root>
