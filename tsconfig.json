@@ -10,7 +10,7 @@
 		"strictNullChecks": true,
 		"declaration": true,
 		"jsx": "react",
-		"outDir": "./dist"
+		"noEmit": true
 	},
-	"include": ["src"]
+	"include": ["src", "benchmark", "test"]
 }

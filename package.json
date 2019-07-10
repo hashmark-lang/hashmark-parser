@@ -38,7 +38,7 @@
 		"format:check": "prettier --check {src,test,benchmark}/**/*.ts *.json",
 		"tslint": "tslint --project tsconfig.json",
 		"tslint:fix": "tslint --project tsconfig.json --fix",
-		"build": "tsc",
+		"build": "tsc --project tsconfig.build.json",
 		"test": "mocha",
 		"preversion": "npm run build && npm test && npm run format:check && npm run tslint",
 		"postversion": "git push && git push --tags",
