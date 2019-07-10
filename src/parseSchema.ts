@@ -70,10 +70,10 @@ export class ParsedSchema implements Schema {
 			}
 			return [new Error(`Unknown tag ${tree.tag}`)];
 		}
-		const childTags = tree.children.map(child => child.tag);
-		const errors = this.validateCardinalityRules(schema.content, tree.tag, childTags);
-		const childErrors = tree.children.flatMap(child => this.validateBlock(child));
-		return errors.concat(childErrors);
+		const childrenTags = tree.children.map(child => child.tag);
+		const errors = this.validateCardinalityRules(schema.content, tree.tag, childrenTags);
+		const childrenErrors = tree.children.flatMap(child => this.validateBlock(child));
+		return errors.concat(childrenErrors);
 	}
 
 	validateLine(line: Array<string | Inline>): Error[] {
@@ -84,9 +84,9 @@ export class ParsedSchema implements Schema {
 	private validateCardinalityRules(
 		rules: CardinalityRules,
 		parent: string,
-		childTags: string[]
+		childrenTags: string[]
 	): Error[] {
-		const childCount = countOccurrences(childTags);
+		const childCount = countOccurrences(childrenTags);
 		const cardinalityErrors: Error[] = [];
 		for (const [tag, cardinality] of rules.entries()) {
 			const count = childCount.get(tag) || 0;
@@ -98,7 +98,7 @@ export class ParsedSchema implements Schema {
 				);
 			}
 		}
-		const disallowedErrors = childTags
+		const disallowedErrors = childrenTags
 			.filter(tag => (this.blocks.has(tag) || this.inlines.has(tag)) && !rules.has(tag))
 			.map(tag => new Error(`Tag ${tag} is not allowed in ${parent}`));
 		return cardinalityErrors.concat(disallowedErrors);
@@ -124,10 +124,10 @@ export class ParsedSchema implements Schema {
 
 	private validateArg(schema: ArgSchema, parent: string, arg: Array<string | Inline>): Error[] {
 		const inlines = arg.filter(x => typeof x !== "string") as Inline[];
-		const childTags = inlines.map(inline => inline.tag);
-		const childErrors = this.validateCardinalityRules(schema.content, parent, childTags);
-		const descendantErrors = inlines.flatMap(inline => this.validateInline(inline));
-		return childErrors.concat(descendantErrors);
+		const childrenTags = inlines.map(inline => inline.tag);
+		const childrenErrors = this.validateCardinalityRules(schema.content, parent, childrenTags);
+		const descendantsErrors = inlines.flatMap(inline => this.validateInline(inline));
+		return childrenErrors.concat(descendantsErrors);
 	}
 
 	isRawBlock(name: string): boolean {
