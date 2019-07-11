@@ -2,6 +2,8 @@ src
 test
 benchmark
 demo
+coverage
+.nyc_output
 .gitattributes
 .prettierrc.json
 .mocharc.json
