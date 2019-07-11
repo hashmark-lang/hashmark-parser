@@ -1,4 +1,5 @@
 import { BlockElement, InlineGroup } from "./ast";
+import { ValidationError } from "./errors";
 
 export const enum Reserved {
 	rootTag = "root",
@@ -15,8 +16,8 @@ export interface Sugar {
 export interface Schema {
 	sugars: Sugar[];
 	getDefault(parentName: string): string | undefined;
-	validateBlock(tree: BlockElement): Error[];
-	validateLine(tree: InlineGroup): Error[];
+	validateBlock(tree: BlockElement): ValidationError[];
+	validateLine(tree: InlineGroup): ValidationError[];
 	isRawBlock(name: string): boolean;
 	isRawHead(name: string): boolean;
 	isRawArg(name: string, index: number): boolean;
@@ -51,11 +52,11 @@ export const defaultSchema: Schema = {
 		return true;
 	},
 
-	validateBlock(tree: BlockElement): Error[] {
+	validateBlock(tree: BlockElement): ValidationError[] {
 		return [];
 	},
 
-	validateLine(tree: InlineGroup): Error[] {
+	validateLine(tree: InlineGroup): ValidationError[] {
 		return [];
 	}
 };

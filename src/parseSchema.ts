@@ -1,4 +1,13 @@
 import { BlockElement, getHeadString, InlineElement, queryAllChildren, queryChildren } from "./ast";
+import {
+	ArgumentCountError,
+	BlockUsedAsInlineError,
+	CardinalityError,
+	DisallowedError,
+	InlineUsedAsBlockError,
+	UnknownTagError,
+	ValidationError
+} from "./errors";
 import { Reserved, Schema, Sugar } from "./schema";
 import { countOccurrences, escapeRegExp } from "./utils";
 
@@ -14,7 +23,8 @@ enum SchemaTags {
 	Start = "start",
 	End = "end"
 }
-enum Cardinality {
+
+export enum Cardinality {
 	ZeroOrMore = "zeroOrMore",
 	OneOrMore = "oneOrMore",
 	One = "one",
@@ -62,13 +72,13 @@ export class ParsedSchema implements Schema {
 		return element && element.defaultElem;
 	}
 
-	validateBlock(tree: BlockElement): Error[] {
+	validateBlock(tree: BlockElement): ValidationError[] {
 		const schema = this.blocks.get(tree.tag);
 		if (!schema) {
 			if (this.inlines.has(tree.tag)) {
-				return [new Error(`Expected ${tree.tag} to be used as an inline tag`)];
+				return [new InlineUsedAsBlockError(tree)];
 			}
-			return [new Error(`Unknown tag ${tree.tag}`)];
+			return [new UnknownTagError(tree)];
 		}
 		const headErrors = this.validateLine(tree.head);
 		const cardinalityErrors = this.validateCardinalityRules(schema.content, tree);
@@ -76,23 +86,21 @@ export class ParsedSchema implements Schema {
 		return headErrors.concat(cardinalityErrors).concat(childrenErrors);
 	}
 
-	validateLine(line: Array<string | InlineElement>): Error[] {
-		const inlines = line.filter(x => typeof x !== "string") as InlineElement[];
+	validateLine(line: Array<string | InlineElement>): ValidationError[] {
+		const inlines = line.filter((x): x is InlineElement => typeof x !== "string");
 		return inlines.flatMap(inline => this.validateInline(inline));
 	}
 
-	private validateInline(inline: InlineElement): Error[] {
+	private validateInline(inline: InlineElement): ValidationError[] {
 		const schema = this.inlines.get(inline.tag);
 		if (!schema) {
 			if (this.blocks.has(inline.tag)) {
-				return [new Error(`Expected ${inline.tag} to be used as a block tag`)];
+				return [new BlockUsedAsInlineError(inline)];
 			}
-			return [new Error(`Unknown inline tag ${inline.tag}`)];
+			return [new UnknownTagError(inline)];
 		}
 		if (inline.args.length !== schema.length) {
-			return [
-				new Error(`Expected ${schema.length} arguments, but got ${inline.args.length}`)
-			];
+			return [new ArgumentCountError(inline, schema.length)];
 		}
 		return inline.args.flatMap((arg, index) => this.validateArg(schema[index], inline, arg));
 	}
@@ -101,31 +109,31 @@ export class ParsedSchema implements Schema {
 		schema: ArgSchema,
 		parent: InlineElement,
 		arg: Array<string | InlineElement>
-	): Error[] {
-		const inlines = arg.filter(x => typeof x !== "string") as InlineElement[];
+	): ValidationError[] {
+		const inlines = arg.filter((x): x is InlineElement => typeof x !== "string");
 		const disallowed = (tag: string) =>
 			(this.blocks.has(tag) || this.inlines.has(tag)) && !schema.content.has(tag);
 		const childrenErrors = inlines
 			.filter(inline => disallowed(inline.tag))
-			.map(inline => new Error(`Tag ${inline.tag} is not allowed in ${parent.tag}`));
+			.map(inline => new DisallowedError(parent, inline));
 		const descendantsErrors = inlines.flatMap(inline => this.validateInline(inline));
 		return childrenErrors.concat(descendantsErrors);
 	}
 
-	private validateCardinalityRules(rules: CardinalityRules, parent: BlockElement): Error[] {
+	private validateCardinalityRules(
+		rules: CardinalityRules,
+		parent: BlockElement
+	): ValidationError[] {
 		const childrenTags = parent.children.map(child => child.tag);
 		const childCount = countOccurrences(childrenTags);
-		const errors: Error[] = [];
+		const errors: ValidationError[] = [];
 
 		// Cardinality errors:
 		for (const [tag, cardinality] of rules.entries()) {
 			const count = childCount.get(tag) || 0;
 			if (!this.validCount(count, cardinality)) {
-				errors.push(
-					new Error(
-						`Saw ${count} occurrences of ${tag}, but the schema wants ${cardinality} in ${parent.tag}`
-					)
-				);
+				const children = queryAllChildren(parent, tag);
+				errors.push(new CardinalityError(parent, children, tag, count, cardinality));
 			}
 		}
 
@@ -134,7 +142,7 @@ export class ParsedSchema implements Schema {
 			const isKnown = this.blocks.has(child.tag) || this.inlines.has(child.tag);
 			const isAllowed = rules.has(child.tag);
 			if (isKnown && !isAllowed) {
-				errors.push(new Error(`Tag ${child.tag} is not allowed in ${parent.tag}`));
+				errors.push(new DisallowedError(parent, child));
 			}
 		}
 
