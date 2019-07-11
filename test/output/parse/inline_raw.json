@@ -1,22 +1,23 @@
 {
-	"tag": "root",
 	"children": [
 		{
-			"tag": "_default",
+			"children": [],
 			"head": [
-				"Hello ",
 				{
-					"tag": "code",
 					"arguments": [
 						[
-							"world"
+							"#inline[",
+							"test"
 						]
 					],
-					"closed": true
-				}
+					"closed": true,
+					"tag": "rawArg1"
+				},
+				"]"
 			],
-			"children": []
+			"tag": "_default"
 		}
 	],
-	"head": []
+	"head": [],
+	"tag": "root"
 }

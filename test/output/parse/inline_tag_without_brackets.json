@@ -1,19 +1,19 @@
 {
-	"tag": "root",
 	"children": [
 		{
-			"tag": "tag",
+			"children": [],
 			"head": [
 				"lorem ",
 				{
-					"tag": "dolphin",
 					"arguments": [],
-					"closed": false
+					"closed": true,
+					"tag": "dolphin"
 				},
 				" ipsum"
 			],
-			"children": []
+			"tag": "tag"
 		}
 	],
-	"head": []
+	"head": [],
+	"tag": "root"
 }

@@ -4,9 +4,8 @@ export function countCaptureGroups(regex: RegExp) {
 }
 
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
-export function escapeRegExp(regexp: string): RegExp {
-	const escaped = regexp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-	return new RegExp(escaped);
+export function escapeRegExp(regexp: string): string {
+	return regexp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }
 
 export function last<T>(seq: ArrayLike<T>): T {

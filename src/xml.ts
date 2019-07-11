@@ -1,6 +1,6 @@
-import { Block, Inline, Line } from "./ast";
+import { BlockElement, InlineElement, InlineGroup } from "./ast";
 
-export function toXML(root: Block): string {
+export function toXML(root: BlockElement): string {
 	const children = root.children.map(toXML);
 	if (root.head.length > 0) {
 		children.unshift(xmlTag("head", true, lineToXML(root.head)));
@@ -8,7 +8,7 @@ export function toXML(root: Block): string {
 	return xmlTag(root.tag, false, ...children);
 }
 
-function inlineToXML(inline: Inline): string {
+function inlineToXML(inline: InlineElement): string {
 	const singleArg = inline.arguments.length <= 1;
 	const args = singleArg
 		? inline.arguments.flatMap(lineToXML) // No <arg> for single inline arg
@@ -16,7 +16,7 @@ function inlineToXML(inline: Inline): string {
 	return xmlTag(inline.tag, singleArg, ...args);
 }
 
-function lineToXML(line: Line): string {
+function lineToXML(line: InlineGroup): string {
 	return line
 		.map(value => (typeof value === "string" ? escapeXML(value) : inlineToXML(value)))
 		.join("");

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
-import { Block } from "../src/ast";
-import { parse } from "../src/parse";
+import { BlockElement } from "../src/ast";
+import { parse } from "../src/Parser";
 
 export class FileInfo {
 	readonly path: string;
@@ -28,7 +28,7 @@ export function readInputFile(fileName: string): string {
 }
 
 // Tagged literal
-export function hm(literals: TemplateStringsArray, ...placeholders: string[]): Block {
+export function hm(literals: TemplateStringsArray, ...placeholders: string[]): BlockElement {
 	let result = "";
 	for (let i = 0; i < placeholders.length; ++i) {
 		result += literals[i];

@@ -1,5 +1,5 @@
-import { Block, getHeadString, Inline, queryAllChildren, queryChildren } from "./ast";
-import { CustomToken, Reserved, Schema } from "./schema";
+import { BlockElement, getHeadString, InlineElement, queryAllChildren, queryChildren } from "./ast";
+import { Reserved, Schema, Sugar } from "./schema";
 import { countOccurrences, escapeRegExp } from "./utils";
 
 enum SchemaTags {
@@ -38,9 +38,9 @@ type CardinalityRules = Map<string, Cardinality>;
 export class ParsedSchema implements Schema {
 	private blocks: Map<string, BlockSchema> = new Map();
 	private inlines: Map<string, InlineSchema> = new Map();
-	customTokens: CustomToken[] = [];
+	sugars: Sugar[] = [];
 
-	constructor(schemaRoot: Block) {
+	constructor(schemaRoot: BlockElement) {
 		if (schemaRoot.tag !== Reserved.rootTag) {
 			throw new Error(`Expected schema ${Reserved.rootTag}, got ${schemaRoot.tag}`);
 		}
@@ -52,7 +52,7 @@ export class ParsedSchema implements Schema {
 			} else if (element.tag === SchemaTags.Inline) {
 				this.inlines.set(name, parseInlineSchema(element));
 				const customToken = parseInlineSugar(element, name);
-				if (customToken) this.customTokens.push(customToken);
+				if (customToken) this.sugars.push(customToken);
 			}
 		}
 	}
@@ -62,7 +62,7 @@ export class ParsedSchema implements Schema {
 		return element && element.defaultElem;
 	}
 
-	validateBlock(tree: Block): Error[] {
+	validateBlock(tree: BlockElement): Error[] {
 		const schema = this.blocks.get(tree.tag);
 		if (!schema) {
 			if (this.inlines.has(tree.tag)) {
@@ -76,8 +76,8 @@ export class ParsedSchema implements Schema {
 		return errors.concat(childrenErrors);
 	}
 
-	validateLine(line: Array<string | Inline>): Error[] {
-		const inlines = line.filter(x => typeof x !== "string") as Inline[];
+	validateLine(line: Array<string | InlineElement>): Error[] {
+		const inlines = line.filter(x => typeof x !== "string") as InlineElement[];
 		return inlines.flatMap(inline => this.validateInline(inline));
 	}
 
@@ -104,7 +104,7 @@ export class ParsedSchema implements Schema {
 		return cardinalityErrors.concat(disallowedErrors);
 	}
 
-	private validateInline(inline: Inline): Error[] {
+	private validateInline(inline: InlineElement): Error[] {
 		const schema = this.inlines.get(inline.tag);
 		if (!schema) {
 			if (this.blocks.has(inline.tag)) {
@@ -122,8 +122,12 @@ export class ParsedSchema implements Schema {
 		);
 	}
 
-	private validateArg(schema: ArgSchema, parent: string, arg: Array<string | Inline>): Error[] {
-		const inlines = arg.filter(x => typeof x !== "string") as Inline[];
+	private validateArg(
+		schema: ArgSchema,
+		parent: string,
+		arg: Array<string | InlineElement>
+	): Error[] {
+		const inlines = arg.filter(x => typeof x !== "string") as InlineElement[];
 		const childrenTags = inlines.map(inline => inline.tag);
 		const childrenErrors = this.validateCardinalityRules(schema.content, parent, childrenTags);
 		const descendantsErrors = inlines.flatMap(inline => this.validateInline(inline));
@@ -135,12 +139,24 @@ export class ParsedSchema implements Schema {
 		return schema ? schema.raw : false;
 	}
 
+	isRawHead(name: string): boolean {
+		throw new Error("Method not implemented.");
+	}
+
 	isRawArg(name: string, index: number): boolean {
 		const schema = this.inlines.get(name);
 		if (schema && index < schema.length) {
 			return schema[index].raw;
 		}
 		return false;
+	}
+
+	isValidHeadChild(parent: string, child: string): boolean {
+		throw new Error("Method not implemented.");
+	}
+
+	isValidArgChild(parent: string, index: number, child: string): boolean {
+		throw new Error("Method not implemented.");
 	}
 
 	private validCount(count: number, cardinality: Cardinality): boolean {
@@ -157,7 +173,7 @@ export class ParsedSchema implements Schema {
 	}
 }
 
-function parseBlockSchema(element: Block): BlockSchema {
+function parseBlockSchema(element: BlockElement): BlockSchema {
 	const defaultElem = queryChildren(element, SchemaTags.Default);
 	const contentBlock = queryChildren(element, SchemaTags.Content);
 	return {
@@ -167,7 +183,7 @@ function parseBlockSchema(element: Block): BlockSchema {
 	};
 }
 
-function parseInlineSchema(element: Block): InlineSchema {
+function parseInlineSchema(element: BlockElement): InlineSchema {
 	return queryAllChildren(element, SchemaTags.Arg).map(arg => {
 		const raw = isRaw(arg);
 		const contentBlock = queryChildren(arg, SchemaTags.Content);
@@ -176,7 +192,7 @@ function parseInlineSchema(element: Block): InlineSchema {
 	});
 }
 
-function parseInlineSugar(element: Block, name: string): CustomToken | undefined {
+function parseInlineSugar(element: BlockElement, name: string): Sugar | undefined {
 	const sugar = queryChildren(element, SchemaTags.Sugar);
 	if (sugar) {
 		const start = queryChildren(sugar, SchemaTags.Start);
@@ -184,15 +200,15 @@ function parseInlineSugar(element: Block, name: string): CustomToken | undefined
 		if (start && end) {
 			return {
 				tag: name,
-				start: escapeRegExp(getHeadString(start)),
-				end: escapeRegExp(getHeadString(end))
+				start: getHeadString(start),
+				end: getHeadString(end)
 			};
 		}
 	}
 	return undefined;
 }
 
-function parseCardinalityRules(parent: Block): CardinalityRules {
+function parseCardinalityRules(parent: BlockElement): CardinalityRules {
 	const rules: CardinalityRules = new Map();
 	for (const rule of parent.children) {
 		const cardinality =
@@ -203,6 +219,6 @@ function parseCardinalityRules(parent: Block): CardinalityRules {
 	return rules;
 }
 
-function isRaw(block: Block): boolean {
+function isRaw(block: BlockElement): boolean {
 	return Boolean(queryChildren(block, SchemaTags.Raw));
 }
