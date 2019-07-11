@@ -17,9 +17,10 @@
 		#optional sugar
 
 #block arg
+	#default zeroOrMore
 	#content
 		#optional raw
-		#optional content
+		zeroOrMore
 
 #block sugar
 	#content
@@ -39,9 +40,6 @@
 	#content
 		#optional raw
 		zeroOrMore
-		oneOrMore
-		optional
-		one
 
 #block start
 #block end
