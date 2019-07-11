@@ -7,8 +7,10 @@ cache:
 notifications:
   email: false
 script:
-- npm run check
 - npm run build
+- npm run format:check
+- npm run tslint
+- npm run coveralls
 deploy:
   skip_cleanup: true
   provider: npm
