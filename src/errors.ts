@@ -11,9 +11,9 @@ export abstract class HMError extends Error {
 	}
 }
 
-//////////////////////////////
-// Schema validation errors //
-//////////////////////////////
+//////////////////////////////////
+// 1xx Schema validation errors //
+//////////////////////////////////
 
 export abstract class ValidationError extends HMError {
 	constructor(readonly code: number, readonly message: string) {
@@ -21,29 +21,37 @@ export abstract class ValidationError extends HMError {
 	}
 }
 
+// 100 Unknown tag error:
+
 export class UnknownTagError extends ValidationError {
 	constructor(tree: BlockElement | InlineElement) {
-		super(1001, `Unknown tag '${tree}'`);
+		super(100, `Unknown tag '${tree}'`);
 	}
 }
 
-export class DisallowedError extends ValidationError {
-	constructor(parent: BlockElement | InlineElement, tree: BlockElement | InlineElement) {
-		super(1002, `Tag '#${tree.tag}' is not allowed in '#${parent.tag}'`);
-	}
-}
+// 11x Misused tag errors:
 
 export class InlineUsedAsBlockError extends ValidationError {
 	constructor(tree: BlockElement) {
-		super(1003, `Expected '${tree.tag}' to be used as an inline tag`);
+		super(110, `Expected '${tree.tag}' to be used as an inline tag`);
 	}
 }
 
 export class BlockUsedAsInlineError extends ValidationError {
 	constructor(tree: InlineElement) {
-		super(1004, `Expected '${tree.tag}' to be used as a block tag`);
+		super(111, `Expected '${tree.tag}' to be used as a block tag`);
 	}
 }
+
+// 12x Disallowed tag errors:
+
+export class DisallowedError extends ValidationError {
+	constructor(parent: BlockElement | InlineElement, tree: BlockElement | InlineElement) {
+		super(120, `Tag '#${tree.tag}' is not allowed in '#${parent.tag}'`);
+	}
+}
+
+// 13x Cardinality errors
 
 export class CardinalityError extends ValidationError {
 	constructor(
@@ -54,7 +62,7 @@ export class CardinalityError extends ValidationError {
 		cardinality: Cardinality
 	) {
 		super(
-			1005,
+			130,
 			`Saw ${count} occurrences of '${tag}' in ${
 				parent.tag
 			}, but the schema requires ${CardinalityError.cardinalityToString(cardinality)} in ${
@@ -79,10 +87,12 @@ export class CardinalityError extends ValidationError {
 	}
 }
 
+// 14x Argument errors
+
 export class ArgumentCountError extends ValidationError {
 	constructor(inline: InlineElement, expected: number) {
 		super(
-			1006,
+			140,
 			`Expected '#${inline.tag}' to have ${expected} arguments, but got ${inline.args.length} instead`
 		);
 	}
