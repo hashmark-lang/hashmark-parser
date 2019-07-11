@@ -10,8 +10,7 @@
 	#arg
 		#raw
 	#arg
-		#content
-			bold
+		bold
 
 #inline bold
 	#sugar

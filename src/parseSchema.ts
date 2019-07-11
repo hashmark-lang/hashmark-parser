@@ -24,7 +24,7 @@ enum Cardinality {
 type InlineSchema = ArgSchema[];
 interface ArgSchema {
 	raw: boolean;
-	content: CardinalityRules;
+	content: Set<string>;
 }
 
 interface BlockSchema {
@@ -70,38 +70,15 @@ export class ParsedSchema implements Schema {
 			}
 			return [new Error(`Unknown tag ${tree.tag}`)];
 		}
-		const childrenTags = tree.children.map(child => child.tag);
-		const errors = this.validateCardinalityRules(schema.content, tree.tag, childrenTags);
+		const headErrors = this.validateLine(tree.head);
+		const cardinalityErrors = this.validateCardinalityRules(schema.content, tree);
 		const childrenErrors = tree.children.flatMap(child => this.validateBlock(child));
-		return errors.concat(childrenErrors);
+		return headErrors.concat(cardinalityErrors).concat(childrenErrors);
 	}
 
 	validateLine(line: Array<string | InlineElement>): Error[] {
 		const inlines = line.filter(x => typeof x !== "string") as InlineElement[];
 		return inlines.flatMap(inline => this.validateInline(inline));
-	}
-
-	private validateCardinalityRules(
-		rules: CardinalityRules,
-		parent: string,
-		childrenTags: string[]
-	): Error[] {
-		const childCount = countOccurrences(childrenTags);
-		const cardinalityErrors: Error[] = [];
-		for (const [tag, cardinality] of rules.entries()) {
-			const count = childCount.get(tag) || 0;
-			if (!this.validCount(count, cardinality)) {
-				cardinalityErrors.push(
-					new Error(
-						`Saw ${count} occurrences of ${tag}, but the schema wants ${cardinality} in ${parent}`
-					)
-				);
-			}
-		}
-		const disallowedErrors = childrenTags
-			.filter(tag => (this.blocks.has(tag) || this.inlines.has(tag)) && !rules.has(tag))
-			.map(tag => new Error(`Tag ${tag} is not allowed in ${parent}`));
-		return cardinalityErrors.concat(disallowedErrors);
 	}
 
 	private validateInline(inline: InlineElement): Error[] {
@@ -117,21 +94,51 @@ export class ParsedSchema implements Schema {
 				new Error(`Expected ${schema.length} arguments, but got ${inline.args.length}`)
 			];
 		}
-		return inline.args.flatMap((arg, index) =>
-			this.validateArg(schema[index], inline.tag, arg)
-		);
+		return inline.args.flatMap((arg, index) => this.validateArg(schema[index], inline, arg));
 	}
 
 	private validateArg(
 		schema: ArgSchema,
-		parent: string,
+		parent: InlineElement,
 		arg: Array<string | InlineElement>
 	): Error[] {
 		const inlines = arg.filter(x => typeof x !== "string") as InlineElement[];
-		const childrenTags = inlines.map(inline => inline.tag);
-		const childrenErrors = this.validateCardinalityRules(schema.content, parent, childrenTags);
+		const disallowed = (tag: string) =>
+			(this.blocks.has(tag) || this.inlines.has(tag)) && !schema.content.has(tag);
+		const childrenErrors = inlines
+			.filter(inline => disallowed(inline.tag))
+			.map(inline => new Error(`Tag ${inline.tag} is not allowed in ${parent.tag}`));
 		const descendantsErrors = inlines.flatMap(inline => this.validateInline(inline));
 		return childrenErrors.concat(descendantsErrors);
+	}
+
+	private validateCardinalityRules(rules: CardinalityRules, parent: BlockElement): Error[] {
+		const childrenTags = parent.children.map(child => child.tag);
+		const childCount = countOccurrences(childrenTags);
+		const errors: Error[] = [];
+
+		// Cardinality errors:
+		for (const [tag, cardinality] of rules.entries()) {
+			const count = childCount.get(tag) || 0;
+			if (!this.validCount(count, cardinality)) {
+				errors.push(
+					new Error(
+						`Saw ${count} occurrences of ${tag}, but the schema wants ${cardinality} in ${parent.tag}`
+					)
+				);
+			}
+		}
+
+		// Disallowed element errors:
+		for (const child of parent.children) {
+			const isKnown = this.blocks.has(child.tag) || this.inlines.has(child.tag);
+			const isAllowed = rules.has(child.tag);
+			if (isKnown && !isAllowed) {
+				errors.push(new Error(`Tag ${child.tag} is not allowed in ${parent.tag}`));
+			}
+		}
+
+		return errors;
 	}
 
 	isRawBlock(name: string): boolean {
@@ -186,8 +193,8 @@ function parseBlockSchema(element: BlockElement): BlockSchema {
 function parseInlineSchema(element: BlockElement): InlineSchema {
 	return queryAllChildren(element, SchemaTags.Arg).map(arg => {
 		const raw = isRaw(arg);
-		const contentBlock = queryChildren(arg, SchemaTags.Content);
-		const content = contentBlock ? parseCardinalityRules(contentBlock) : new Map();
+		const allowed = queryAllChildren(arg, Cardinality.ZeroOrMore);
+		const content = new Set(allowed.map(getHeadString));
 		return { raw, content };
 	});
 }
