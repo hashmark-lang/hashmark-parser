@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { parse } from "../src/parse";
+import { parse } from "../src/Parser";
 import { ParsedSchema } from "../src/parseSchema";
 import { hm, readInputFile } from "./utils";
 
@@ -196,25 +196,25 @@ describe("ParsedSchema", () => {
 
 	describe("customTokens", () => {
 		it("is empty when no sugar is defined", () => {
-			assert.isEmpty(blocksSchema.customTokens);
+			assert.isEmpty(blocksSchema.sugars);
 		});
 
 		it("only contains the defined sugar", () => {
-			const boldSugar = inlinesSchema.customTokens.find(c => c.tag === "bold")!;
+			const boldSugar = inlinesSchema.sugars.find(c => c.tag === "bold")!;
 			assert.notStrictEqual(boldSugar, undefined);
-			assert.lengthOf(inlinesSchema.customTokens, 1);
+			assert.lengthOf(inlinesSchema.sugars, 1);
 		});
 
 		it(".start contains a RegExp corresponding to the specified start character", () => {
-			const boldSugar = inlinesSchema.customTokens.find(c => c.tag === "bold")!;
+			const boldSugar = inlinesSchema.sugars.find(c => c.tag === "bold")!;
 			assert.notStrictEqual(boldSugar, undefined);
-			assert.strictEqual(boldSugar.start.source, "\\*");
+			assert.strictEqual(boldSugar.start, "*");
 		});
 
 		it(".end contains a RegExp corresponding to the specified end character", () => {
-			const boldSugar = inlinesSchema.customTokens.find(c => c.tag === "bold")!;
+			const boldSugar = inlinesSchema.sugars.find(c => c.tag === "bold")!;
 			assert.notStrictEqual(boldSugar, undefined);
-			assert.strictEqual(boldSugar.end.source, "\\*");
+			assert.strictEqual(boldSugar.end, "*");
 		});
 	});
 });

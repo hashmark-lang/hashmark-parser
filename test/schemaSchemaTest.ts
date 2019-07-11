@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { readFileSync } from "fs";
-import { parse } from "../src/parse";
+import { parse } from "../src/Parser";
 import { ParsedSchema } from "../src/parseSchema";
 import { filesIn } from "./utils";
 

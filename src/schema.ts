@@ -1,61 +1,61 @@
-import { Block, Line } from "./ast";
+import { BlockElement, InlineGroup } from "./ast";
 
 export const enum Reserved {
 	rootTag = "root",
 	defaultTag = "_default"
 }
 
-export interface CustomToken {
+export interface Sugar {
 	tag: string;
-	start: RegExp;
-	end: RegExp;
+	start: string;
+	end: string;
+	separator?: string;
 }
 
 export interface Schema {
-	customTokens: CustomToken[];
+	sugars: Sugar[];
 	getDefault(parentName: string): string | undefined;
-	validateBlock(tree: Block): Error[];
-	validateLine(tree: Line): Error[];
+	validateBlock(tree: BlockElement): Error[];
+	validateLine(tree: InlineGroup): Error[];
 	isRawBlock(name: string): boolean;
+	isRawHead(name: string): boolean;
 	isRawArg(name: string, index: number): boolean;
+	isValidHeadChild(parent: string, child: string): boolean;
+	isValidArgChild(parent: string, index: number, child: string): boolean;
 }
 
 export const defaultSchema: Schema = {
-	customTokens: [
-		{
-			start: /`/,
-			end: /`/,
-			tag: "code"
-		},
-		{
-			start: /\*/,
-			end: /\*/,
-			tag: "emphasis"
-		},
-		{
-			start: /_/,
-			end: /_/,
-			tag: "strong"
-		}
-	],
+	sugars: [],
 
 	getDefault(parentName: string) {
 		return undefined;
 	},
 
 	isRawBlock(name: string): boolean {
-		return name === "raw";
+		return false;
+	},
+
+	isRawHead(name: string): boolean {
+		return false;
 	},
 
 	isRawArg(name: string, index: number): boolean {
-		return name === "raw";
+		return false;
 	},
 
-	validateBlock(tree: Block): Error[] {
+	isValidHeadChild(parent: string, child: string): boolean {
+		return true;
+	},
+
+	isValidArgChild(parent: string, index: number, child: string): boolean {
+		return true;
+	},
+
+	validateBlock(tree: BlockElement): Error[] {
 		return [];
 	},
 
-	validateLine(tree: Line): Error[] {
+	validateLine(tree: InlineGroup): Error[] {
 		return [];
 	}
 };

@@ -1,29 +1,29 @@
-export type Line = Array<string | Inline>;
+export type InlineGroup = Array<string | InlineElement>;
 
-export interface Block {
+export interface BlockElement {
 	tag: string;
-	head: Line;
-	children: Block[];
+	head: InlineGroup;
+	children: BlockElement[];
 }
 
-export interface Inline {
+export interface InlineElement {
 	tag: string;
-	arguments: Line[];
+	arguments: InlineGroup[];
 	closed: boolean;
 }
 
-export function queryAll(ast: Block, tag: string): Block[] {
+export function queryAll(ast: BlockElement, tag: string): BlockElement[] {
 	return ast.children.flatMap(child => {
 		const descendants = queryAll(child, tag);
 		return child.tag === tag ? [child, ...descendants] : descendants;
 	});
 }
 
-export function queryAllChildren(ast: Block, tag: string): Block[] {
+export function queryAllChildren(ast: BlockElement, tag: string): BlockElement[] {
 	return ast.children.filter(b => b.tag === tag);
 }
 
-export function query(ast: Block, tag: string): Block | undefined {
+export function query(ast: BlockElement, tag: string): BlockElement | undefined {
 	for (const child of ast.children) {
 		if (child.tag === tag) return child;
 		const childResult = query(child, tag);
@@ -32,11 +32,11 @@ export function query(ast: Block, tag: string): Block | undefined {
 	return undefined;
 }
 
-export function queryChildren(ast: Block, tag: string): Block | undefined {
+export function queryChildren(ast: BlockElement, tag: string): BlockElement | undefined {
 	return ast.children.find(b => b.tag === tag);
 }
 
-export function getHeadString(block: Block): string {
+export function getHeadString(block: BlockElement): string {
 	if (block.head.some(x => typeof x !== "string")) {
 		throw new Error("problem"); // TODO do better than this later
 	}

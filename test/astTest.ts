@@ -1,11 +1,18 @@
 import { assert } from "chai";
-import { Block, getHeadString, query, queryAll, queryAllChildren, queryChildren } from "../src/ast";
-import { parse } from "../src/parse";
+import {
+	BlockElement,
+	getHeadString,
+	query,
+	queryAll,
+	queryAllChildren,
+	queryChildren
+} from "../src/ast";
+import { parse } from "../src/Parser";
 import { readInputFile } from "./utils";
 
 describe("ast", () => {
 	const bigFile = parse(readInputFile("bigfile.hm"));
-	const doc = query(bigFile, "document") as Block;
+	const doc = query(bigFile, "document") as BlockElement;
 	const os = parse(readInputFile("os.hm"));
 	const list = parse(readInputFile("list.hm"));
 	const dfs = parse(readInputFile("dfs.hm"));

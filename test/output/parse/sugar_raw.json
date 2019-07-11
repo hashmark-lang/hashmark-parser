@@ -1,0 +1,28 @@
+{
+  "children": [
+    {
+      "children": [],
+      "head": [
+        {
+          "arguments": [
+            [
+              "#notInterpreted[",
+              "lorem",
+              "]",
+              " ipsum ",
+              "*",
+              "dolor",
+              "*",
+              " sit"
+            ]
+          ],
+          "closed": true,
+          "tag": "code"
+        }
+      ],
+      "tag": "_default"
+    }
+  ],
+  "head": [],
+  "tag": "root"
+}

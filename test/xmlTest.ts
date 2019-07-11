@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { parse } from "../src/parse";
+import { parse } from "../src/Parser";
 import { toXML } from "../src/xml";
 import { FileInfo, filesIn } from "./utils";
 

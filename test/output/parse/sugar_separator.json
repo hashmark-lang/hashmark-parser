@@ -1,0 +1,50 @@
+{
+  "children": [
+    {
+      "children": [],
+      "head": [
+        {
+          "arguments": [
+            [
+              "a"
+            ],
+            [
+              "b ",
+              {
+                "arguments": [
+                  [
+                    "c"
+                  ],
+                  [
+                    "d"
+                  ],
+                  [
+                    "e"
+                  ]
+                ],
+                "closed": true,
+                "tag": "set"
+              }
+            ],
+            [
+              {
+                "arguments": [
+                  [
+                    "f"
+                  ]
+                ],
+                "closed": true,
+                "tag": "set"
+              }
+            ]
+          ],
+          "closed": true,
+          "tag": "set"
+        }
+      ],
+      "tag": "_default"
+    }
+  ],
+  "head": [],
+  "tag": "root"
+}

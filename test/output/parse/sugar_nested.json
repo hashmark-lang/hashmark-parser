@@ -1,0 +1,49 @@
+{
+  "children": [
+    {
+      "children": [],
+      "head": [
+        {
+          "arguments": [
+            [
+              {
+                "arguments": [
+                  [
+                    "lorem"
+                  ]
+                ],
+                "closed": true,
+                "tag": "strong"
+              },
+              " ipsum"
+            ]
+          ],
+          "closed": true,
+          "tag": "tag"
+        },
+        " dolor ",
+        {
+          "arguments": [
+            [
+              "sit ",
+              {
+                "arguments": [
+                  [
+                    "amet"
+                  ]
+                ],
+                "closed": false,
+                "tag": "tag"
+              }
+            ]
+          ],
+          "closed": true,
+          "tag": "emphasis"
+        }
+      ],
+      "tag": "_default"
+    }
+  ],
+  "head": [],
+  "tag": "root"
+}

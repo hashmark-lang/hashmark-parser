@@ -1,0 +1,21 @@
+{
+  "children": [
+    {
+      "children": [],
+      "head": [
+        {
+          "arguments": [
+            [
+              "hello"
+            ]
+          ],
+          "closed": true,
+          "tag": "strong"
+        }
+      ],
+      "tag": "_default"
+    }
+  ],
+  "head": [],
+  "tag": "root"
+}
