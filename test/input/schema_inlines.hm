@@ -1,4 +1,5 @@
 #block root
+	#default paragraph
 	#content
 		paragraph
 
@@ -9,6 +10,7 @@
 #inline url
 	#arg
 		#raw
+		bold
 	#arg
 		bold
 
