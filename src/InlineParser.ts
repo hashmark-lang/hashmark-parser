@@ -78,7 +78,7 @@ export class InlineParser {
 			}
 			case "#": {
 				const endsWithBracket = last(token) === "[";
-				const tag = token.slice(1, endsWithBracket ? -1 : token.length);
+				const tag = token.slice(1, endsWithBracket ? -1 : undefined);
 				this.open(tag, this.inlineTag, !endsWithBracket);
 				return;
 			}
