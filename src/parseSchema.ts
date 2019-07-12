@@ -18,7 +18,7 @@ import {
 	ValidationError
 } from "./errors";
 import { Reserved, Schema, Sugar } from "./schema";
-import { countOccurrences, escapeRegExp } from "./utils";
+import { countOccurrences } from "./utils";
 
 enum SchemaTags {
 	Root = "root",
@@ -49,7 +49,10 @@ interface ArgSchema {
 
 interface BlockSchema {
 	raw: boolean;
-	headContent: Set<string>;
+	head: {
+		content: Set<string>;
+		raw: boolean;
+	};
 	content: CardinalityRules;
 	defaultElem: string | undefined;
 }
@@ -91,7 +94,7 @@ export class ParsedSchema implements Schema {
 			}
 			return [new UnknownTagError(tree)];
 		}
-		const headErrors = this.validateHead(schema.headContent, tree);
+		const headErrors = this.validateHead(schema.head.content, tree);
 		const cardinalityErrors = this.validateCardinalityRules(schema.content, tree);
 		const childrenErrors = tree.children.flatMap(child => this.validateBlock(child));
 		return headErrors.concat(cardinalityErrors).concat(childrenErrors);
@@ -176,7 +179,8 @@ export class ParsedSchema implements Schema {
 	}
 
 	isRawHead(name: string): boolean {
-		throw new Error("Method not implemented.");
+		const schema = this.blocks.get(name);
+		return schema ? schema.head.raw : false;
 	}
 
 	isRawArg(name: string, index: number): boolean {
@@ -188,11 +192,16 @@ export class ParsedSchema implements Schema {
 	}
 
 	isValidHeadChild(parent: string, child: string): boolean {
-		throw new Error("Method not implemented.");
+		const schema = this.blocks.get(parent);
+		return schema ? schema.head.content.has(child) : false;
 	}
 
 	isValidArgChild(parent: string, index: number, child: string): boolean {
-		throw new Error("Method not implemented.");
+		const schema = this.inlines.get(parent);
+		if (schema && index < schema.length) {
+			return schema[index].content.has(child);
+		}
+		return false;
 	}
 
 	private validCount(count: number, cardinality: Cardinality): boolean {
@@ -215,7 +224,10 @@ function parseBlockSchema(element: BlockElement): BlockSchema {
 	const contentBlock = queryChildren(element, SchemaTags.Content);
 	const defaultElemLine = queryChildren(element, SchemaTags.Default);
 	return {
-		headContent: new Set(allowedInHead.map(getHeadString)),
+		head: {
+			content: new Set(allowedInHead.map(getHeadString)),
+			raw: headBlock ? isRaw(headBlock) : false
+		},
 		content: contentBlock ? parseCardinalityRules(contentBlock) : new Map(),
 		raw: isRaw(element),
 		defaultElem: defaultElemLine && getHeadString(defaultElemLine)
