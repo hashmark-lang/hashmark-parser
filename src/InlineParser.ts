@@ -135,8 +135,7 @@ export class InlineParser {
 		this.isRawArg = this.schema.isRawArg(element.tag, element.arguments.length);
 	}
 
-	private close(index: number = -1) {
-		if (index < 0) index = this.stack.length + index;
+	private close(index: number = this.stack.length - 1) {
 		if (index === this.stack.length) return;
 		this.stack[index].element.closed = true;
 		this.stack.length = index;
