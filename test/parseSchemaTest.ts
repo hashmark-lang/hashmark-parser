@@ -1,18 +1,32 @@
 import { assert } from "chai";
 import { parse } from "../src/Parser";
 import { ParsedSchema } from "../src/parseSchema";
-import { hm, readInputFile } from "./utils";
-
-function loadSchema(fileName: string): ParsedSchema {
-	const file = readInputFile(fileName);
-	const parsed = parse(file);
-	return new ParsedSchema(parsed);
-}
+import { Schema } from "../src/schema";
+import { getSchemaSchema, hm, readInputFile } from "./utils";
 
 describe("ParsedSchema", () => {
-	const inlinesSchema = loadSchema("schema_inlines.hm");
-	const blocksSchema = loadSchema("schema_blocks.hm");
-	const defaultsSchema = loadSchema("schema_defaults.hm");
+	let schemaSchema: Schema;
+
+	let inlinesSchema: ParsedSchema;
+	let blocksSchema: ParsedSchema;
+	let defaultsSchema: ParsedSchema;
+	let headsSchema: ParsedSchema;
+
+	function loadSchema(fileName: string): ParsedSchema {
+		if (!schemaSchema) {
+			schemaSchema = getSchemaSchema();
+		}
+		const file = readInputFile(fileName);
+		const parsed = parse(file, schemaSchema);
+		return new ParsedSchema(parsed);
+	}
+
+	before(() => {
+		inlinesSchema = loadSchema("schema_inlines.hm");
+		blocksSchema = loadSchema("schema_blocks.hm");
+		defaultsSchema = loadSchema("schema_defaults.hm");
+		headsSchema = loadSchema("schema_heads.hm");
+	});
 
 	describe("isRawBlock()", () => {
 		it("returns true for blocks marked as raw in the schema", () => {
@@ -50,6 +64,56 @@ describe("ParsedSchema", () => {
 		it("returns false for block tags", () => {
 			assert.isFalse(inlinesSchema.isRawArg("paragraph", 0));
 			assert.isFalse(inlinesSchema.isRawArg("paragraph", 1));
+		});
+	});
+
+	describe("isRawHead()", () => {
+		it("returns true when the head is marked as raw in the schema", () => {
+			assert.isTrue(headsSchema.isRawHead("date"));
+		});
+
+		it("returns false when the head isn't marked as raw", () => {
+			assert.isFalse(headsSchema.isRawHead("author"));
+		});
+
+		it("returns false when the element is unknown", () => {
+			assert.isFalse(headsSchema.isRawHead("unknown"));
+		});
+	});
+
+	describe("isValidHeadChild()", () => {
+		it("returns true when the element is marked as valid content", () => {
+			assert.isTrue(headsSchema.isValidHeadChild("paragraph", "emphasis"));
+		});
+
+		it("returns false when the element is not marked as valid content", () => {
+			assert.isFalse(headsSchema.isValidHeadChild("author", "emphasis"));
+		});
+
+		it("returns false when the parent element is unknown", () => {
+			assert.isFalse(headsSchema.isValidHeadChild("unknown", "emphasis"));
+		});
+
+		it("returns false when the child element is unknown", () => {
+			assert.isFalse(headsSchema.isValidHeadChild("paragraph", "unknown"));
+		});
+	});
+
+	describe("isValidArgChild()", () => {
+		it("returns true when the arg is marked as valid content", () => {
+			assert.isTrue(inlinesSchema.isValidArgChild("url", 1, "bold"));
+		});
+
+		it("returns false when the arg is marked as valid content", () => {
+			assert.isFalse(inlinesSchema.isValidArgChild("url", 1, "paragraph"));
+		});
+
+		it("returns false when the arg is not defined in the schema", () => {
+			assert.isFalse(inlinesSchema.isValidArgChild("url", 123, "bold"));
+		});
+
+		it("returns false when the parent element is unknown", () => {
+			assert.isFalse(inlinesSchema.isValidArgChild("unknown", 0, "bold"));
 		});
 	});
 
@@ -178,7 +242,7 @@ describe("ParsedSchema", () => {
 		}
 	});
 
-	describe("customTokens", () => {
+	describe("sugars", () => {
 		it("is empty when no sugar is defined", () => {
 			assert.isEmpty(blocksSchema.sugars);
 		});
