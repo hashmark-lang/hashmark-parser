@@ -8,12 +8,19 @@ interface InlineSyntax {
 }
 
 export class InlineParser {
+	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
+	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
 	private readonly inlineTag: InlineSyntax = { separator: "][", end: "]" };
+	// Map of sugar start character to sugar definition:
 	private readonly sugars: Map<string, Sugar>;
+	// Stack of currently open inline elements:
 	private stack: Array<{ element: InlineElement; syntax: InlineSyntax }> = [];
+	// Inline group at nesting level 0:
 	private root: InlineGroup;
+	// Inline group at current nesting level:
 	private current: InlineGroup;
+
 	private isRawArg: boolean;
 	private blockName: string;
 
@@ -61,6 +68,10 @@ export class InlineParser {
 		return this.root;
 	}
 
+	/**
+	 * Handles escaped characters, inline sugar and inline tags
+	 * @param token string containing the token
+	 */
 	private handleToken(token: string) {
 		switch (token[0]) {
 			case "\\": {
@@ -74,6 +85,9 @@ export class InlineParser {
 				return;
 			}
 			default: {
+				// Auto-close in cases like:
+				// 	 *_Hello*
+				//   *#inline[Test*
 				for (let j = this.stack.length - 1; j >= 0; --j) {
 					if (this.stack[j].syntax.end === token) {
 						this.close(j);
@@ -81,6 +95,7 @@ export class InlineParser {
 					}
 				}
 
+				// Close arg, and open next arg for separators:
 				for (let j = this.stack.length - 1; j >= 0; --j) {
 					if (this.stack[j].syntax.separator === token) {
 						this.close(j + 1);
@@ -129,6 +144,10 @@ export class InlineParser {
 		this.isRawArg = false;
 	}
 
+	/**
+	 * Whether the sugar should be parsed as sugar in this context, or simply as text
+	 * @param sugar description of the sugar
+	 */
 	private isSugarStart(sugar: Sugar) {
 		if (this.stack.length === 0) return this.schema.isValidHeadChild(sugar.tag, this.blockName);
 		const top = last(this.stack).element;
