@@ -48,8 +48,6 @@ export class InlineParser {
 	}
 
 	parse(input: string, blockName: string): InlineGroup {
-		if (!input) return [];
-
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
 		this.current = this.root = [];
