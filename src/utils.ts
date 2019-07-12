@@ -15,3 +15,16 @@ export function countOccurrences<T>(arr: T[]): Map<T, number> {
 	}
 	return map;
 }
+
+export function ordinal(i: number): string {
+	function suffix(j: number) {
+		const tens = j % 100;
+		if (10 <= tens && tens <= 20) return "th";
+		const units = tens % 10;
+		if (units === 1) return "st";
+		if (units === 2) return "nd";
+		if (units === 3) return "rd";
+		return "th";
+	}
+	return i + suffix(Math.abs(i));
+}

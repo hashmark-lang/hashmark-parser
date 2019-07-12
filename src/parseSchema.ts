@@ -1,9 +1,18 @@
-import { BlockElement, getHeadString, InlineElement, queryAllChildren, queryChildren } from "./ast";
+import {
+	BlockElement,
+	getHeadString,
+	InlineElement,
+	InlineGroup,
+	queryAllChildren,
+	queryChildren
+} from "./ast";
 import {
 	ArgumentCountError,
 	BlockUsedAsInlineError,
 	CardinalityError,
-	DisallowedError,
+	DisallowedInArgError,
+	DisallowedInBlockError,
+	DisallowedInHeadError,
 	InlineUsedAsBlockError,
 	UnknownTagError,
 	ValidationError
@@ -17,6 +26,7 @@ enum SchemaTags {
 	Inline = "inline",
 	Default = "default",
 	Raw = "raw",
+	Head = "head",
 	Content = "content",
 	Arg = "arg",
 	Sugar = "sugar",
@@ -39,6 +49,7 @@ interface ArgSchema {
 
 interface BlockSchema {
 	raw: boolean;
+	headContent: Set<string>;
 	content: CardinalityRules;
 	defaultElem: string | undefined;
 }
@@ -80,7 +91,7 @@ export class ParsedSchema implements Schema {
 			}
 			return [new UnknownTagError(tree)];
 		}
-		const headErrors = this.validateLine(tree.head);
+		const headErrors = this.validateHead(schema.headContent, tree);
 		const cardinalityErrors = this.validateCardinalityRules(schema.content, tree);
 		const childrenErrors = tree.children.flatMap(child => this.validateBlock(child));
 		return headErrors.concat(cardinalityErrors).concat(childrenErrors);
@@ -102,22 +113,32 @@ export class ParsedSchema implements Schema {
 		if (inline.args.length !== schema.length) {
 			return [new ArgumentCountError(inline, schema.length)];
 		}
-		return inline.args.flatMap((arg, index) => this.validateArg(schema[index], inline, arg));
+		return inline.args.flatMap((arg, index) => this.validateArg(schema[index], inline, index));
 	}
 
 	private validateArg(
 		schema: ArgSchema,
 		parent: InlineElement,
-		arg: Array<string | InlineElement>
+		argIndex: number
 	): ValidationError[] {
-		const inlines = arg.filter((x): x is InlineElement => typeof x !== "string");
+		const arg = parent.args[argIndex];
+		return this.findDisallowedInlines(schema.content, arg)
+			.map(inline => new DisallowedInArgError(parent, argIndex, inline))
+			.concat(this.validateLine(arg));
+	}
+
+	private validateHead(allowed: Set<string>, parent: BlockElement): ValidationError[] {
+		return this.findDisallowedInlines(allowed, parent.head)
+			.map(inline => new DisallowedInHeadError(parent, inline))
+			.concat(this.validateLine(parent.head));
+	}
+
+	private findDisallowedInlines(allowed: Set<string>, line: InlineGroup): InlineElement[] {
+		// Disallowed means "not unknown" and "not allowed"
 		const disallowed = (tag: string) =>
-			(this.blocks.has(tag) || this.inlines.has(tag)) && !schema.content.has(tag);
-		const childrenErrors = inlines
-			.filter(inline => disallowed(inline.tag))
-			.map(inline => new DisallowedError(parent, inline));
-		const descendantsErrors = inlines.flatMap(inline => this.validateInline(inline));
-		return childrenErrors.concat(descendantsErrors);
+			(this.blocks.has(tag) || this.inlines.has(tag)) && !allowed.has(tag);
+		const inlines = line.filter((x): x is InlineElement => typeof x !== "string");
+		return inlines.filter(inline => disallowed(inline.tag));
 	}
 
 	private validateCardinalityRules(
@@ -142,7 +163,7 @@ export class ParsedSchema implements Schema {
 			const isKnown = this.blocks.has(child.tag) || this.inlines.has(child.tag);
 			const isAllowed = rules.has(child.tag);
 			if (isKnown && !isAllowed) {
-				errors.push(new DisallowedError(parent, child));
+				errors.push(new DisallowedInBlockError(parent, child));
 			}
 		}
 
@@ -189,12 +210,15 @@ export class ParsedSchema implements Schema {
 }
 
 function parseBlockSchema(element: BlockElement): BlockSchema {
-	const defaultElem = queryChildren(element, SchemaTags.Default);
+	const headBlock = queryChildren(element, SchemaTags.Head);
+	const allowedInHead = headBlock ? queryAllChildren(headBlock, Cardinality.ZeroOrMore) : [];
 	const contentBlock = queryChildren(element, SchemaTags.Content);
+	const defaultElemLine = queryChildren(element, SchemaTags.Default);
 	return {
+		headContent: new Set(allowedInHead.map(getHeadString)),
 		content: contentBlock ? parseCardinalityRules(contentBlock) : new Map(),
 		raw: isRaw(element),
-		defaultElem: defaultElem && getHeadString(defaultElem)
+		defaultElem: defaultElemLine && getHeadString(defaultElemLine)
 	};
 }
 
