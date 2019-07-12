@@ -1,8 +1,3 @@
-// From https://stackoverflow.com/a/16046903
-export function countCaptureGroups(regex: RegExp) {
-	return new RegExp(regex.source + "|").exec("")!.length - 1;
-}
-
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
 export function escapeRegExp(regexp: string): string {
 	return regexp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
