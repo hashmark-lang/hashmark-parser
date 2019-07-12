@@ -7,7 +7,7 @@ import { FileInfo, filesIn } from "./utils";
 
 describe("parse()", function() {
 	for (const output of filesIn("test/output/parse", ".json")) {
-		beforeEach(function() {
+		before(function() {
 			const schema = {
 				...defaultSchema,
 				sugars: [
