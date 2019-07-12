@@ -1,6 +1,7 @@
 // tslint:disable:max-classes-per-file
 import { BlockElement, InlineElement } from "./ast";
 import { Cardinality } from "./parseSchema";
+import { ordinal } from "./utils";
 
 export abstract class HMError extends Error {
 	abstract readonly code: number;
@@ -45,9 +46,27 @@ export class BlockUsedAsInlineError extends ValidationError {
 
 // 12x Disallowed tag errors:
 
-export class DisallowedError extends ValidationError {
-	constructor(parent: BlockElement | InlineElement, tree: BlockElement | InlineElement) {
+export class DisallowedInBlockError extends ValidationError {
+	constructor(parent: BlockElement, tree: BlockElement) {
 		super(120, `Tag '#${tree.tag}' is not allowed in '#${parent.tag}'`);
+	}
+}
+
+export class DisallowedInArgError extends ValidationError {
+	constructor(parent: InlineElement, argIndex: number, tree: InlineElement) {
+		super(
+			121,
+			`Tag '#${tree.tag}' is not allowed in the ${ordinal(argIndex + 1)} argument of '#${
+				parent.tag
+			}'`
+		);
+	}
+}
+
+// TODO use this, and parse head constraints correctly!
+export class DisallowedInHeadError extends ValidationError {
+	constructor(parent: BlockElement, tree: InlineElement) {
+		super(122, `Tag '#${tree.tag}' is not allowed in the head of '#${parent.tag}'`);
 	}
 }
 
@@ -72,18 +91,15 @@ export class CardinalityError extends ValidationError {
 	}
 
 	static cardinalityToString(cardinality: Cardinality): string {
-		switch (cardinality) {
-			case Cardinality.One:
-				return "exactly one";
-			case Cardinality.OneOrMore:
-				return "one or more";
-			case Cardinality.Optional:
-				return "zero or one";
-			case Cardinality.ZeroOrMore:
-				throw new Error(
-					`${Cardinality.ZeroOrMore} cardinality should never be the cause of a cardinality error`
-				);
+		if (cardinality === Cardinality.ZeroOrMore) {
+			throw new Error(`${cardinality} should never be the cause of a cardinality error`);
 		}
+		const strings = {
+			[Cardinality.One]: "exactly one",
+			[Cardinality.OneOrMore]: "one or more",
+			[Cardinality.Optional]: "zero or one"
+		};
+		return strings[cardinality] + ` ('#${cardinality}')`;
 	}
 }
 
