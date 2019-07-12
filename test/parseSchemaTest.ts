@@ -97,6 +97,10 @@ describe("ParsedSchema", () => {
 		it("returns false when the child element is unknown", () => {
 			assert.isFalse(headsSchema.isValidHeadChild("paragraph", "unknown"));
 		});
+
+		it("returns false when the head is raw", () => {
+			assert.isFalse(headsSchema.isValidHeadChild("date", "emphasis"));
+		});
 	});
 
 	describe("isValidArgChild()", () => {
@@ -114,6 +118,10 @@ describe("ParsedSchema", () => {
 
 		it("returns false when the parent element is unknown", () => {
 			assert.isFalse(inlinesSchema.isValidArgChild("unknown", 0, "bold"));
+		});
+
+		it("returns false when the arg is raw", () => {
+			assert.isFalse(inlinesSchema.isValidArgChild("url", 0, "bold"));
 		});
 	});
 

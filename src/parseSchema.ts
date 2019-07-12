@@ -220,13 +220,16 @@ export class ParsedSchema implements Schema {
 
 function parseBlockSchema(element: BlockElement): BlockSchema {
 	const headBlock = queryChildren(element, SchemaTags.Head);
-	const allowedInHead = headBlock ? queryAllChildren(headBlock, Cardinality.ZeroOrMore) : [];
+	const headIsRaw = headBlock ? isRaw(headBlock) : false;
+	const allowedInHead =
+		headBlock && !headIsRaw ? queryAllChildren(headBlock, Cardinality.ZeroOrMore) : [];
+	const headContent = new Set(allowedInHead.map(getHeadString));
 	const contentBlock = queryChildren(element, SchemaTags.Content);
 	const defaultElemLine = queryChildren(element, SchemaTags.Default);
 	return {
 		head: {
-			content: new Set(allowedInHead.map(getHeadString)),
-			raw: headBlock ? isRaw(headBlock) : false
+			content: headContent,
+			raw: headIsRaw
 		},
 		content: contentBlock ? parseCardinalityRules(contentBlock) : new Map(),
 		raw: isRaw(element),
@@ -237,7 +240,7 @@ function parseBlockSchema(element: BlockElement): BlockSchema {
 function parseInlineSchema(element: BlockElement): InlineSchema {
 	return queryAllChildren(element, SchemaTags.Arg).map(arg => {
 		const raw = isRaw(arg);
-		const allowed = queryAllChildren(arg, Cardinality.ZeroOrMore);
+		const allowed = !raw ? queryAllChildren(arg, Cardinality.ZeroOrMore) : [];
 		const content = new Set(allowed.map(getHeadString));
 		return { raw, content };
 	});
