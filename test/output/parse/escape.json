@@ -4,38 +4,28 @@
 		{
 			"tag": "_default",
 			"head": [
-				"Lorem ",
-				"#",
-				" Ipsum"
+				"Lorem # Ipsum"
 			],
 			"children": []
 		},
 		{
 			"tag": "_default",
 			"head": [
-				"#",
-				" Lorem Ipsum"
+				"# Lorem Ipsum"
 			],
 			"children": []
 		},
 		{
 			"tag": "_default",
 			"head": [
-				"Lorem Ispum ",
-				"#"
+				"Lorem Ispum #"
 			],
 			"children": []
 		},
 		{
 			"tag": "_default",
 			"head": [
-				"\\",
-				" ",
-				"#",
-				" ",
-				"[",
-				" ",
-				"]"
+				"\\ # [ ]"
 			],
 			"children": []
 		}
