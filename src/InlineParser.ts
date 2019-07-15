@@ -47,7 +47,7 @@ export class InlineParser {
 		this.sugars = new Map(schema.sugars.map(_ => [_.start, _]));
 	}
 
-	parse(input: string, blockName: string, column: number): InlineGroup {
+	parse(input: string, blockName: string, line: number, column: number): InlineGroup {
 		if (this.schema.isRawHead(blockName)) return [input];
 
 		const tokens = input.split(this.regex);
@@ -61,7 +61,7 @@ export class InlineParser {
 			if (i % 2 === 0 || (this.isRawArg && token !== last(this.stack).syntax.end)) {
 				if (token) this.pushText(token);
 			} else {
-				this.handleToken(token, column);
+				this.handleToken(token, line, column);
 			}
 			column += token.length;
 		}
@@ -72,8 +72,10 @@ export class InlineParser {
 	/**
 	 * Handles escaped characters, inline sugar and inline tags
 	 * @param token string containing the token
+	 * @param line line number in the source file (1-based)
+	 * @param column column number in the source file of the token start (1-based)
 	 */
-	private handleToken(token: string, column: number) {
+	private handleToken(token: string, line: number, column: number) {
 		switch (token[0]) {
 			case "\\": {
 				this.pushText(token[1]);
@@ -82,7 +84,14 @@ export class InlineParser {
 			case "#": {
 				const endsWithBracket = last(token) === "[";
 				const tag = token.slice(1, endsWithBracket ? -1 : undefined);
-				this.open(tag, this.inlineTag, column, column + tag.length + 1, !endsWithBracket);
+				this.open(
+					tag,
+					this.inlineTag,
+					line,
+					column,
+					column + tag.length + 1,
+					!endsWithBracket
+				);
 				return;
 			}
 			default: {
@@ -107,7 +116,7 @@ export class InlineParser {
 
 				const sugar = this.sugars.get(token);
 				if (sugar && this.isSugarStart(sugar)) {
-					this.open(sugar.tag, sugar, column, column + token.length);
+					this.open(sugar.tag, sugar, line, column, column + token.length);
 					return;
 				}
 
@@ -128,11 +137,12 @@ export class InlineParser {
 	private open(
 		tag: string,
 		syntax: InlineSyntax,
+		line: number,
 		tagStart: number,
 		tagEnd: number,
 		closed: boolean = false
 	) {
-		const element = { tag, args: [], closed, tagStart, tagEnd };
+		const element = { tag, args: [], closed, line, tagStart, tagEnd };
 		this.current.push(element);
 		if (!closed) {
 			this.stack.push({ element, syntax });

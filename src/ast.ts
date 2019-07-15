@@ -13,6 +13,7 @@ export interface InlineElement {
 	tag: string;
 	args: InlineGroup[];
 	closed: boolean;
+	line: number;
 	tagStart: number;
 	tagEnd: number;
 }
