@@ -1,16 +1,15 @@
 import { assert } from "chai";
+import {
+	ArgumentCountError,
+	BlockUsedAsInlineError,
+	DisallowedInArgError,
+	InlineUsedAsBlockError,
+	UnknownTagError
+} from "../src/errors";
 import { parse } from "../src/Parser";
 import { ParsedSchema } from "../src/parseSchema";
 import { Schema } from "../src/schema";
-import { getSchemaSchema, readInputFile, deindent } from "./utils";
-import {
-	UnknownTagError,
-	InlineUsedAsBlockError,
-	ValidationError,
-	BlockUsedAsInlineError,
-	ArgumentCountError,
-	DisallowedInArgError
-} from "../src/errors";
+import { deindent, getSchemaSchema, readInputFile } from "./utils";
 
 describe("ParsedSchema", () => {
 	let schemaSchema: Schema;
