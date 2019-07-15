@@ -125,7 +125,7 @@ export class InlineParser {
 		tagEnd: number,
 		closed: boolean = false
 	) {
-		const element = { tag, arguments: [], closed, tagStart, tagEnd };
+		const element = { tag, args: [], closed, tagStart, tagEnd };
 		this.current.push(element);
 		if (!closed) {
 			this.stack.push({ element, syntax });
@@ -136,15 +136,15 @@ export class InlineParser {
 	private openArg() {
 		const element = last(this.stack).element;
 		this.current = [];
-		element.arguments.push(this.current);
-		this.isRawArg = this.schema.isRawArg(element.tag, element.arguments.length);
+		element.args.push(this.current);
+		this.isRawArg = this.schema.isRawArg(element.tag, element.args.length);
 	}
 
 	private close(index: number = this.stack.length - 1) {
 		if (index === this.stack.length) return;
 		this.stack[index].element.closed = true;
 		this.stack.length = index;
-		this.current = this.stack.length > 0 ? last(last(this.stack).element.arguments) : this.root;
+		this.current = this.stack.length > 0 ? last(last(this.stack).element.args) : this.root;
 		this.isRawArg = false;
 	}
 
@@ -155,6 +155,6 @@ export class InlineParser {
 	private isSugarStart(sugar: Sugar) {
 		if (this.stack.length === 0) return this.schema.isValidHeadChild(sugar.tag, this.blockName);
 		const top = last(this.stack).element;
-		return this.schema.isValidArgChild(top.tag, top.arguments.length, sugar.tag);
+		return this.schema.isValidArgChild(top.tag, top.args.length, sugar.tag);
 	}
 }

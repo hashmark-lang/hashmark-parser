@@ -10,12 +10,11 @@
 				" test ",
 				{
 					"tag": "tag",
-					"arguments": [
+					"args": [
 						[
 							"inline"
 						]
-					],
-					"closed": true
+					]
 				}
 			],
 			"children": []

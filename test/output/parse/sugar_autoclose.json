@@ -4,20 +4,18 @@
       "children": [],
       "head": [
         {
-          "arguments": [
+          "args": [
             [
               {
-                "arguments": [
+                "args": [
                   [
                     "Hello"
                   ]
                 ],
-                "closed": false,
                 "tag": "emphasis"
               }
             ]
           ],
-          "closed": true,
           "tag": "strong"
         }
       ],

@@ -4,40 +4,36 @@
       "children": [],
       "head": [
         {
-          "arguments": [
+          "args": [
             [
               {
-                "arguments": [
+                "args": [
                   [
                     "lorem"
                   ]
                 ],
-                "closed": true,
                 "tag": "strong"
               },
               " ipsum"
             ]
           ],
-          "closed": true,
           "tag": "tag"
         },
         " dolor ",
         {
-          "arguments": [
+          "args": [
             [
               "sit ",
               {
-                "arguments": [
+                "args": [
                   [
                     "amet"
                   ]
                 ],
-                "closed": false,
                 "tag": "tag"
               }
             ]
           ],
-          "closed": true,
           "tag": "emphasis"
         }
       ],

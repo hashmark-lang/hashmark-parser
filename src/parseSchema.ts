@@ -112,12 +112,12 @@ export class ParsedSchema implements Schema {
 			}
 			return [new Error(`Unknown inline tag ${inline.tag}`)];
 		}
-		if (inline.arguments.length !== schema.length) {
+		if (inline.args.length !== schema.length) {
 			return [
-				new Error(`Expected ${schema.length} arguments, but got ${inline.arguments.length}`)
+				new Error(`Expected ${schema.length} arguments, but got ${inline.args.length}`)
 			];
 		}
-		return inline.arguments.flatMap((arg, index) =>
+		return inline.args.flatMap((arg, index) =>
 			this.validateArg(schema[index], inline.tag, arg)
 		);
 	}

@@ -5,8 +5,7 @@
 			"head": [
 				"lorem ",
 				{
-					"arguments": [],
-					"closed": true,
+					"args": [],
 					"tag": "dolphin"
 				},
 				" ipsum"

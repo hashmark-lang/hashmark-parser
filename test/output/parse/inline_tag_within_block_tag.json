@@ -7,12 +7,11 @@
 				"text ",
 				{
 					"tag": "inline",
-					"arguments": [
+					"args": [
 						[
 							"attr"
 						]
-					],
-					"closed": true
+					]
 				},
 				" text"
 			],

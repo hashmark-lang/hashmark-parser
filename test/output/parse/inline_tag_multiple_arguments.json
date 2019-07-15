@@ -6,15 +6,14 @@
 			"head": [
 				{
 					"tag": "link",
-					"arguments": [
+					"args": [
 						[
 							"Example"
 						],
 						[
 							"www.example.com"
 						]
-					],
-					"closed": true
+					]
 				}
 			],
 			"children": []

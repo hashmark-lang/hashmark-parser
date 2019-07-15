@@ -11,7 +11,7 @@ export interface BlockElement {
 
 export interface InlineElement {
 	tag: string;
-	arguments: InlineGroup[];
+	args: InlineGroup[];
 	closed: boolean;
 	tagStart: number;
 	tagEnd: number;

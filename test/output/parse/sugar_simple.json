@@ -4,12 +4,11 @@
       "children": [],
       "head": [
         {
-          "arguments": [
+          "args": [
             [
               "hello"
             ]
           ],
-          "closed": true,
           "tag": "strong"
         }
       ],

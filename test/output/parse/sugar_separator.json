@@ -4,14 +4,14 @@
       "children": [],
       "head": [
         {
-          "arguments": [
+          "args": [
             [
               "a"
             ],
             [
               "b ",
               {
-                "arguments": [
+                "args": [
                   [
                     "c"
                   ],
@@ -22,23 +22,20 @@
                     "e"
                   ]
                 ],
-                "closed": true,
                 "tag": "set"
               }
             ],
             [
               {
-                "arguments": [
+                "args": [
                   [
                     "f"
                   ]
                 ],
-                "closed": true,
                 "tag": "set"
               }
             ]
           ],
-          "closed": true,
           "tag": "set"
         }
       ],

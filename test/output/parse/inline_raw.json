@@ -4,13 +4,12 @@
 			"children": [],
 			"head": [
 				{
-					"arguments": [
+					"args": [
 						[
 							"#inline[",
 							"test"
 						]
 					],
-					"closed": true,
 					"tag": "rawArg1"
 				},
 				"]"
