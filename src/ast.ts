@@ -4,12 +4,17 @@ export interface BlockElement {
 	tag: string;
 	head: InlineGroup;
 	children: BlockElement[];
+	line: number;
+	tagStart: number;
+	tagEnd: number;
 }
 
 export interface InlineElement {
 	tag: string;
 	arguments: InlineGroup[];
 	closed: boolean;
+	tagStart: number;
+	tagEnd: number;
 }
 
 export function queryAll(ast: BlockElement, tag: string): BlockElement[] {
