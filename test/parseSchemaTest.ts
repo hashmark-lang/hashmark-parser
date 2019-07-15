@@ -254,7 +254,11 @@ describe("ParsedSchema", () => {
 
 		for (const test of cardinalities) {
 			describe(test.name, () => {
-				const schema = makeSchema(test.cardinality);
+				let schema: ParsedSchema;
+
+				before(() => {
+					schema = makeSchema(test.cardinality);
+				});
 
 				for (let i = 0; i <= 2; ++i) {
 					const allowed = test.allowed.includes(i);
@@ -297,7 +301,12 @@ describe("ParsedSchema", () => {
 					#raw
 			#inline bold
 				#arg`);
-		const schema = new ParsedSchema(parse(schemaFile, schemaSchema));
+
+		let schema: ParsedSchema;
+
+		before(() => {
+			schema = new ParsedSchema(parse(schemaFile, schemaSchema));
+		});
 
 		for (let i = 0; i <= 2; ++i) {
 			it(`allows ${i} elements`, () => {
