@@ -1,0 +1,47 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"children": [],
+					"head": [
+						"Lorem"
+					],
+					"tag": "_raw_line"
+				},
+				{
+					"children": [],
+					"head": [
+						"\tIpsum"
+					],
+					"tag": "_raw_line"
+				},
+				{
+					"children": [],
+					"head": [
+						"  Dolor"
+					],
+					"tag": "_raw_line"
+				},
+				{
+					"children": [],
+					"head": [
+						"Sit"
+					],
+					"tag": "_raw_line"
+				}
+			],
+			"head": [],
+			"tag": "rawBody"
+		},
+		{
+			"children": [],
+			"head": [
+				"Amet"
+			],
+			"tag": "_default"
+		}
+	],
+	"head": [],
+	"tag": "root"
+}
