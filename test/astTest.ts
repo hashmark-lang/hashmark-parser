@@ -11,11 +11,19 @@ import { parse } from "../src/Parser";
 import { readInputFile } from "./utils";
 
 describe("ast", () => {
-	const bigFile = parse(readInputFile("bigfile.hm"));
-	const doc = query(bigFile, "document") as BlockElement;
-	const os = parse(readInputFile("os.hm"));
-	const list = parse(readInputFile("list.hm"));
-	const dfs = parse(readInputFile("dfs.hm"));
+	let bigFile: BlockElement;
+	let doc: BlockElement;
+	let os: BlockElement;
+	let list: BlockElement;
+	let dfs: BlockElement;
+
+	before(() => {
+		bigFile = parse(readInputFile("bigfile.hm"));
+		doc = query(bigFile, "document") as BlockElement;
+		os = parse(readInputFile("os.hm"));
+		list = parse(readInputFile("list.hm"));
+		dfs = parse(readInputFile("dfs.hm"));
+	});
 
 	describe("queryAll()", () => {
 		it("finds all descendants", () => {
