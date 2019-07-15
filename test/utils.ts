@@ -33,19 +33,13 @@ export function readInputFile(fileName: string): string {
 	return readFileSync(filePath).toString();
 }
 
-// Tagged literal
-export function hm(literals: TemplateStringsArray, ...placeholders: string[]): BlockElement {
-	let result = "";
-	for (let i = 0; i < placeholders.length; ++i) {
-		result += literals[i];
-		result += placeholders[i];
-	}
-	result += literals[literals.length - 1];
-	const lines = result.split(/\r\n|\n|\r/).filter(line => line.trim().length > 0);
+// De-indents a multiline string to match the indentation level of the first line
+export function deindent(multiline: string): string {
+	const lines = multiline.split(/\r\n|\n|\r/).filter(line => line.trim().length > 0);
 	if (lines.length <= 1) {
-		return parse(result);
+		return multiline;
 	}
 	const indentation = lines[0].search(/[^\t]/);
 	const deindented = lines.map(line => line.substring(indentation)).join("\n");
-	return parse(deindented);
+	return deindented;
 }

@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { parse } from "../src/Parser";
 import { ParsedSchema } from "../src/parseSchema";
 import { Schema } from "../src/schema";
-import { getSchemaSchema, hm, readInputFile } from "./utils";
+import { getSchemaSchema, readInputFile, deindent } from "./utils";
 
 describe("ParsedSchema", () => {
 	let schemaSchema: Schema;
@@ -177,11 +177,12 @@ describe("ParsedSchema", () => {
 
 		function makeSchema(cardinality: string | undefined): ParsedSchema {
 			const rule = cardinality ? `#${cardinality} element` : "element";
-			const schema = hm`
+			const schemaFile = deindent(`
 			#block root
 				#content
 					${rule}
-			#block element`;
+			#block element`);
+			const schema = parse(schemaFile, schemaSchema);
 			return new ParsedSchema(schema);
 		}
 
@@ -219,7 +220,7 @@ describe("ParsedSchema", () => {
 	});
 
 	describe("validateLine()", () => {
-		const schema = new ParsedSchema(hm`
+		const schemaFile = deindent(`
 			#block title
 				#head
 					inline
@@ -230,6 +231,7 @@ describe("ParsedSchema", () => {
 					#raw
 			#inline bold
 				#arg`);
+		const schema = new ParsedSchema(parse(schemaFile, schemaSchema));
 
 		for (let i = 0; i <= 2; ++i) {
 			it(`allows ${i} elements`, () => {
