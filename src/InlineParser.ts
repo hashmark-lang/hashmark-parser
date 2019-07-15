@@ -48,6 +48,8 @@ export class InlineParser {
 	}
 
 	parse(input: string, blockName: string, column: number): InlineGroup {
+		if (this.schema.isRawHead(blockName)) return [input];
+
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
 		this.current = this.root = [];
