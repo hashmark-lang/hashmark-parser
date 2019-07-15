@@ -1,0 +1,78 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [],
+							"head": [
+								"inline"
+							],
+							"tag": "_default"
+						}
+					],
+					"head": [],
+					"tag": "head"
+				}
+			],
+			"head": [
+				"title"
+			],
+			"tag": "block"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"children": [],
+									"head": [
+										"bold"
+									],
+									"tag": "_default"
+								}
+							],
+							"head": [],
+							"tag": "content"
+						}
+					],
+					"head": [],
+					"tag": "arg"
+				},
+				{
+					"children": [
+						{
+							"children": [],
+							"head": [],
+							"tag": "raw"
+						}
+					],
+					"head": [],
+					"tag": "arg"
+				}
+			],
+			"head": [
+				"inline"
+			],
+			"tag": "inline"
+		},
+		{
+			"children": [
+				{
+					"children": [],
+					"head": [],
+					"tag": "arg"
+				}
+			],
+			"head": [
+				"bold"
+			],
+			"tag": "inline"
+		}
+	],
+	"head": [],
+	"tag": "root"
+}
