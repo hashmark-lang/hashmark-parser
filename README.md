@@ -35,7 +35,7 @@ const schemaSchemaFile = "#block block";
 
 // Parse with a schema:
 const schemaSchema = new ParsedSchema(parse(schemaSchemaFile));
-const schema = new ParsedSchema(parse(schemaFile, schemaSchemaFile));
+const schema = new ParsedSchema(parse(schemaFile, schemaSchema));
 const doc = parse(file, schema)
 
 // ... or parse without a schema:
