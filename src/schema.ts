@@ -3,7 +3,8 @@ import { ValidationError } from "./errors";
 
 export const enum Reserved {
 	rootTag = "root",
-	defaultTag = "_default"
+	defaultTag = "_default",
+	rawLine = "_raw_line"
 }
 
 export interface Sugar {
