@@ -4,7 +4,7 @@ import { Cardinality } from "./parseSchema";
 import { ordinal } from "./utils";
 
 export abstract class HMError extends Error {
-	constructor(readonly code: number, message: string) {
+	constructor(readonly code: ErrorCode, message: string) {
 		super(message);
 	}
 
@@ -24,27 +24,58 @@ export const enum ErrorCode {
 	ARGUMENT_COUNT
 }
 
+export interface ErrorPosition {
+	line: number;
+	startCol: number;
+	endCol: number;
+}
+
 //////////////////////////////
 // Schema validation errors //
 //////////////////////////////
 
-export abstract class ValidationError extends HMError {}
+export abstract class ValidationError extends HMError {
+	readonly position: ErrorPosition[];
+	constructor(
+		code: ErrorCode,
+		message: string,
+		...errorSources: Array<BlockElement | InlineElement>
+	) {
+		super(code, message);
+		this.position = errorSources.map(tree => ({
+			line: tree.line,
+			startCol: tree.tagStart,
+			endCol: tree.tagEnd
+		}));
+	}
+}
 
 export class UnknownTagError extends ValidationError {
+	readonly position: ErrorPosition[];
 	constructor(tree: BlockElement | InlineElement) {
-		super(ErrorCode.UNKNOWN_TAG, `Unknown tag '${tree.tag}'`);
+		super(ErrorCode.UNKNOWN_TAG, `Unknown tag '${tree.tag}'`, tree);
 	}
 }
 
 export class InlineUsedAsBlockError extends ValidationError {
+	readonly position: ErrorPosition[];
 	constructor(tree: BlockElement) {
-		super(ErrorCode.INLINE_USED_AS_BLOCK, `Expected '${tree.tag}' to be used as an inline tag`);
+		super(
+			ErrorCode.INLINE_USED_AS_BLOCK,
+			`Expected '${tree.tag}' to be used as an inline tag`,
+			tree
+		);
 	}
 }
 
 export class BlockUsedAsInlineError extends ValidationError {
+	readonly position: ErrorPosition[];
 	constructor(tree: InlineElement) {
-		super(ErrorCode.BLOCK_USED_AS_INLINE, `Expected '${tree.tag}' to be used as a block tag`);
+		super(
+			ErrorCode.BLOCK_USED_AS_INLINE,
+			`Expected '${tree.tag}' to be used as a block tag`,
+			tree
+		);
 	}
 }
 
@@ -52,7 +83,8 @@ export class DisallowedInBlockError extends ValidationError {
 	constructor(parent: BlockElement, tree: BlockElement) {
 		super(
 			ErrorCode.DISALLOWED_IN_BLOCK,
-			`Tag '#${tree.tag}' is not allowed in '#${parent.tag}'`
+			`Tag '#${tree.tag}' is not allowed in '#${parent.tag}'`,
+			tree
 		);
 	}
 }
@@ -63,7 +95,8 @@ export class DisallowedInArgError extends ValidationError {
 			ErrorCode.DISALLOWED_IN_ARG,
 			`Tag '#${tree.tag}' is not allowed in the ${ordinal(argIndex + 1)} argument of '#${
 				parent.tag
-			}'`
+			}'`,
+			tree
 		);
 	}
 }
@@ -72,7 +105,8 @@ export class DisallowedInHeadError extends ValidationError {
 	constructor(parent: BlockElement, tree: InlineElement) {
 		super(
 			ErrorCode.DISALLOWED_IN_HEAD,
-			`Tag '#${tree.tag}' is not allowed in the head of '#${parent.tag}'`
+			`Tag '#${tree.tag}' is not allowed in the head of '#${parent.tag}'`,
+			tree
 		);
 	}
 }
@@ -91,7 +125,8 @@ export class CardinalityError extends ValidationError {
 				parent.tag
 			}, but the schema requires ${CardinalityError.cardinalityToString(cardinality)} in ${
 				parent.tag
-			}`
+			}`,
+			...children
 		);
 	}
 
@@ -112,7 +147,8 @@ export class ArgumentCountError extends ValidationError {
 	constructor(inline: InlineElement, expected: number) {
 		super(
 			ErrorCode.ARGUMENT_COUNT,
-			`Expected '#${inline.tag}' to have ${expected} arguments, but got ${inline.args.length} instead`
+			`Expected '#${inline.tag}' to have ${expected} arguments, but got ${inline.args.length} instead`,
+			inline
 		);
 	}
 }
