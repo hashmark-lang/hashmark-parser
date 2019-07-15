@@ -1,0 +1,28 @@
+{
+	"children": [
+	  {
+		"children": [
+		  {
+			"children": [],
+			"head": [],
+			"tag": "tag2"
+		  },
+		  {
+			"children": [
+			  {
+				"children": [],
+				"head": [],
+				"tag": "tag4"
+			  }
+			],
+			"head": [],
+			"tag": "tag3"
+		  }
+		],
+		"head": [],
+		"tag": "tag1"
+	  }
+	],
+	"head": [],
+	"tag": "root"
+  }
