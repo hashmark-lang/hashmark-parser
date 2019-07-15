@@ -1,0 +1,33 @@
+{
+  "children": [
+    {
+      "children": [],
+      "head": [
+        "]",
+        " ",
+        "][",
+        " test ",
+        {
+          "args": [
+            [
+              "inline"
+            ]
+          ],
+          "closed": true,
+          "tag": "tag",
+          "tagEnd": 15,
+          "tagStart": 11
+        }
+      ],
+      "line": 1,
+      "tag": "_default",
+      "tagEnd": 1,
+      "tagStart": 1
+    }
+  ],
+  "head": [],
+  "line": 0,
+  "tag": "root",
+  "tagEnd": 1,
+  "tagStart": 1
+}

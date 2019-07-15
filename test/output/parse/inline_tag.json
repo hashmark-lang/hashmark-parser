@@ -6,12 +6,11 @@
 			"head": [
 				{
 					"tag": "cite",
-					"arguments": [
+					"args": [
 						[
 							"id"
 						]
-					],
-					"closed": true
+					]
 				}
 			],
 			"children": []

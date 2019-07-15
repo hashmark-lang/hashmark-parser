@@ -4,26 +4,24 @@
       "children": [],
       "head": [
         {
-          "arguments": [
+          "args": [
             [
               "`",
               "plain",
               "`"
             ]
           ],
-          "closed": true,
           "tag": "strong"
         },
         " ",
         {
-          "arguments": [
+          "args": [
             [
               "`",
               "plain",
               "`"
             ]
           ],
-          "closed": true,
           "tag": "tag"
         }
       ],

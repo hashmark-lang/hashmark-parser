@@ -11,10 +11,9 @@
 			"head": [
 				{
 					"tag": "tag\\",
-					"arguments": [
+					"args": [
 						[]
-					],
-					"closed": false
+					]
 				}
 			],
 			"children": []

@@ -9,10 +9,10 @@ export function toXML(root: BlockElement): string {
 }
 
 function inlineToXML(inline: InlineElement): string {
-	const singleArg = inline.arguments.length <= 1;
+	const singleArg = inline.args.length <= 1;
 	const args = singleArg
-		? inline.arguments.flatMap(lineToXML) // No <arg> for single inline arg
-		: inline.arguments.map(arg => xmlTag("arg", true, lineToXML(arg))); // <arg> for multiple args
+		? inline.args.flatMap(lineToXML) // No <arg> for single inline arg
+		: inline.args.map(arg => xmlTag("arg", true, lineToXML(arg))); // <arg> for multiple args
 	return xmlTag(inline.tag, singleArg, ...args);
 }
 
