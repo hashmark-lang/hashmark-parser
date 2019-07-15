@@ -6,8 +6,7 @@
 				{
 					"args": [
 						[
-							"#inline[",
-							"test"
+							"#inline[test"
 						]
 					],
 					"tag": "rawArg1"

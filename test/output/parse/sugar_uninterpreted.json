@@ -6,9 +6,7 @@
         {
           "args": [
             [
-              "`",
-              "plain",
-              "`"
+              "`plain`"
             ]
           ],
           "tag": "strong"
@@ -17,9 +15,7 @@
         {
           "args": [
             [
-              "`",
-              "plain",
-              "`"
+              "`plain`"
             ]
           ],
           "tag": "tag"

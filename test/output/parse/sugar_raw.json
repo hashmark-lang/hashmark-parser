@@ -6,14 +6,7 @@
         {
           "args": [
             [
-              "#notInterpreted[",
-              "lorem",
-              "]",
-              " ipsum ",
-              "*",
-              "dolor",
-              "*",
-              " sit"
+              "#notInterpreted[lorem] ipsum *dolor* sit"
             ]
           ],
           "tag": "code"

@@ -115,7 +115,12 @@ export class InlineParser {
 	}
 
 	private pushText(text: string) {
-		this.current.push(text);
+		const lastIndex = this.current.length - 1;
+		if (lastIndex < 0 || typeof this.current[lastIndex] !== "string") {
+			this.current.push(text);
+		} else {
+			this.current[lastIndex] += text;
+		}
 	}
 
 	private open(
