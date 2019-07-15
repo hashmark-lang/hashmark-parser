@@ -62,7 +62,7 @@ export class InlineUsedAsBlockError extends ValidationError {
 	constructor(tree: BlockElement) {
 		super(
 			ErrorCode.INLINE_USED_AS_BLOCK,
-			`Expected '${tree.tag}' to be used as an inline tag`,
+			`Expected '#${tree.tag}' to be used as an inline tag`,
 			tree
 		);
 	}
@@ -73,7 +73,7 @@ export class BlockUsedAsInlineError extends ValidationError {
 	constructor(tree: InlineElement) {
 		super(
 			ErrorCode.BLOCK_USED_AS_INLINE,
-			`Expected '${tree.tag}' to be used as a block tag`,
+			`Expected '#${tree.tag}' to be used as a block tag`,
 			tree
 		);
 	}
@@ -121,12 +121,12 @@ export class CardinalityError extends ValidationError {
 	) {
 		super(
 			ErrorCode.CARDINALITY,
-			`Saw ${count} occurrences of '${tag}' in ${
+			`Saw ${count} occurrences of '#${tag}' in '#${
 				parent.tag
-			}, but the schema requires ${CardinalityError.cardinalityToString(cardinality)} in ${
+			}', but the schema requires ${CardinalityError.cardinalityToString(cardinality)} in '#${
 				parent.tag
-			}`,
-			...children
+			}'`,
+			...(children.length > 0 ? children : [parent])
 		);
 	}
 
@@ -139,7 +139,7 @@ export class CardinalityError extends ValidationError {
 			[Cardinality.OneOrMore]: "one or more",
 			[Cardinality.Optional]: "zero or one"
 		};
-		return strings[cardinality] + ` ('#${cardinality}')`;
+		return strings[cardinality];
 	}
 }
 
