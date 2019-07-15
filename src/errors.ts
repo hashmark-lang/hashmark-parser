@@ -32,7 +32,7 @@ export abstract class ValidationError extends HMError {}
 
 export class UnknownTagError extends ValidationError {
 	constructor(tree: BlockElement | InlineElement) {
-		super(ErrorCode.UNKNOWN_TAG, `Unknown tag '${tree}'`);
+		super(ErrorCode.UNKNOWN_TAG, `Unknown tag '${tree.tag}'`);
 	}
 }
 
