@@ -36,7 +36,7 @@ export class Parser {
 			const tagStart = 1 + indent.length;
 			const tagEnd = tagStart + (tagName ? tagName.length + 1 : 0);
 			const column = tagEnd + (tagName ? 1 : 0);
-			const head = this.inlineParser.parse(lineContent, tag, column);
+			const head = this.inlineParser.parse(lineContent, tag, line, column);
 			const block = { tag, head, children: [], line, tagStart, tagEnd };
 			current.children.push(block);
 			stack.push(block);
