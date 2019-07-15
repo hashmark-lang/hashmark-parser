@@ -3,6 +3,14 @@ import { parse } from "../src/Parser";
 import { ParsedSchema } from "../src/parseSchema";
 import { Schema } from "../src/schema";
 import { getSchemaSchema, readInputFile, deindent } from "./utils";
+import {
+	UnknownTagError,
+	InlineUsedAsBlockError,
+	ValidationError,
+	BlockUsedAsInlineError,
+	ArgumentCountError,
+	DisallowedInArgError
+} from "../src/errors";
 
 describe("ParsedSchema", () => {
 	let schemaSchema: Schema;
@@ -141,6 +149,65 @@ describe("ParsedSchema", () => {
 	});
 
 	describe("validateBlock()", () => {
+		function getErrors(file: string, schema: Schema) {
+			const block = parse(file, schema);
+			return schema.validateBlock(block);
+		}
+
+		it("returns an UnknownTagError an unknown block tag is used", () => {
+			const file = "#unknown tag";
+			const error = getErrors(file, blocksSchema).find(e => e instanceof UnknownTagError);
+			assert.notStrictEqual(error, undefined);
+		});
+
+		it("returns an UnknownTagError an unknown inline tag is used", () => {
+			const file = "#parent #unknown[tag]";
+			const error = getErrors(file, blocksSchema).find(e => e instanceof UnknownTagError);
+			assert.notStrictEqual(error, undefined);
+		});
+
+		it("returns an InlineUsedAsBlockError when an inline tag is used as a block", () => {
+			const file = "#url should be inline";
+			const error = getErrors(file, inlinesSchema).find(
+				e => e instanceof InlineUsedAsBlockError
+			);
+			assert.notStrictEqual(error, undefined);
+		});
+
+		it("returns a BlockUsedAsInlineError when a block tag is used inline", () => {
+			const file = "#parent #child[should not be inline]";
+			const error = getErrors(file, blocksSchema).find(
+				e => e instanceof BlockUsedAsInlineError
+			);
+			assert.notStrictEqual(error, undefined);
+		});
+
+		it("returns an ArgumentCountError when too few arguments are used", () => {
+			const file = "#paragraph #url[1]";
+			const error = getErrors(file, inlinesSchema).find(e => e instanceof ArgumentCountError);
+			assert.notStrictEqual(error, undefined);
+		});
+
+		it("does not return ArgumentCountError when the right number of arguments are used", () => {
+			const file = "#paragraph #url[1][2]";
+			const error = getErrors(file, inlinesSchema).find(e => e instanceof ArgumentCountError);
+			assert.isUndefined(error);
+		});
+
+		it("returns an ArgumentCountError when too many arguments are used", () => {
+			const file = "#paragraph #url[1][2][3]";
+			const error = getErrors(file, inlinesSchema).find(e => e instanceof ArgumentCountError);
+			assert.notStrictEqual(error, undefined);
+		});
+
+		it("returns a DisallowedInArgError when a disallowed tag is used in an arg", () => {
+			const file = "#url[https://example.com][#url[1][2]]";
+			const error = getErrors(file, inlinesSchema).find(
+				e => e instanceof DisallowedInArgError
+			);
+			assert.notStrictEqual(error, undefined);
+		});
+
 		interface CardinalityDescription {
 			name: string;
 			cardinality: string | undefined;
