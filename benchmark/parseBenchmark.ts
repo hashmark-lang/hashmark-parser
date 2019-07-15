@@ -1,6 +1,7 @@
 /* tslint:disable:no-console */
 import { Event, Suite } from "benchmark";
 import { parse } from "../src/Parser";
+import { toJSON } from "../src/json";
 
 const N_CHILDREN = 10;
 const MAX_DEPTH = 3;
@@ -31,7 +32,7 @@ function formatBytes(bytes: number, decimals = 2) {
 
 const input = generateBenchmarkInput();
 console.log("Size of test input: " + formatBytes(input.length));
-const jsonAst = JSON.stringify(parse(input));
+const jsonAst = JSON.stringify(toJSON(parse(input)));
 new Suite("compare")
 	.add("Parse Hashmark", () => {
 		parse(input);
