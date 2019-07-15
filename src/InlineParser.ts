@@ -47,7 +47,7 @@ export class InlineParser {
 		this.sugars = new Map(schema.sugars.map(_ => [_.start, _]));
 	}
 
-	parse(input: string, blockName: string): InlineGroup {
+	parse(input: string, blockName: string, column: number): InlineGroup {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
 		this.current = this.root = [];
@@ -59,8 +59,9 @@ export class InlineParser {
 			if (i % 2 === 0 || (this.isRawArg && token !== last(this.stack).syntax.end)) {
 				if (token) this.pushText(token);
 			} else {
-				this.handleToken(token);
+				this.handleToken(token, column);
 			}
+			column += token.length;
 		}
 
 		return this.root;
@@ -70,7 +71,7 @@ export class InlineParser {
 	 * Handles escaped characters, inline sugar and inline tags
 	 * @param token string containing the token
 	 */
-	private handleToken(token: string) {
+	private handleToken(token: string, column: number) {
 		switch (token[0]) {
 			case "\\": {
 				this.pushText(token[1]);
@@ -79,7 +80,7 @@ export class InlineParser {
 			case "#": {
 				const endsWithBracket = last(token) === "[";
 				const tag = token.slice(1, endsWithBracket ? -1 : undefined);
-				this.open(tag, this.inlineTag, !endsWithBracket);
+				this.open(tag, this.inlineTag, column, column + tag.length + 1, !endsWithBracket);
 				return;
 			}
 			default: {
@@ -104,7 +105,7 @@ export class InlineParser {
 
 				const sugar = this.sugars.get(token);
 				if (sugar && this.isSugarStart(sugar)) {
-					this.open(sugar.tag, sugar);
+					this.open(sugar.tag, sugar, column, column + token.length);
 					return;
 				}
 
@@ -117,8 +118,14 @@ export class InlineParser {
 		this.current.push(text);
 	}
 
-	private open(tag: string, syntax: InlineSyntax, closed: boolean = false) {
-		const element = { tag, arguments: [], closed };
+	private open(
+		tag: string,
+		syntax: InlineSyntax,
+		tagStart: number,
+		tagEnd: number,
+		closed: boolean = false
+	) {
+		const element = { tag, arguments: [], closed, tagStart, tagEnd };
 		this.current.push(element);
 		if (!closed) {
 			this.stack.push({ element, syntax });
