@@ -1,6 +1,6 @@
 /* tslint:disable:no-console */
 import { Event, Suite } from "benchmark";
-import { toJSON } from "../src/json";
+import { toJSON } from "../src/output/json";
 import { parse } from "../src/Parser";
 
 const N_CHILDREN = 10;

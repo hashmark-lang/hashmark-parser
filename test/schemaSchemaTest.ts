@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { readFileSync } from "fs";
-import { parse } from "../src/Parser";
-import { Schema } from "../src/schema";
+import { parse } from "../src/parser/Parser";
+import { Schema } from "../src/schema/schema";
 import { filesIn, getSchemaSchema } from "./utils";
 
 function errorsToString(errors: Error[]): string {
@@ -15,7 +15,7 @@ describe("schema-schema.hm", () => {
 	});
 
 	it("validates itself", () => {
-		const schemaSchemaFile = readFileSync("src/schema-schema.hm", "utf-8");
+		const schemaSchemaFile = readFileSync("src/schema/schema-schema.hm", "utf-8");
 		const schemaSchemaAst = parse(schemaSchemaFile, schemaSchema);
 		const errors = schemaSchema.validateBlock(schemaSchemaAst);
 		assert.isEmpty(errors, errorsToString(errors));

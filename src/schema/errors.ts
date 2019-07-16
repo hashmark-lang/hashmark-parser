@@ -1,7 +1,7 @@
 // tslint:disable:max-classes-per-file
-import { BlockElement, InlineElement } from "./ast";
+import { BlockElement, InlineElement } from "../ast";
+import { ordinal } from "../utils";
 import { Cardinality } from "./parseSchema";
-import { ordinal } from "./utils";
 
 export abstract class HMError extends Error {
 	constructor(readonly code: ErrorCode, message: string) {

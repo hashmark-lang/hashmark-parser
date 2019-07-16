@@ -5,7 +5,8 @@ import {
 	InlineGroup,
 	queryAllChildren,
 	queryChildren
-} from "./ast";
+} from "../ast";
+import { countOccurrences } from "../utils";
 import {
 	ArgumentCountError,
 	BlockUsedAsInlineError,
@@ -18,7 +19,6 @@ import {
 	ValidationError
 } from "./errors";
 import { Reserved, Schema, Sugar } from "./schema";
-import { countOccurrences } from "./utils";
 
 enum SchemaTags {
 	Root = "root",

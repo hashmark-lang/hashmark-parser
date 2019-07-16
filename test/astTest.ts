@@ -7,7 +7,7 @@ import {
 	queryAllChildren,
 	queryChildren
 } from "../src/ast";
-import { parse } from "../src/Parser";
+import { parse } from "../src/parser/Parser";
 import { readInputFile } from "./utils";
 
 describe("ast", () => {

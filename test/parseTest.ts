@@ -1,7 +1,7 @@
 import { assert } from "chai";
-import { toJSON } from "../src/json";
-import { Parser } from "../src/Parser";
-import { defaultSchema } from "../src/schema";
+import { toJSON } from "../src/output/json";
+import { Parser } from "../src/parser/Parser";
+import { defaultSchema } from "../src/schema/schema";
 import { FileInfo, filesIn } from "./utils";
 
 /* tslint:disable:only-arrow-functions */

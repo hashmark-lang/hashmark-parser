@@ -1,6 +1,6 @@
-import { InlineElement, InlineGroup } from "./ast";
-import { defaultSchema, Schema, Sugar } from "./schema";
-import { escapeRegExp, last } from "./utils";
+import { InlineElement, InlineGroup } from "../ast";
+import { defaultSchema, Schema, Sugar } from "../schema/schema";
+import { escapeRegExp, last } from "../utils";
 
 interface InlineSyntax {
 	separator?: string;
