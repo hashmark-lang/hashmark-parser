@@ -1,8 +1,8 @@
 import { assert } from "chai";
-import { toJSON } from "../src/output/json";
-import { Parser } from "../src/parser/Parser";
-import { defaultSchema } from "../src/schema/schema";
-import { FileInfo, filesIn } from "./utils";
+import { toJSON } from "../../src/output/json";
+import { Parser } from "../../src/parser/Parser";
+import { defaultSchema } from "../../src/schema/schema";
+import { FileInfo, filesIn } from "../utils";
 
 /* tslint:disable:only-arrow-functions */
 
@@ -52,9 +52,9 @@ describe("parse()", function() {
 		this.parser = new Parser(schema);
 	});
 
-	for (const output of filesIn("test/output/parse", ".json")) {
+	for (const output of filesIn("test/resources/output/parser", ".json")) {
 		it(`works with ${output.name}`, function() {
-			const input = new FileInfo("test/input", output.name, ".hm");
+			const input = new FileInfo("test/resources/input", output.name, ".hm");
 			assert.deepStrictEqual(
 				toJSON(this.parser.parse(input.readContent())),
 				JSON.parse(output.readContent())
@@ -62,9 +62,9 @@ describe("parse()", function() {
 		});
 	}
 
-	for (const output of filesIn("test/output/parse-fullast", ".json")) {
+	for (const output of filesIn("test/resources/output/parser-fullast", ".json")) {
 		it(`works with ${output.name} (full ast)`, function() {
-			const input = new FileInfo("test/input", output.name, ".hm");
+			const input = new FileInfo("test/resources/input", output.name, ".hm");
 			assert.deepStrictEqual(
 				this.parser.parse(input.readContent()),
 				JSON.parse(output.readContent())

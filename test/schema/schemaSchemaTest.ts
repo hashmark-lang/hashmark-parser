@@ -1,8 +1,8 @@
 import { assert } from "chai";
 import { readFileSync } from "fs";
-import { parse } from "../src/parser/Parser";
-import { Schema } from "../src/schema/schema";
-import { filesIn, getSchemaSchema } from "./utils";
+import { parse } from "../../src/parser/Parser";
+import { Schema } from "../../src/schema/schema";
+import { filesIn, getSchemaSchema } from "../utils";
 
 function errorsToString(errors: Error[]): string {
 	return "\n\t" + errors.map(e => "- " + e.message).join("\n\t") + "\n";
@@ -21,7 +21,7 @@ describe("schema-schema.hm", () => {
 		assert.isEmpty(errors, errorsToString(errors));
 	});
 
-	for (const file of filesIn("test/input", ".hm")) {
+	for (const file of filesIn("test/resources/input", ".hm")) {
 		if (file.name.startsWith("schema_")) {
 			it("validates " + file.name + file.extension, () => {
 				const schema = parse(file.readContent(), schemaSchema);

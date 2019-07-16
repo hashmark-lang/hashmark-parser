@@ -1,6 +1,5 @@
 import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
-import { BlockElement } from "../src/ast";
 import { parse } from "../src/parser/Parser";
 import { ParsedSchema } from "../src/schema/parseSchema";
 import { Schema } from "../src/schema/schema";
@@ -29,7 +28,7 @@ export function getSchemaSchema(): Schema {
 }
 
 export function readInputFile(fileName: string): string {
-	const filePath = path.join("test", "input", fileName);
+	const filePath = path.join("test", "resources", "input", fileName);
 	return readFileSync(filePath).toString();
 }
 
