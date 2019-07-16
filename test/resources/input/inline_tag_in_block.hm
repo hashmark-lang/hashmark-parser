@@ -1,3 +1,4 @@
 #tag
+	#test #inline[content] Text
 	#inline[content] Text
 Text

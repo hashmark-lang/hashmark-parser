@@ -1,31 +1,31 @@
 {
-  "children": [
-    {
-      "children": [],
-      "head": [
-        "] ][ test ",
-        {
-          "args": [
-            [
-              "inline"
-            ]
-          ],
-          "closed": true,
-          "line": 1,
-          "tag": "tag",
-          "tagEnd": 15,
-          "tagStart": 11
-        }
-      ],
-      "line": 1,
-      "tag": "_default",
-      "tagEnd": 1,
-      "tagStart": 1
-    }
-  ],
-  "head": [],
-  "line": 0,
-  "tag": "root",
-  "tagEnd": 1,
-  "tagStart": 1
+	"head": [],
+	"line": 1,
+	"tag": "root",
+	"tagStart": 1,
+	"tagEnd": 1,
+	"children": [
+		{
+			"children": [],
+			"line": 1,
+			"tag": "_default",
+			"tagStart": 1,
+			"tagEnd": 1,
+			"head": [
+				"] ][ test ",
+				{
+					"closed": true,
+					"line": 1,
+					"tag": "tag",
+					"tagStart": 11,
+					"tagEnd": 15,
+					"args": [
+						[
+							"inline"
+						]
+					]
+				}
+			]
+		}
+	]
 }

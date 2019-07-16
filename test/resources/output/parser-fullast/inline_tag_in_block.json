@@ -1,0 +1,73 @@
+{
+	"tag": "root",
+	"line": 1,
+	"tagStart": 1,
+	"tagEnd": 1,
+	"head": [],
+	"children": [
+		{
+			"tag": "tag",
+			"line": 1,
+			"tagStart": 1,
+			"tagEnd": 5,
+			"head": [],
+			"children": [
+				{
+					"tag": "test",
+					"line": 2,
+					"tagStart": 2,
+					"tagEnd": 7,
+					"head": [
+						{
+							"tag": "inline",
+							"closed": true,
+							"line": 2,
+							"tagStart": 8,
+							"tagEnd": 15,
+							"args": [
+								[
+									"content"
+								]
+							]
+						},
+						" Text"
+					],
+					"children": []
+					
+				},
+				{
+					"tag": "_default",
+					"line": 3,
+					"tagStart": 2,
+					"tagEnd": 2,
+					"head": [
+						{
+							"tag": "inline",
+							"closed": true,
+							"line": 3,
+							"tagStart": 2,
+							"tagEnd": 9,
+							"args": [
+								[
+									"content"
+								]
+							]
+						},
+						" Text"
+					],
+					"children": []
+				}
+			]			
+		},
+		{
+			"tag": "_default",
+			"line": 4,
+			"tagStart": 1,
+			"tagEnd": 1,
+			"head": [
+				"Text"
+			],
+			"children": []
+		}
+	]
+}
