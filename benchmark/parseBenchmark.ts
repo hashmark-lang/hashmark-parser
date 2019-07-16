@@ -1,7 +1,7 @@
 /* tslint:disable:no-console */
 import { Event, Suite } from "benchmark";
 import { toJSON } from "../src/output/json";
-import { parse } from "../src/Parser";
+import { parse } from "../src/parser/Parser";
 
 const N_CHILDREN = 10;
 const MAX_DEPTH = 3;
