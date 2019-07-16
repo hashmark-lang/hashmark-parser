@@ -2,6 +2,7 @@ src
 test
 benchmark
 demo
+docs
 coverage
 .nyc_output
 .gitattributes
