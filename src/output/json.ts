@@ -1,4 +1,4 @@
-import { BlockElement, InlineElement, InlineGroup } from "./ast";
+import { BlockElement, InlineElement, InlineGroup } from "../ast";
 
 export interface BlockElementJSON {
 	tag: string;

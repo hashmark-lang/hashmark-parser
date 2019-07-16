@@ -1,6 +1,6 @@
 import { assert } from "chai";
-import { parse } from "../src/Parser";
-import { toXML } from "../src/xml";
+import { toXML } from "../src/output/xml";
+import { parse } from "../src/parser/Parser";
 import { FileInfo, filesIn } from "./utils";
 
 describe("xml", () => {

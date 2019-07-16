@@ -1,7 +1,7 @@
-import { BlockElement } from "./ast";
+import { BlockElement } from "../ast";
+import { defaultSchema, Reserved, Schema } from "../schema/schema";
+import { last } from "../utils";
 import { InlineParser } from "./InlineParser";
-import { defaultSchema, Reserved, Schema } from "./schema";
-import { last } from "./utils";
 
 export function parse(input: string, schema: Schema = defaultSchema) {
 	return new Parser(schema).parse(input);
