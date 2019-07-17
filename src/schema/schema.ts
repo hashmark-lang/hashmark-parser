@@ -1,63 +1,48 @@
-import { BlockElement, InlineGroup } from "../ast";
-import { ValidationError } from "./errors";
+// Additional rule:
+//   All prop names within an element must be different
 
-export const enum Reserved {
-	rootTag = "root",
-	defaultTag = "_default",
-	rawLine = "_raw_line"
+export const enum Cardinality {
+	ZeroOrMore = "zeroOrMore",
+	OneOrMore = "oneOrMore",
+	One = "one",
+	Optional = "optional"
 }
 
-export interface Sugar {
-	tag: string;
-	start: string;
-	end: string;
-	separator?: string;
+interface BlockSchema {
+	default?: string;
+	props:
+		| [{ name: string; content: "raw" }]
+		| Array<{
+				name: string;
+				content: {
+					[tag: string]: Cardinality;
+				};
+		  }>;
 }
 
 export interface Schema {
-	sugars: Sugar[];
-	getDefault(parentName: string): string | undefined;
-	validateBlock(tree: BlockElement): ValidationError[];
-	validateLine(tree: InlineGroup): ValidationError[];
-	isRawBlock(name: string): boolean;
-	isRawHead(name: string): boolean;
-	isRawArg(name: string, index: number): boolean;
-	isValidHeadChild(parent: string, child: string): boolean;
-	isValidArgChild(parent: string, index: number, child: string): boolean;
+	root: BlockSchema;
+
+	blockElements: {
+		[tag: string]: BlockSchema & {
+			head?: {
+				name: string;
+				content: "raw" | string[];
+			};
+		};
+	};
+
+	inlineElements: {
+		[tag: string]: {
+			props: Array<{
+				name: string;
+				content: "raw" | string[];
+			}>;
+			sugar?: {
+				start: string;
+				separator?: string;
+				end: string;
+			};
+		};
+	};
 }
-
-export const defaultSchema: Schema = {
-	sugars: [],
-
-	getDefault(parentName: string) {
-		return undefined;
-	},
-
-	isRawBlock(name: string): boolean {
-		return false;
-	},
-
-	isRawHead(name: string): boolean {
-		return false;
-	},
-
-	isRawArg(name: string, index: number): boolean {
-		return false;
-	},
-
-	isValidHeadChild(parent: string, child: string): boolean {
-		return true;
-	},
-
-	isValidArgChild(parent: string, index: number, child: string): boolean {
-		return true;
-	},
-
-	validateBlock(tree: BlockElement): ValidationError[] {
-		return [];
-	},
-
-	validateLine(tree: InlineGroup): ValidationError[] {
-		return [];
-	}
-};
