@@ -17,7 +17,7 @@ export class Parser {
 	}
 
 	parse(input: string): BlockElement {
-		let line = 0;
+		let line = 1;
 		const root: BlockElement = {
 			tag: Reserved.rootTag,
 			children: [],
