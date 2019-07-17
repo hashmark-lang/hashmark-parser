@@ -1,21 +1,21 @@
 export type InlineGroup = Array<string | InlineElement>;
 
-export interface BlockElement {
+interface Positioned {
+	line: number; // line number, 1-based
+	tagStart: number; // column number, 1-based, inclusive
+	tagEnd: number; // column number, 1-based, exclusive
+}
+
+export interface BlockElement extends Positioned {
 	tag: string;
 	head: InlineGroup;
 	children: BlockElement[];
-	line: number;
-	tagStart: number;
-	tagEnd: number;
 }
 
-export interface InlineElement {
+export interface InlineElement extends Positioned {
 	tag: string;
 	args: InlineGroup[];
 	closed: boolean;
-	line: number;
-	tagStart: number;
-	tagEnd: number;
 }
 
 export function queryAll(ast: BlockElement, tag: string): BlockElement[] {
