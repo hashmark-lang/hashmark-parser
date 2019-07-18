@@ -1,5 +1,5 @@
-import { InlineElement, InlineGroup } from "../ast";
-import { defaultSchema, Schema, Sugar } from "../schema/schema";
+import { IRNode, IRNodeList } from "../ir/IRNode";
+import { InlineProp, Schema, Sugar } from "../schema/Schema";
 import { escapeRegExp, last } from "../utils";
 
 interface InlineSyntax {
@@ -7,24 +7,50 @@ interface InlineSyntax {
 	end: string;
 }
 
+type NamedSugar = Sugar & { tag: string };
+
 export class InlineParser {
 	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
 	private readonly inlineTag: InlineSyntax = { separator: "][", end: "]" };
 	// Map of sugar start character to sugar definition:
-	private readonly sugars: Map<string, Sugar>;
+	private readonly sugars: Map<string, NamedSugar>;
 	// Stack of currently open inline elements:
-	private stack: Array<{ element: InlineElement; syntax: InlineSyntax }> = [];
+	private stack: Array<{
+		node: IRNode;
+		syntax: InlineSyntax;
+		schema: InlineProp[];
+		length: number;
+	}> = [];
 	// Inline group at nesting level 0:
-	private root: InlineGroup;
+	private root: IRNodeList;
+	private props: Map<string, InlineProp[]>;
+	private headProps: Map<string, InlineProp>;
 	// Inline group at current nesting level:
-	private current: InlineGroup;
-
+	private current: IRNodeList;
 	private isRawArg: boolean;
 	private blockName: string;
 
-	constructor(private readonly schema: Schema = defaultSchema) {
+	constructor(schema: Schema) {
+		const sugarStarts: string[] = [];
+		const sugarSeparators: string[] = [];
+		const sugarEnds: string[] = [];
+
+		for (const { tag, sugar, props } of schema.inlineElements) {
+			if (sugar) {
+				this.sugars.set(sugar.start, { ...sugar, tag });
+				sugarStarts.push(sugar.start);
+				if (sugar.separator) sugarSeparators.push(sugar.separator);
+				sugarEnds.push(sugar.start);
+			}
+			this.props.set(tag, props);
+		}
+
+		for (const { tag, head } of schema.blockElements) {
+			if (head) this.headProps.set(tag, head);
+		}
+
 		this.regex = new RegExp(
 			"(" +
 				[
@@ -33,9 +59,9 @@ export class InlineParser {
 					...[
 						this.inlineTag.separator,
 						this.inlineTag.end,
-						...schema.sugars.map(_ => _.start),
-						...schema.sugars.map(_ => _.separator).filter(_ => _),
-						...schema.sugars.map(_ => _.end)
+						...sugarStarts,
+						...sugarSeparators,
+						...sugarEnds
 					].map(escapeRegExp)
 				]
 					.map(_ => `(?:${_})`)
@@ -43,13 +69,9 @@ export class InlineParser {
 				")",
 			"g"
 		);
-
-		this.sugars = new Map(schema.sugars.map(_ => [_.start, _]));
 	}
 
-	parse(input: string, blockName: string, line: number, column: number): InlineGroup {
-		if (this.schema.isRawHead(blockName)) return [input];
-
+	parse(input: string, blockName: string, line: number, column: number): IRNodeList {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
 		this.current = this.root = [];
@@ -109,7 +131,7 @@ export class InlineParser {
 				for (let j = this.stack.length - 1; j >= 0; --j) {
 					if (this.stack[j].syntax.separator === token) {
 						this.close(j + 1);
-						this.openArg();
+						this.openProp();
 						return;
 					}
 				}
@@ -142,36 +164,49 @@ export class InlineParser {
 		tagEnd: number,
 		closed: boolean = false
 	) {
-		const element = { tag, args: [], closed, line, tagStart, tagEnd };
-		this.current.push(element);
+		const node = { tag, namespace: "[schema]:inline", props: {} };
+		this.current.push(node);
+		// TODO: check that tag is a valid child of last(stack).node
 		if (!closed) {
-			this.stack.push({ element, syntax });
-			this.openArg();
+			const schema = this.props.get(tag) || [];
+			this.stack.push({ node, syntax, length: 0, schema });
+			this.openProp();
 		}
 	}
 
-	private openArg() {
-		const element = last(this.stack).element;
-		this.current = [];
-		element.args.push(this.current);
-		this.isRawArg = this.schema.isRawArg(element.tag, element.args.length);
+	private openProp() {
+		const parent = last(this.stack);
+		const propSchema = parent.schema[parent.length];
+		if (!propSchema) return;
+		this.isRawArg = !!propSchema.raw;
+		this.current = parent.node.props[propSchema.name] = [];
+		++parent.length;
 	}
 
 	private close(index: number = this.stack.length - 1) {
 		if (index === this.stack.length) return;
-		this.stack[index].element.closed = true;
 		this.stack.length = index;
-		this.current = this.stack.length > 0 ? last(last(this.stack).element.args) : this.root;
 		this.isRawArg = false;
+		if (this.stack.length === 0) {
+			this.current = this.root;
+		} else {
+			const parent = last(this.stack);
+			const parentLastProp = parent.schema[parent.length - 1];
+			this.current = parent.node.props[parentLastProp.name];
+		}
 	}
 
 	/**
 	 * Whether the sugar should be parsed as sugar in this context, or simply as text
 	 * @param sugar description of the sugar
 	 */
-	private isSugarStart(sugar: Sugar) {
-		if (this.stack.length === 0) return this.schema.isValidHeadChild(sugar.tag, this.blockName);
-		const top = last(this.stack).element;
-		return this.schema.isValidArgChild(top.tag, top.args.length, sugar.tag);
+	private isSugarStart(sugar: NamedSugar) {
+		if (this.stack.length === 0) {
+			const headProp = this.headProps.get(this.blockName);
+			return headProp && headProp.raw !== true && sugar.tag in headProp.content;
+		}
+		const parent = last(this.stack);
+		const parentLastProp = parent.schema[parent.length - 1];
+		return parentLastProp.raw !== true && sugar.tag in parentLastProp.content;
 	}
 }
