@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
-import { parse } from "../src/parser/Parser";
+import { parse } from "../src/parser/BlockParser";
 import { ParsedSchema } from "../src/schema/parseSchema";
 import { Schema } from "../src/schema/schema";
 

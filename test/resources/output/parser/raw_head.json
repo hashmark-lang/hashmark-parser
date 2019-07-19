@@ -1,13 +1,13 @@
 {
+	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"children": [],
+			"tag": "rawHead",
 			"head": [
 				"#notInterpreted[lorem #notInterpreted[ipsumo] dolor *sit*] *amet*"
 			],
-			"tag": "rawHead"
+			"children": []
 		}
-	],
-	"head": [],
-	"tag": "root"
+	]
 }

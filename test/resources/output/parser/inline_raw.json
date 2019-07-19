@@ -1,21 +1,29 @@
 {
+	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"children": [],
 			"head": [
 				{
+					"tag": "rawFirstArg",
 					"args": [
 						[
-							"#inline[test"
+							"#notATag[this is raw"
+						],
+						[
+							{
+								"tag": "inline",
+								"args": [
+									[
+										"this not is raw"
+									]
+								]
+							}
 						]
-					],
-					"tag": "rawArg1"
-				},
-				"]"
+					]
+				}
 			],
-			"tag": "_default"
+			"children": []
 		}
-	],
-	"head": [],
-	"tag": "root"
+	]
 }

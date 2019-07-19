@@ -1,18 +1,18 @@
 {
+	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"children": [],
+			"tag": "paragraph",
 			"head": [
 				"lorem ",
 				{
-					"args": [],
-					"tag": "dolphin"
+					"tag": "inline",
+					"args": []
 				},
 				" ipsum"
 			],
-			"tag": "tag"
+			"children": []
 		}
-	],
-	"head": [],
-	"tag": "root"
+	]
 }

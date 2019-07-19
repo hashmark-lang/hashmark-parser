@@ -1,0 +1,49 @@
+{
+	"tag": "root",
+	"children": [
+		{
+			"tag": "section",
+			"head": [
+				"My section"
+			],
+			"children": [
+				{
+					"head": [
+						{
+							"tag": "inline",
+							"args": [
+								[
+									"content"
+								]
+							],
+							"line": 2,
+							"tagStart": 3,
+							"tagEnd": 9
+						},
+						" Text"
+					],
+					"children": [],
+					"line": 2,
+					"tagStart": 2,
+					"tagEnd": 2
+				}
+			],
+			"line": 1,
+			"tagStart": 2,
+			"tagEnd": 9
+		},
+		{
+			"head": [
+				"Text"
+			],
+			"children": [],
+			"line": 3,
+			"tagStart": 1,
+			"tagEnd": 1
+		}
+	],
+	"head": [],
+	"line": 1,
+	"tagStart": 1,
+	"tagEnd": 1
+}

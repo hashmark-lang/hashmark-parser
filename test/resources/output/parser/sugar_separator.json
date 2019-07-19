@@ -1,47 +1,46 @@
 {
-  "children": [
-    {
-      "children": [],
-      "head": [
-        {
-          "args": [
-            [
-              "a"
-            ],
-            [
-              "b ",
-              {
-                "args": [
-                  [
-                    "c"
-                  ],
-                  [
-                    "d"
-                  ],
-                  [
-                    "e"
-                  ]
-                ],
-                "tag": "set"
-              }
-            ],
-            [
-              {
-                "args": [
-                  [
-                    "f"
-                  ]
-                ],
-                "tag": "set"
-              }
-            ]
-          ],
-          "tag": "set"
-        }
-      ],
-      "tag": "_default"
-    }
-  ],
-  "head": [],
-  "tag": "root"
+	"tag": "root",
+	"head": [],
+	"children": [
+		{
+			"head": [
+				{
+					"tag": "set",
+					"args": [
+						[
+							"a"
+						],
+						[
+							"b",
+							{
+								"tag": "set",
+								"args": [
+									[
+										"c"
+									],
+									[
+										"d"
+									]
+								]
+							}
+						],
+						[
+							{
+								"tag": "set",
+								"args": [
+									[
+										"e"
+									],
+									[
+										"f"
+									]
+								]
+							}
+						]
+					]
+				}
+			],
+			"children": []
+		}
+	]
 }

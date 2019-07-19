@@ -1,41 +1,30 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"tag": "document",
-			"head": [
-				"Title"
-			],
+			"tag": "list",
+			"head": [],
 			"children": [
 				{
-					"tag": "list",
-					"head": [],
-					"children": [
-						{
-							"tag": "_default",
-							"head": [
-								"Banana"
-							],
-							"children": []
-						},
-						{
-							"tag": "_default",
-							"head": [
-								"Pear"
-							],
-							"children": []
-						},
-						{
-							"tag": "_default",
-							"head": [
-								"Apple"
-							],
-							"children": []
-						}
-					]
+					"head": [
+						"Banana"
+					],
+					"children": []
+				},
+				{
+					"head": [
+						"Pear"
+					],
+					"children": []
+				},
+				{
+					"head": [
+						"Apple"
+					],
+					"children": []
 				}
 			]
 		}
-	],
-	"head": []
+	]
 }

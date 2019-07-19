@@ -1,5 +1,6 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
 			"tag": "document",
@@ -14,7 +15,6 @@
 					],
 					"children": [
 						{
-							"tag": "_default",
 							"head": [
 								"Lorem"
 							],
@@ -24,6 +24,5 @@
 				}
 			]
 		}
-	],
-	"head": []
+	]
 }

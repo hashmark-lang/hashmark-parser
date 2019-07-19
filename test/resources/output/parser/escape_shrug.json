@@ -1,13 +1,12 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"tag": "_default",
 			"head": [
 				"¯\\_(ツ)_/¯"
 			],
 			"children": []
 		}
-	],
-	"head": []
+	]
 }

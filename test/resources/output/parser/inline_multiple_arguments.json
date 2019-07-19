@@ -1,8 +1,8 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"tag": "_default",
 			"head": [
 				{
 					"tag": "link",
@@ -18,6 +18,5 @@
 			],
 			"children": []
 		}
-	],
-	"head": []
+	]
 }

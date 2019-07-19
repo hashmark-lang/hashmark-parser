@@ -1,8 +1,9 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"tag": "tag",
+			"tag": "paragraph",
 			"head": [
 				"text ",
 				{
@@ -17,6 +18,5 @@
 			],
 			"children": []
 		}
-	],
-	"head": []
+	]
 }

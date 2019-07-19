@@ -1,34 +1,30 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"tag": "_default",
 			"head": [
 				"Hello"
 			],
 			"children": []
 		},
 		{
-			"tag": "_default",
 			"head": [
 				"World"
 			],
 			"children": []
 		},
 		{
-			"tag": "_default",
 			"head": [
 				"Hello"
 			],
 			"children": []
 		},
 		{
-			"tag": "_default",
 			"head": [
 				"World"
 			],
 			"children": []
 		}
-	],
-	"head": []
+	]
 }

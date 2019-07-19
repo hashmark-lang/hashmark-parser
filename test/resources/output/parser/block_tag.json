@@ -1,5 +1,6 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
 			"tag": "section",
@@ -8,7 +9,6 @@
 			],
 			"children": [
 				{
-					"tag": "_default",
 					"head": [
 						"Hello World"
 					],
@@ -16,6 +16,5 @@
 				}
 			]
 		}
-	],
-	"head": []
+	]
 }
