@@ -5,7 +5,7 @@ import {
 	InlineGroup,
 	queryAllChildren,
 	queryChildren
-} from "../ast";
+} from "../ast/ast";
 import { countOccurrences } from "../utils";
 import {
 	ArgumentCountError,

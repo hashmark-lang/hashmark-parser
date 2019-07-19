@@ -1,30 +1,29 @@
-import { InlineElement, InlineGroup } from "../ast";
-import { defaultSchema, Schema, Sugar } from "../schema/schema";
 import { escapeRegExp, last } from "../utils";
+import { InlineHandler, Sugar } from "./InlineHandler";
 
 interface InlineSyntax {
 	separator?: string;
 	end: string;
 }
 
-export class InlineParser {
+export class InlineParser<T, TagT> {
 	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
 	private readonly inlineTag: InlineSyntax = { separator: "][", end: "]" };
-	// Map of sugar start character to sugar definition:
-	private readonly sugars: Map<string, Sugar>;
 	// Stack of currently open inline elements:
-	private stack: Array<{ element: InlineElement; syntax: InlineSyntax }> = [];
+	private stack: Array<{ data?: T; tagData: TagT; syntax: InlineSyntax; length: number }> = [];
 	// Inline group at nesting level 0:
-	private root: InlineGroup;
+	private root: T;
 	// Inline group at current nesting level:
-	private current: InlineGroup;
+	private current: T;
 
-	private isRawArg: boolean;
-	private blockName: string;
+	// Map of sugar start character to sugar definition:
+	private sugars: Map<string, Sugar>;
+	private isRaw: boolean;
 
-	constructor(private readonly schema: Schema = defaultSchema) {
+	constructor(private readonly handler: InlineHandler<T, TagT>) {
+		const sugars = handler.getAllSugars();
 		this.regex = new RegExp(
 			"(" +
 				[
@@ -33,9 +32,9 @@ export class InlineParser {
 					...[
 						this.inlineTag.separator,
 						this.inlineTag.end,
-						...schema.sugars.map(_ => _.start),
-						...schema.sugars.map(_ => _.separator).filter(_ => _),
-						...schema.sugars.map(_ => _.end)
+						...sugars.map(_ => _.start),
+						...sugars.map(_ => _.separator).filter(_ => _),
+						...sugars.map(_ => _.end)
 					].map(escapeRegExp)
 				]
 					.map(_ => `(?:${_})`)
@@ -43,23 +42,19 @@ export class InlineParser {
 				")",
 			"g"
 		);
-
-		this.sugars = new Map(schema.sugars.map(_ => [_.start, _]));
 	}
 
-	parse(input: string, blockName: string, line: number, column: number): InlineGroup {
-		if (this.schema.isRawHead(blockName)) return [input];
-
+	parse(input: string, line: number, column: number): T {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
-		this.current = this.root = [];
-		this.isRawArg = false;
-		this.blockName = blockName;
+		const { data, raw, sugars } = this.handler.rootInlineTag();
+		this.current = this.root = data;
+		this.isRaw = raw;
 
 		for (let i = 0; i < tokens.length; ++i) {
 			const token = tokens[i];
-			if (i % 2 === 0 || (this.isRawArg && token !== last(this.stack).syntax.end)) {
-				if (token) this.pushText(token);
+			if (i % 2 === 0 || (this.isRaw && !this.isRawEnd(token))) {
+				if (token) this.handler.pushText(this.current, token);
 			} else {
 				this.handleToken(token, line, column);
 			}
@@ -78,7 +73,7 @@ export class InlineParser {
 	private handleToken(token: string, line: number, column: number) {
 		switch (token[0]) {
 			case "\\": {
-				this.pushText(token[1]);
+				this.handler.pushText(this.current, token[1]);
 				return;
 			}
 			case "#": {
@@ -88,8 +83,8 @@ export class InlineParser {
 					tag,
 					this.inlineTag,
 					line,
-					column,
-					column + tag.length + 1,
+					column + 1,
+					column + 1 + tag.length,
 					!endsWithBracket
 				);
 				return;
@@ -115,22 +110,13 @@ export class InlineParser {
 				}
 
 				const sugar = this.sugars.get(token);
-				if (sugar && this.isSugarStart(sugar)) {
+				if (sugar) {
 					this.open(sugar.tag, sugar, line, column, column + token.length);
 					return;
 				}
 
-				this.pushText(token);
+				this.handler.pushText(this.current, token);
 			}
-		}
-	}
-
-	private pushText(text: string) {
-		const lastIndex = this.current.length - 1;
-		if (lastIndex < 0 || typeof this.current[lastIndex] !== "string") {
-			this.current.push(text);
-		} else {
-			this.current[lastIndex] += text;
 		}
 	}
 
@@ -142,36 +128,36 @@ export class InlineParser {
 		tagEnd: number,
 		closed: boolean = false
 	) {
-		const element = { tag, args: [], closed, line, tagStart, tagEnd };
-		this.current.push(element);
+		const tagData = this.handler.openInlineTag(this.current, tag, line, tagStart, tagEnd);
 		if (!closed) {
-			this.stack.push({ element, syntax });
+			this.stack.push({ tagData, syntax, length: 0 });
 			this.openArg();
 		}
 	}
 
 	private openArg() {
-		const element = last(this.stack).element;
-		this.current = [];
-		element.args.push(this.current);
-		this.isRawArg = this.schema.isRawArg(element.tag, element.args.length);
+		const parent = last(this.stack);
+		const { data, raw, sugars } = this.handler.openArgument(
+			parent.tagData,
+			parent.length,
+			0,
+			0
+		);
+		parent.data = this.current = data;
+		this.isRaw = raw;
+		this.sugars = sugars;
+		++parent.length;
 	}
 
 	private close(index: number = this.stack.length - 1) {
 		if (index === this.stack.length) return;
-		this.stack[index].element.closed = true;
 		this.stack.length = index;
-		this.current = this.stack.length > 0 ? last(last(this.stack).element.args) : this.root;
-		this.isRawArg = false;
+		this.current = this.stack.length > 0 ? last(this.stack).data! : this.root;
+		this.isRaw = false;
 	}
 
-	/**
-	 * Whether the sugar should be parsed as sugar in this context, or simply as text
-	 * @param sugar description of the sugar
-	 */
-	private isSugarStart(sugar: Sugar) {
-		if (this.stack.length === 0) return this.schema.isValidHeadChild(sugar.tag, this.blockName);
-		const top = last(this.stack).element;
-		return this.schema.isValidArgChild(top.tag, top.args.length, sugar.tag);
+	private isRawEnd(token: string) {
+		const syntax = last(this.stack).syntax;
+		return token === syntax.end || token === syntax.separator;
 	}
 }

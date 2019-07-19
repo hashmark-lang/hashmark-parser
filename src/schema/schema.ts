@@ -1,4 +1,4 @@
-import { BlockElement, InlineGroup } from "../ast";
+import { BlockElement, InlineGroup } from "../ast/ast";
 import { ValidationError } from "./errors";
 
 export const enum Reserved {
