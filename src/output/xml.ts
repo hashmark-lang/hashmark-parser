@@ -1,4 +1,4 @@
-import { BlockElement, InlineElement, InlineGroup } from "../ast";
+import { BlockElement, InlineElement, InlineGroup } from "../ast/ast";
 
 export function toXML(root: BlockElement): string {
 	const children = root.children.map(toXML);

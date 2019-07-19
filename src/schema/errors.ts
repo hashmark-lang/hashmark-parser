@@ -1,5 +1,5 @@
 // tslint:disable:max-classes-per-file
-import { BlockElement, InlineElement } from "../ast";
+import { BlockElement, InlineElement } from "../ast/ast";
 import { ordinal } from "../utils";
 import { Cardinality } from "./parseSchema";
 
