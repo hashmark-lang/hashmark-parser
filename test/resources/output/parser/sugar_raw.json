@@ -1,20 +1,19 @@
 {
-  "children": [
-    {
-      "children": [],
-      "head": [
-        {
-          "args": [
-            [
-              "#notInterpreted[lorem] ipsum *dolor* sit"
-            ]
-          ],
-          "tag": "code"
-        }
-      ],
-      "tag": "_default"
-    }
-  ],
-  "head": [],
-  "tag": "root"
+	"tag": "root",
+	"head": [],
+	"children": [
+		{
+			"head": [
+				{
+					"tag": "code",
+					"args": [
+						[
+							"#notInterpreted[lorem] ipsum *dolor* sit"
+						]
+					]
+				}
+			],
+			"children": []
+		}
+	]
 }

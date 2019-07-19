@@ -1,3 +1,37 @@
 {
-    "todo": true
+    "tag": "root",
+    "head": [],
+    "children": [
+        {
+            "head": [
+                {
+                    "tag": "inline",
+                    "args": [
+                        [
+                            {
+                                "tag": "inline",
+                                "args": [
+                                    [
+                                        "lorem"
+                                    ]
+                                ]
+                            },
+                            " ipsum"
+                        ],
+                        [
+                            {
+                                "tag": "inline",
+                                "args": [
+                                    [
+                                        "dolor"
+                                    ]
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "children": []
+        }
+    ]
 }

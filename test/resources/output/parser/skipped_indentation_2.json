@@ -1,78 +1,76 @@
 {
+	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [],
-							"head": [
-								"inline"
-							],
-							"tag": "_default"
-						}
-					],
-					"head": [],
-					"tag": "head"
-				}
-			],
+			"tag": "block",
 			"head": [
 				"title"
 			],
-			"tag": "block"
-		},
-		{
 			"children": [
 				{
+					"tag": "head",
+					"head": [],
 					"children": [
 						{
-							"children": [
-								{
-									"children": [],
-									"head": [
-										"bold"
-									],
-									"tag": "_default"
-								}
+							"head": [
+								"inline"
 							],
-							"head": [],
-							"tag": "content"
+							"children": []
 						}
-					],
-					"head": [],
-					"tag": "arg"
-				},
-				{
-					"children": [
-						{
-							"children": [],
-							"head": [],
-							"tag": "raw"
-						}
-					],
-					"head": [],
-					"tag": "arg"
+					]
 				}
-			],
+			]
+		},
+		{
+			"tag": "inline",
 			"head": [
 				"inline"
 			],
-			"tag": "inline"
-		},
-		{
 			"children": [
 				{
-					"children": [],
+					"tag": "arg",
 					"head": [],
-					"tag": "arg"
+					"children": [
+						{
+							"tag": "content",
+							"head": [],
+							"children": [
+								{
+									"head": [
+										"bold"
+									],
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"tag": "arg",
+					"head": [],
+					"children": [
+						{
+							"tag": "raw",
+							"head": [],
+							"children": []
+						}
+					]
 				}
-			],
+			]
+		},
+		{
+			"tag": "inline",
 			"head": [
 				"bold"
 			],
-			"tag": "inline"
+			"children": [
+				{
+					"tag": "arg",
+					"head": [],
+					"children": []
+				}
+			]
 		}
-	],
-	"head": [],
-	"tag": "root"
+	]
 }

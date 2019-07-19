@@ -1,28 +1,36 @@
 {
-	"children": [
-	  {
-		"children": [
-		  {
-			"children": [],
-			"head": [],
-			"tag": "tag2"
-		  },
-		  {
-			"children": [
-			  {
-				"children": [],
-				"head": [],
-				"tag": "tag4"
-			  }
-			],
-			"head": [],
-			"tag": "tag3"
-		  }
-		],
-		"head": [],
-		"tag": "tag1"
-	  }
-	],
+	"tag": "root",
 	"head": [],
-	"tag": "root"
-  }
+	"children": [
+		{
+			"tag": "section",
+			"head": [
+				"1"
+			],
+			"children": [
+				{
+					"tag": "section",
+					"head": [
+						"2"
+					],
+					"children": []
+				},
+				{
+					"tag": "section",
+					"head": [
+						"3"
+					],
+					"children": [
+						{
+							"tag": "section",
+							"head": [
+								"4"
+							],
+							"children": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

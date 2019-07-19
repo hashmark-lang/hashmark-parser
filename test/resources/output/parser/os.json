@@ -1,5 +1,6 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
 			"tag": "document",
@@ -41,7 +42,6 @@
 									"children": []
 								},
 								{
-									"tag": "_default",
 									"head": [
 										"An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications."
 									],
@@ -60,6 +60,5 @@
 				}
 			]
 		}
-	],
-	"head": []
+	]
 }

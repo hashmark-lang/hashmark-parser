@@ -1,5 +1,6 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
 			"tag": "tag\\#",
@@ -7,7 +8,6 @@
 			"children": []
 		},
 		{
-			"tag": "_default",
 			"head": [
 				{
 					"tag": "tag\\",
@@ -28,6 +28,5 @@
 			"head": [],
 			"children": []
 		}
-	],
-	"head": []
+	]
 }

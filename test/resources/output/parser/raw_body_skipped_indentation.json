@@ -1,47 +1,46 @@
 {
+	"tag": "root",
+	"head": [],
 	"children": [
 		{
+			"tag": "rawBody",
+			"head": [],
 			"children": [
 				{
-					"children": [],
+					"tag": "_raw_line",
 					"head": [
 						"Lorem"
 					],
-					"tag": "_raw_line"
+					"children": []
 				},
 				{
-					"children": [],
+					"tag": "_raw_line",
 					"head": [
 						"\tIpsum"
 					],
-					"tag": "_raw_line"
+					"children": []
 				},
 				{
-					"children": [],
+					"tag": "_raw_line",
 					"head": [
 						"  Dolor"
 					],
-					"tag": "_raw_line"
+					"children": []
 				},
 				{
-					"children": [],
+					"tag": "_raw_line",
 					"head": [
 						"Sit"
 					],
-					"tag": "_raw_line"
+					"children": []
 				}
-			],
-			"head": [],
-			"tag": "rawBody"
+			]
 		},
 		{
-			"children": [],
 			"head": [
 				"Amet"
 			],
-			"tag": "_default"
+			"children": []
 		}
-	],
-	"head": [],
-	"tag": "root"
+	]
 }

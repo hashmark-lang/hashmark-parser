@@ -1,20 +1,19 @@
 {
-  "children": [
-    {
-      "children": [],
-      "head": [
-        {
-          "args": [
-            [
-              "hello"
-            ]
-          ],
-          "tag": "strong"
-        }
-      ],
-      "tag": "_default"
-    }
-  ],
-  "head": [],
-  "tag": "root"
+	"tag": "root",
+	"head": [],
+	"children": [
+		{
+			"head": [
+				{
+					"tag": "strong",
+					"args": [
+						[
+							"hello"
+						]
+					]
+				}
+			],
+			"children": []
+		}
+	]
 }

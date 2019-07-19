@@ -1,45 +1,44 @@
 {
-  "children": [
-    {
-      "children": [],
-      "head": [
-        {
-          "args": [
-            [
-              {
-                "args": [
-                  [
-                    "lorem"
-                  ]
-                ],
-                "tag": "strong"
-              },
-              " ipsum"
-            ]
-          ],
-          "tag": "tag"
-        },
-        " dolor ",
-        {
-          "args": [
-            [
-              "sit ",
-              {
-                "args": [
-                  [
-                    "amet"
-                  ]
-                ],
-                "tag": "tag"
-              }
-            ]
-          ],
-          "tag": "emphasis"
-        }
-      ],
-      "tag": "_default"
-    }
-  ],
-  "head": [],
-  "tag": "root"
+	"tag": "root",
+	"head": [],
+	"children": [
+		{
+			"head": [
+				{
+					"tag": "strong",
+					"args": [
+						[
+							{
+								"tag": "strong",
+								"args": [
+									[
+										"lorem"
+									]
+								]
+							},
+							" ipsum"
+						]
+					]
+				},
+				" dolor ",
+				{
+					"tag": "emphasis",
+					"args": [
+						[
+							"sit ",
+							{
+								"tag": "emphasis",
+								"args": [
+									[
+										"amet"
+									]
+								]
+							}
+						]
+					]
+				}
+			],
+			"children": []
+		}
+	]
 }

@@ -1,12 +1,12 @@
 {
 	"tag": "root",
+	"head": [],
 	"children": [
 		{
-			"tag": "_default",
 			"head": [
 				"] ][ test ",
 				{
-					"tag": "tag",
+					"tag": "inline",
 					"args": [
 						[
 							"inline"
@@ -16,6 +16,5 @@
 			],
 			"children": []
 		}
-	],
-	"head": []
+	]
 }

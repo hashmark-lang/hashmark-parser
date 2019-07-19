@@ -1,27 +1,26 @@
 {
-  "children": [
-    {
-      "children": [],
-      "head": [
-        {
-          "args": [
-            [
-              {
-                "args": [
-                  [
-                    "Hello"
-                  ]
-                ],
-                "tag": "emphasis"
-              }
-            ]
-          ],
-          "tag": "strong"
-        }
-      ],
-      "tag": "_default"
-    }
-  ],
-  "head": [],
-  "tag": "root"
+	"tag": "root",
+	"head": [],
+	"children": [
+		{
+			"head": [
+				{
+					"tag": "strong",
+					"args": [
+						[
+							{
+								"tag": "emphasis",
+								"args": [
+									[
+										"Hello"
+									]
+								]
+							}
+						]
+					]
+				}
+			],
+			"children": []
+		}
+	]
 }
