@@ -1,5 +1,5 @@
 <root>
-	<tag>
-		<head>lorem <dolphin/> ipsum</head>
-	</tag>
+	<paragraph>
+		<head>lorem <inline/> ipsum</head>
+	</paragraph>
 </root>
