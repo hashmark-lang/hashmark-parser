@@ -1,18 +1,22 @@
-export interface BlockHandler<T> {
-	rootBlock(): BlockContext<T>;
+/**
+ * Takes instructions from a [[BlockParser]] to produce `BlockData` objects
+ */
+export interface BlockHandler<BlockData> {
+	rootBlock(): BlockContext<BlockData>;
 	openBlock(
-		parent: T,
+		parent: BlockData,
 		tag: string,
 		head: string,
 		line: number,
 		tagStart: number,
 		tagEnd: number,
 		headStart: number
-	): BlockContext<T>;
-	rawLine(parent: T, content: string): void;
+	): BlockContext<BlockData>;
+	rawLine(parent: BlockData, content: string): void;
 }
 
-export interface BlockContext<T> {
+// Block data, with extra information for parsing.
+export interface BlockContext<BlockData> {
 	rawBody: boolean;
-	data: T;
+	data: BlockData;
 }

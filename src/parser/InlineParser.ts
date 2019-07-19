@@ -6,23 +6,28 @@ interface InlineSyntax {
 	end: string;
 }
 
-export class InlineParser<T, TagT> {
+export class InlineParser<InlineGroupData, InlineData> {
 	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
 	private readonly inlineTag: InlineSyntax = { separator: "][", end: "]" };
 	// Stack of currently open inline elements:
-	private stack: Array<{ data?: T; tagData: TagT; syntax: InlineSyntax; length: number }> = [];
+	private stack: Array<{
+		data?: InlineGroupData;
+		tagData: InlineData;
+		syntax: InlineSyntax;
+		length: number;
+	}> = [];
 	// Inline group at nesting level 0:
-	private root: T;
+	private root: InlineGroupData;
 	// Inline group at current nesting level:
-	private current: T;
+	private current: InlineGroupData;
 
 	// Map of sugar start character to sugar definition:
 	private sugars: Map<string, Sugar>;
 	private isRaw: boolean;
 
-	constructor(private readonly handler: InlineHandler<T, TagT>) {
+	constructor(private readonly handler: InlineHandler<InlineGroupData, InlineData>) {
 		const sugars = handler.getAllSugars();
 		this.regex = new RegExp(
 			"(" +
@@ -44,7 +49,7 @@ export class InlineParser<T, TagT> {
 		);
 	}
 
-	parse(input: string, line: number, column: number): T {
+	parse(input: string, line: number, column: number): InlineGroupData {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
 		const { data, raw, sugars } = this.handler.rootInlineTag();

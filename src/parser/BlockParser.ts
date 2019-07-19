@@ -7,12 +7,22 @@ export function parse(input: string) {
 	return new BlockParser(handler).parse(input);
 }
 
-export class BlockParser<T> {
+/**
+ * Parses Hashmark blocks. A block is a Hashmark tag with a body. For example:
+ * ```
+ * #block head
+ * 		block content
+ * ```
+ *
+ * @typeparam BlockData		Type of produced block objects
+ */
+export class BlockParser<BlockData> {
 	private readonly regex = /(?:\r\n|\n|\r|^)(\t*)(.*)/gm;
 	private readonly tagRegex = /(?:#([^ \[\r\n]+)(?: |$))?(.*)/;
-	constructor(private readonly handler: BlockHandler<T>) {}
 
-	parse(input: string): T {
+	constructor(private readonly handler: BlockHandler<BlockData>) {}
+
+	parse(input: string): BlockData {
 		const init = this.handler.rootBlock();
 		let inRawBody = init.rawBody;
 		const stack = [{ data: init.data, indent: 0 }];
