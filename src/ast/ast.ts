@@ -1,7 +1,7 @@
 export type InlineGroup = Array<string | InlineElement>;
 
 export interface BlockElement {
-	tag: string;
+	tag?: string;
 	head: InlineGroup;
 	children: BlockElement[];
 	line: number;
