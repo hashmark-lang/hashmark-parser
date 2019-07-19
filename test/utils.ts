@@ -1,8 +1,5 @@
 import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
-import { parse } from "../src/parser/BlockParser";
-import { ParsedSchema } from "../src/schema/parseSchema";
-import { Schema } from "../src/schema/schema";
 
 export class FileInfo {
 	readonly path: string;
@@ -21,10 +18,6 @@ export function* filesIn(dir: string, extension: string): IterableIterator<FileI
 			yield new FileInfo(dir, file.slice(0, -extension.length), extension);
 		}
 	}
-}
-
-export function getSchemaSchema(): Schema {
-	return new ParsedSchema(parse(readFileSync("src/schema/schema-schema.hm", "utf-8")));
 }
 
 export function readInputFile(fileName: string): string {

@@ -1,7 +1,13 @@
 // tslint:disable:max-classes-per-file
 import { BlockElement, InlineElement } from "../ast/ast";
 import { ordinal } from "../utils";
-import { Cardinality } from "./parseSchema";
+
+enum Cardinality {
+	ZeroOrMore = "zeroOrMore",
+	OneOrMore = "oneOrMore",
+	One = "one",
+	Optional = "optional"
+}
 
 export abstract class HMError extends Error {
 	constructor(readonly code: ErrorCode, message: string) {
