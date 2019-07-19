@@ -1,11 +1,14 @@
 import { BlockElement, InlineElement, InlineGroup } from "../ast/ast";
+import { Reserved } from "../schema/schema";
 
 export function toXML(root: BlockElement): string {
 	const children = root.children.map(toXML);
+	const tag = root.tag || Reserved.defaultTag;
 	if (root.head.length > 0) {
-		children.unshift(xmlTag("head", true, lineToXML(root.head)));
+		return xmlTag(tag, false, xmlTag("head", true, lineToXML(root.head)), ...children);
+	} else {
+		return xmlTag(tag, false, ...children);
 	}
-	return xmlTag(root.tag, false, ...children);
 }
 
 function inlineToXML(inline: InlineElement): string {
