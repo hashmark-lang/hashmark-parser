@@ -1,15 +1,29 @@
-export interface InlineHandler<T, TagT> {
-	rootInlineTag(): InlineContext<T>;
-	openInlineTag(parent: T, tag: string, line: number, start: number, end: number): TagT;
-	openArgument(parent: TagT, index: number, line: number, start: number): InlineContext<T>;
-	pushText(parent: T, content: string): void;
+/**
+ * Takes instructions from [[InlineParser]] in order to build an AST.
+ */
+export interface InlineHandler<InlineGroupData, InlineData> {
+	rootInlineTag(): InlineContext<InlineGroupData>;
+	openInlineTag(
+		parent: InlineGroupData,
+		tag: string,
+		line: number,
+		start: number,
+		end: number
+	): InlineData;
+	openArgument(
+		parent: InlineData,
+		index: number,
+		line: number,
+		start: number
+	): InlineContext<InlineGroupData>;
+	pushText(parent: InlineGroupData, content: string): void;
 	getAllSugars(): Sugar[];
 }
 
-export interface InlineContext<T> {
+export interface InlineContext<InlineGroupData> {
 	raw: boolean;
 	sugars: SugarsMap;
-	data: T;
+	data: InlineGroupData;
 }
 
 export interface Sugar {
