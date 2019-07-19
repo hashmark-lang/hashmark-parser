@@ -1,8 +1,6 @@
 import { assert } from "chai";
-import { AstHandler } from "../../src/ast/AstHandler";
 import { toJSON } from "../../src/output/json";
 import { BlockParser } from "../../src/parser/BlockParser";
-import { defaultSchema } from "../../src/schema/schema";
 import { FileInfo, filesIn } from "../utils";
 import { TestHandler } from "./TestHandler";
 
