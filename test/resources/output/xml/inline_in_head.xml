@@ -1,5 +1,5 @@
 <root>
-	<tag>
+	<paragraph>
 		<head>text <inline>attr</inline> text</head>
-	</tag>
+	</paragraph>
 </root>
