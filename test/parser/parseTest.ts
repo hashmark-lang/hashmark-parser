@@ -11,9 +11,9 @@ describe("parse()", function() {
 		this.parser = new BlockParser(handler);
 	});
 
-	for (const output of filesIn("test/resources/output/parser", ".json")) {
+	for (const output of filesIn("test/_resources/output/parser", ".json")) {
 		it(`works with ${output.name}`, function() {
-			const input = new FileInfo("test/resources/input", output.name, ".hm");
+			const input = new FileInfo("test/_resources/input", output.name, ".hm");
 			assert.strictEqual(
 				JSON.stringify(toJSON(this.parser.parse(input.readContent())), null, "\t"),
 				JSON.stringify(JSON.parse(output.readContent()), null, "\t")
@@ -21,9 +21,9 @@ describe("parse()", function() {
 		});
 	}
 
-	for (const output of filesIn("test/resources/output/parser-fullast", ".json")) {
+	for (const output of filesIn("test/_resources/output/parser-fullast", ".json")) {
 		it(`works with ${output.name} (full ast)`, function() {
-			const input = new FileInfo("test/resources/input", output.name, ".hm");
+			const input = new FileInfo("test/_resources/input", output.name, ".hm");
 			assert.strictEqual(
 				JSON.stringify(this.parser.parse(input.readContent()), null, "\t"),
 				JSON.stringify(JSON.parse(output.readContent()), null, "\t")

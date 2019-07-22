@@ -21,7 +21,7 @@ export function* filesIn(dir: string, extension: string): IterableIterator<FileI
 }
 
 export function readInputFile(fileName: string): string {
-	const filePath = path.join("test", "resources", "input", fileName);
+	const filePath = path.join("test", "_resources", "input", fileName);
 	return readFileSync(filePath).toString();
 }
 
