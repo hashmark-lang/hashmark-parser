@@ -6,7 +6,7 @@ interface InlineSyntax {
 	end: string;
 }
 
-export class InlineParser<InlineGroupData, InlineData> {
+export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
@@ -19,26 +19,26 @@ export class InlineParser<InlineGroupData, InlineData> {
 		length: number;
 	}> = [];
 	// Inline group at nesting level 0:
-	private root: InlineGroupData;
+	private root?: InlineGroupData;
 	// Inline group at current nesting level:
-	private current: InlineGroupData;
+	private current?: InlineGroupData;
 
 	// Map of sugar start character to sugar definition:
-	private sugars: Map<string, Sugar>;
-	private isRaw: boolean;
+	private sugars?: Map<string, Sugar>;
+	private isRaw?: boolean;
 
-	constructor(private readonly handler: InlineHandler<InlineGroupData, InlineData>) {
+	constructor(private readonly handler: InlineHandler<InlineGroupData, InlineData, ParentData>) {
 		const sugars = handler.getAllSugars();
 		this.regex = new RegExp(
 			"(" +
 				[
 					/#[^ \[]+\[?/.source,
 					/\\./.source,
+					...[this.inlineTag.separator ? [escapeRegExp(this.inlineTag.separator)] : []],
 					...[
-						this.inlineTag.separator,
 						this.inlineTag.end,
 						...sugars.map(_ => _.start),
-						...sugars.map(_ => _.separator).filter(_ => _),
+						...sugars.map(_ => _.separator).filter((_): _ is string => Boolean(_)),
 						...sugars.map(_ => _.end)
 					].map(escapeRegExp)
 				]
@@ -49,10 +49,11 @@ export class InlineParser<InlineGroupData, InlineData> {
 		);
 	}
 
-	parse(input: string, line: number, column: number): InlineGroupData {
+	parse(input: string, line: number, column: number, parentData: ParentData): InlineGroupData {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
-		const { data, raw, sugars } = this.handler.rootInlineTag();
+		const { data, raw, sugars } = this.handler.rootInlineTag(parentData);
+		this.sugars = sugars;
 		this.current = this.root = data;
 		this.isRaw = raw;
 
@@ -78,7 +79,7 @@ export class InlineParser<InlineGroupData, InlineData> {
 	private handleToken(token: string, line: number, column: number) {
 		switch (token[0]) {
 			case "\\": {
-				this.handler.pushText(this.current, token[1]);
+				this.handler.pushText(this.current!, token[1]);
 				return;
 			}
 			case "#": {
@@ -114,13 +115,13 @@ export class InlineParser<InlineGroupData, InlineData> {
 					}
 				}
 
-				const sugar = this.sugars.get(token);
+				const sugar = this.sugars!.get(token);
 				if (sugar) {
 					this.open(sugar.tag, sugar, line, column, column + token.length);
 					return;
 				}
 
-				this.handler.pushText(this.current, token);
+				this.handler.pushText(this.current!, token);
 			}
 		}
 	}
@@ -133,7 +134,7 @@ export class InlineParser<InlineGroupData, InlineData> {
 		tagEnd: number,
 		closed: boolean = false
 	) {
-		const tagData = this.handler.openInlineTag(this.current, tag, line, tagStart, tagEnd);
+		const tagData = this.handler.openInlineTag(this.current!, tag, line, tagStart, tagEnd);
 		if (!closed) {
 			this.stack.push({ tagData, syntax, length: 0 });
 			this.openArg();

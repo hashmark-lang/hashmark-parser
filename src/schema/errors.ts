@@ -9,6 +9,8 @@ enum Cardinality {
 	Optional = "optional"
 }
 
+export type ErrorLogger = (error: HMError) => void;
+
 export abstract class HMError extends Error {
 	constructor(readonly code: ErrorCode, message: string) {
 		super(message);
@@ -21,13 +23,13 @@ export abstract class HMError extends Error {
 
 export const enum ErrorCode {
 	UNKNOWN_TAG = 100,
-	INLINE_USED_AS_BLOCK,
-	BLOCK_USED_AS_INLINE,
 	DISALLOWED_IN_BLOCK,
 	DISALLOWED_IN_ARG,
 	DISALLOWED_IN_HEAD,
 	CARDINALITY,
-	ARGUMENT_COUNT
+	DISALLOWED_ARG,
+	DISALLOWED_HEAD,
+	DISALLOWED_DEFAULT_TAG
 }
 
 export interface ErrorPosition {
@@ -41,78 +43,45 @@ export interface ErrorPosition {
 //////////////////////////////
 
 export abstract class ValidationError extends HMError {
-	readonly position: ErrorPosition[];
-	constructor(
-		code: ErrorCode,
-		message: string,
-		...errorSources: Array<BlockElement | InlineElement>
-	) {
+	readonly positions: ErrorPosition[];
+	constructor(code: ErrorCode, message: string, ...positions: ErrorPosition[]) {
 		super(code, message);
-		this.position = errorSources.map(tree => ({
-			line: tree.line,
-			startCol: tree.tagStart,
-			endCol: tree.tagEnd
-		}));
+		this.positions = positions;
 	}
 }
 
-export class UnknownTagError extends ValidationError {
-	readonly position: ErrorPosition[];
-	constructor(tree: BlockElement | InlineElement) {
-		super(ErrorCode.UNKNOWN_TAG, `Unknown tag '${tree.tag}'`, tree);
-	}
-}
-
-export class InlineUsedAsBlockError extends ValidationError {
-	readonly position: ErrorPosition[];
-	constructor(tree: BlockElement) {
-		super(
-			ErrorCode.INLINE_USED_AS_BLOCK,
-			`Expected '#${tree.tag}' to be used as an inline tag`,
-			tree
-		);
-	}
-}
-
-export class BlockUsedAsInlineError extends ValidationError {
-	readonly position: ErrorPosition[];
-	constructor(tree: InlineElement) {
-		super(
-			ErrorCode.BLOCK_USED_AS_INLINE,
-			`Expected '#${tree.tag}' to be used as a block tag`,
-			tree
-		);
+export class UnknownBlockTagError extends ValidationError {
+	constructor(tag: string, pos: ErrorPosition) {
+		super(ErrorCode.UNKNOWN_TAG, `Unknown block tag '${tag}'`, pos);
 	}
 }
 
 export class DisallowedInBlockError extends ValidationError {
-	constructor(parent: BlockElement, tree: BlockElement) {
+	constructor(parentTag: string, childTag: string, pos: ErrorPosition) {
 		super(
 			ErrorCode.DISALLOWED_IN_BLOCK,
-			`Tag '#${tree.tag}' is not allowed in '#${parent.tag}'`,
-			tree
+			`Tag '#${childTag}' is not allowed in '#${parentTag}'`,
+			pos
 		);
 	}
 }
 
 export class DisallowedInArgError extends ValidationError {
-	constructor(parent: InlineElement, argIndex: number, tree: InlineElement) {
+	constructor(tag: string, arg: string, pos: ErrorPosition) {
 		super(
 			ErrorCode.DISALLOWED_IN_ARG,
-			`Tag '#${tree.tag}' is not allowed in the ${ordinal(argIndex + 1)} argument of '#${
-				parent.tag
-			}'`,
-			tree
+			`Tag '#${tag}' is not allowed in the '${arg}' argument`,
+			pos
 		);
 	}
 }
 
 export class DisallowedInHeadError extends ValidationError {
-	constructor(parent: BlockElement, tree: InlineElement) {
+	constructor(tag: string, parentTag: string, pos: ErrorPosition) {
 		super(
 			ErrorCode.DISALLOWED_IN_HEAD,
-			`Tag '#${tree.tag}' is not allowed in the head of '#${parent.tag}'`,
-			tree
+			`Tag '#${tag}' is not allowed in the head of '#${parentTag}'`,
+			pos
 		);
 	}
 }
@@ -131,8 +100,7 @@ export class CardinalityError extends ValidationError {
 				parent.tag
 			}', but the schema requires ${CardinalityError.cardinalityToString(cardinality)} in '#${
 				parent.tag
-			}'`,
-			...(children.length > 0 ? children : [parent])
+			}'`
 		);
 	}
 
@@ -149,12 +117,30 @@ export class CardinalityError extends ValidationError {
 	}
 }
 
-export class ArgumentCountError extends ValidationError {
-	constructor(inline: InlineElement, expected: number) {
+export class DisallowedArgError extends ValidationError {
+	constructor(tag: string, index: number, expectedLength: number, pos: ErrorPosition) {
 		super(
-			ErrorCode.ARGUMENT_COUNT,
-			`Expected '#${inline.tag}' to have ${expected} arguments, but got ${inline.args.length} instead`,
-			inline
+			ErrorCode.DISALLOWED_ARG,
+			`Disallowed ${ordinal(
+				index + 1
+			)} argument in '#${tag}'. Expected exactly ${expectedLength} arguments.`,
+			pos
+		);
+	}
+}
+
+export class DisallowedHeadError extends ValidationError {
+	constructor(parentTag: string, pos: ErrorPosition) {
+		super(ErrorCode.DISALLOWED_HEAD, `Block '#${parentTag}' cannot have a head`, pos);
+	}
+}
+
+export class DisallowedDefaultTagError extends ValidationError {
+	constructor(parentTag: string, pos: ErrorPosition) {
+		super(
+			ErrorCode.DISALLOWED_DEFAULT_TAG,
+			`Default tags are not allowed in block '#${parentTag}'`,
+			pos
 		);
 	}
 }

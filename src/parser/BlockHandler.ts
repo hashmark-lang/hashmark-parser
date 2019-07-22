@@ -5,7 +5,7 @@ export interface BlockHandler<BlockData> {
 	rootBlock(): BlockContext<BlockData>;
 	openBlock(
 		parent: BlockData,
-		tag: string,
+		tag: string | undefined,
 		head: string,
 		line: number,
 		tagStart: number,

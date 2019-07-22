@@ -1,8 +1,8 @@
 /**
  * Takes instructions from [[InlineParser]] in order to build an AST.
  */
-export interface InlineHandler<InlineGroupData, InlineData> {
-	rootInlineTag(): InlineContext<InlineGroupData>;
+export interface InlineHandler<InlineGroupData, InlineData, ParentData = undefined> {
+	rootInlineTag(parentData: ParentData): InlineContext<InlineGroupData>;
 	openInlineTag(
 		parent: InlineGroupData,
 		tag: string,

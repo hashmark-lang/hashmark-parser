@@ -30,7 +30,6 @@ export interface BlockProp {
 	name: string;
 	raw: undefined;
 	content: Array<{
-		schema: string;
 		tag: string;
 		cardinality: Cardinality;
 	}>;

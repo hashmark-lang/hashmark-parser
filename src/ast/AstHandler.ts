@@ -14,7 +14,7 @@ export class AstHandler
 
 	openBlock(
 		parent: BlockElement,
-		tag: string,
+		tag: string | undefined,
 		headContent: string,
 		line: number,
 		tagStart: number,
@@ -27,8 +27,13 @@ export class AstHandler
 		return { data, rawBody: false };
 	}
 
-	protected parseHead(parentTag: string, content: string, line: number, column: number) {
-		return this.inlineParser.parse(content, line, column);
+	protected parseHead(
+		parentTag: string | undefined,
+		content: string,
+		line: number,
+		column: number
+	) {
+		return this.inlineParser.parse(content, line, column, undefined);
 	}
 
 	rawLine(parent: BlockElement, content: string): void {
@@ -57,6 +62,7 @@ export class AstHandler
 		parent.push(element);
 		return element;
 	}
+
 	openArgument(parent: InlineElement, index: number, line: number, start: number) {
 		const data: InlineGroup = [];
 		parent.args.push(data);
