@@ -23,8 +23,8 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 			for (const prop of props) {
 				if (!prop.raw) {
 					for (const { tag: childTag } of prop.content) {
-						const sugar = sugars.get(childTag)!;
-						sugarsMap.set(sugar.start, sugar);
+						const sugar = sugars.get(childTag);
+						if (sugar) sugarsMap.set(sugar.start, sugar);
 					}
 				}
 			}
@@ -37,8 +37,8 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 			const sugarsMap: SugarsMap = new Map();
 			if (head && !head.raw) {
 				for (const { tag: childTag } of head.content) {
-					const sugar = sugars.get(childTag)!;
-					sugarsMap.set(sugar.start, sugar);
+					const sugar = sugars.get(childTag);
+					if (sugar) sugarsMap.set(sugar.start, sugar);
 				}
 			}
 			this.headSugarsMaps.set(tag, sugarsMap);
