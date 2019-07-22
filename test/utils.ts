@@ -1,28 +1,44 @@
 import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
 
-export class FileInfo {
-	readonly path: string;
-	constructor(readonly dir: string, readonly name: string, readonly extension: string) {
-		this.path = path.join(dir, name + extension);
+export class File {
+	constructor(readonly filePath: string) {}
+
+	get directory(): string {
+		return path.dirname(this.filePath);
 	}
 
-	readContent(): string {
-		return readFileSync(this.path).toString();
+	get name(): string {
+		return path.basename(this.filePath, this.extension);
+	}
+
+	get extension(): string {
+		return path.extname(this.filePath);
+	}
+
+	read(): string {
+		return readFileSync(this.filePath).toString();
 	}
 }
 
-export function* filesIn(dir: string, extension: string): IterableIterator<FileInfo> {
-	for (const file of readdirSync(dir)) {
-		if (file.endsWith(extension)) {
-			yield new FileInfo(dir, file.slice(0, -extension.length), extension);
-		}
-	}
+export function filePairs(
+	outputDir: string,
+	outputExtension: string,
+	inputExtension: string = ".hm"
+): Array<[File, File]> {
+	return filesIn(resourcePath("output", outputDir))
+		.filter(file => file.extension === outputExtension)
+		.map(file => [new File(resourcePath("input", file.name + inputExtension)), file]);
 }
 
-export function readInputFile(fileName: string): string {
-	const filePath = path.join("test", "_resources", "input", fileName);
-	return readFileSync(filePath).toString();
+export function filesIn(dir: string): File[] {
+	return readdirSync(dir, { encoding: "utf-8" }).map(
+		fileName => new File(path.join(dir, fileName))
+	);
+}
+
+export function resourcePath(...paths: string[]): string {
+	return path.join("test", "_resources", ...paths);
 }
 
 // De-indents a multiline string to match the indentation level of the first line
