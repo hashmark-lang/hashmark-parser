@@ -70,11 +70,13 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 
 		// TODO: check that tag is valid child of parent tag
 
-		return {
+		const data = {
 			tag,
 			namespace: "[base]",
 			props: Object.fromEntries(this.props.get(tag)!.map(prop => [prop.name, []]))
 		};
+		parent.push(data);
+		return data;
 	}
 
 	openArgument(
