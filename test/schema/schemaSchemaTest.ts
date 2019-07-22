@@ -21,7 +21,7 @@ describe("schema-schema.hm", () => {
 		assert.isEmpty(errors, errorsToString(errors));
 	});
 
-	for (const file of filesIn("test/resources/input", ".hm")) {
+	for (const file of filesIn("test/_resources/input", ".hm")) {
 		if (file.name.startsWith("schema_")) {
 			it("validates " + file.name + file.extension, () => {
 				const schema = parse(file.readContent(), schemaSchema);
