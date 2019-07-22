@@ -1,0 +1,25 @@
+{
+	"tag": "root",
+	"namespace": "[base]",
+	"props": {
+		"content": [
+			{
+				"tag": "paragraph",
+				"namespace": "[base]",
+				"props": {
+					"text": [
+						{
+							"tag": "bold",
+							"namespace": "[base]",
+							"props": {
+								"text": [
+									"hello"
+								]
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}

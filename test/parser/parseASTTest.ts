@@ -3,7 +3,7 @@ import { BlockElement, BlockParser, toJSON } from "../../src";
 import { filePairs } from "../utils";
 import { TestHandler } from "./TestHandler";
 
-describe("parse()", () => {
+describe("parse AST", () => {
 	let parser: BlockParser<BlockElement>;
 	let handler: TestHandler;
 

@@ -1,0 +1,26 @@
+{
+	"tag": "root",
+	"namespace": "[base]",
+	"props": {
+		"content": [
+			{
+				"tag": "section",
+				"namespace": "[base]",				
+				"props": {
+					"content": [
+						{
+							"tag": "paragraph",
+							"namespace": "[base]",
+							"props": {
+								"text": ["Hello World"]
+							}
+						}
+					],
+					"title": [
+						"Introduction"
+					]
+				}
+			}
+		]
+	}
+}
