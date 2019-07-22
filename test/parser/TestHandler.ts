@@ -30,7 +30,7 @@ const sugarsMap = new Map(sugars.map(_ => [_.start, _]));
 export class TestHandler extends AstHandler {
 	openBlock(
 		parent: BlockElement,
-		tag: string,
+		tag: string | undefined,
 		headContent: string,
 		line: number,
 		tagStart: number,
@@ -43,8 +43,19 @@ export class TestHandler extends AstHandler {
 		};
 	}
 
-	protected parseHead(parentTag: string, content: string, line: number, column: number) {
-		return parentTag === "rawHead" ? [content] : this.inlineParser.parse(content, line, column);
+	protected parseHead(
+		parentTag: string | undefined,
+		content: string,
+		line: number,
+		column: number
+	) {
+		return parentTag === "rawHead"
+			? [content]
+			: this.inlineParser.parse(content, line, column, undefined);
+	}
+
+	rootInlineTag() {
+		return { ...super.rootInlineTag(), sugars: sugarsMap };
 	}
 
 	openArgument(parent: InlineElement, index: number, line: number, start: number) {
