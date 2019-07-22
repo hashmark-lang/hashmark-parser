@@ -86,7 +86,11 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 			return { data: null, rawBody: true };
 		}
 
-		const props = this.emptyProps(...childTagToProp.values());
+		const rawPropName = this.rawProps.get(tag);
+		const props = rawPropName
+			? this.emptyProps(rawPropName)
+			: this.emptyProps(...childTagToProp.values());
+
 		const data = { tag, namespace: "[base]", props };
 		parent.props[propName].push(data);
 
@@ -101,13 +105,11 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 					endCol: headStart + headContent.length
 				})
 			);
-			return { data: null, rawBody: true };
+		} else {
+			data.props[headSchema.name] = headSchema.raw
+				? [headContent]
+				: this.inlineParser.parse(headContent, line, headStart, tag) || [];
 		}
-
-		data.props[headSchema.name] = headSchema.raw
-			? [headContent]
-			: this.inlineParser.parse(headContent, line, headStart, tag) || [];
-
 		return { data, rawBody: this.rawProps.has(tag) };
 	}
 

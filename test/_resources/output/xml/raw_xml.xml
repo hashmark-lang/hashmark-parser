@@ -1,29 +1,26 @@
 <root>
-	<document>
-		<head>Code in Hashmark</head>
+	<_default>
+		<head>Here&apos;s an example XML tag: <code>&lt;test id=&quot;test&quot;&gt;Hello world&lt;/test&gt;</code></head>
+	</_default>
+	<_default>
+		<head>Here&apos;s a more complete code sample:</head>
+	</_default>
+	<code>
+		<head>xml</head>
 		<_default>
-			<head>Here&apos;s an example XML tag: <code>&lt;test id=&quot;test&quot;&gt;Hello world&lt;/test&gt;</code></head>
+			<head>&lt;!-- This should be all be escaped in the XML output &lt;test&gt; &amp; &lt;example&gt; --&gt;</head>
 		</_default>
 		<_default>
-			<head>Here&apos;s a more complete code sample:</head>
+			<head>&lt;example id=&quot;example&quot;&gt;</head>
+			<_default>
+				<head>&lt;test/&gt;</head>
+			</_default>
+			<_default>
+				<head>&lt;test id=&apos;hello&apos;&gt;world &amp; planet&lt;/test&gt;</head>
+			</_default>
 		</_default>
-		<code>
-			<head>xml</head>
-			<_default>
-				<head>&lt;!-- This should be all be escaped in the XML output &lt;test&gt; &amp; &lt;example&gt; --&gt;</head>
-			</_default>
-			<_default>
-				<head>&lt;example id=&quot;example&quot;&gt;</head>
-				<_default>
-					<head>&lt;test/&gt;</head>
-				</_default>
-				<_default>
-					<head>&lt;test id=&apos;hello&apos;&gt;world &amp; planet&lt;/test&gt;</head>
-				</_default>
-			</_default>
-			<_default>
-				<head>&lt;/example&gt;</head>
-			</_default>
-		</code>
-	</document>
+		<_default>
+			<head>&lt;/example&gt;</head>
+		</_default>
+	</code>
 </root>
