@@ -8,7 +8,7 @@ import {
 	HMError,
 	UnknownBlockTagError
 } from "../schema/errors";
-import { InlineProp, Schema } from "../schema/schema";
+import { BlockSchema, InlineProp, Schema } from "../schema/schema";
 import { IRInlineHandler } from "./IRInlineHandler";
 import { IRNode, IRNodeList } from "./IRNode";
 
@@ -27,32 +27,30 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 
 	constructor(private schema: Schema, private readonly logger: ErrorLogger) {
 		this.inlineParser = new InlineParser(new IRInlineHandler(schema, logger));
+		schema.blockElements.forEach(elem => this.buildMaps(elem));
+		this.buildMaps({ tag: "root", ...schema.root });
+	}
 
-		for (const { tag, props, head, defaultTag } of schema.blockElements) {
-			if (head) {
-				this.heads.set(tag, head);
-			}
+	private buildMaps({ tag, props, head, defaultTag }: BlockSchema): void {
+		if (head) this.heads.set(tag, head);
+		if (defaultTag) this.defaultTags.set(tag, defaultTag);
 
-			if (defaultTag) {
-				this.defaultTags.set(tag, defaultTag);
-			}
-
-			const map = new Map();
-			this.propNames.set(tag, map);
-			for (const prop of props) {
-				if (prop.raw) {
-					this.rawProps.set(tag, name);
-				} else {
-					for (const rule of prop.content) {
-						map.set(rule.tag, name);
-					}
+		const map = new Map();
+		this.propNames.set(tag, map);
+		for (const prop of props) {
+			if (prop.raw) {
+				this.rawProps.set(tag, prop.name);
+			} else {
+				for (const rule of prop.content) {
+					map.set(rule.tag, prop.name);
 				}
 			}
 		}
 	}
 
 	rootBlock() {
-		const data = { tag: "root", namespace: "[base]", props: {} };
+		const props = this.emptyProps(...this.propNames.get("root")!.values());
+		const data = { tag: "root", namespace: "[base]", props };
 		return { data, rawBody: false };
 	}
 
@@ -88,7 +86,7 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 			return { data: null, rawBody: true };
 		}
 
-		const props = Object.fromEntries([...childTagToProp.values()].map(_ => [_, []]));
+		const props = this.emptyProps(...childTagToProp.values());
 		const data = { tag, namespace: "[base]", props };
 		parent.props[propName].push(data);
 
@@ -122,5 +120,9 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 	private log(error: HMError) {
 		this.logger(error);
 		this.loggerEnabled = false;
+	}
+
+	private emptyProps(...keys: string[]): { [key: string]: [] } {
+		return Object.fromEntries(keys.map(x => [x, []]));
 	}
 }
