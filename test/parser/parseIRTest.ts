@@ -23,19 +23,23 @@ describe("parse IR", () => {
 
 	for (const { folder, schema } of schemas) {
 		describe(folder, () => {
-			let errors: HMError[];
+			const errors: HMError[] = [];
 			let parser: BlockParser<IRNode | null>;
 
 			before(() => {
-				errors = [];
 				parser = new BlockParser(new IRHandler(schema, errors.push));
+			});
+
+			beforeEach(() => {
+				errors.length = 0; // clear
 			});
 
 			for (const [input, output] of filePairs(`parser-ir/${folder}`, ".json")) {
 				it(`works with ${input.name}`, () => {
 					assert.strictEqual(
 						JSON.stringify(parser.parse(input.read()), null, "\t"),
-						JSON.stringify(JSON.parse(output.read()), null, "\t")
+						JSON.stringify(JSON.parse(output.read()), null, "\t"),
+						errors.join("\n")
 					);
 				});
 			}
@@ -47,11 +51,13 @@ function getDocumentSchema(): Schema {
 	const inlineTags = [
 		{ schema: "[base]", tag: "link" },
 		{ schema: "[base]", tag: "bold" },
-		{ schema: "[base]", tag: "inline" }
+		{ schema: "[base]", tag: "inline" },
+		{ schema: "[base]", tag: "code" }
 	];
-	const paragraphSectionContent = [
+	const blockContent = [
 		{ tag: "paragraph", cardinality: Cardinality.ZeroOrMore },
-		{ tag: "section", cardinality: Cardinality.ZeroOrMore }
+		{ tag: "section", cardinality: Cardinality.ZeroOrMore },
+		{ tag: "code", cardinality: Cardinality.ZeroOrMore }
 	];
 
 	return {
@@ -60,7 +66,7 @@ function getDocumentSchema(): Schema {
 			props: [
 				{
 					name: "content",
-					content: paragraphSectionContent
+					content: blockContent
 				}
 			]
 		},
@@ -75,7 +81,16 @@ function getDocumentSchema(): Schema {
 				tag: "section",
 				head: { name: "title", content: inlineTags },
 				defaultTag: "paragraph",
-				props: [{ name: "content", content: paragraphSectionContent }]
+				props: [
+					{
+						name: "content",
+						content: blockContent
+					}
+				]
+			},
+			{
+				tag: "code",
+				props: [{ name: "content", raw: true }]
 			}
 		],
 
@@ -108,6 +123,10 @@ function getDocumentSchema(): Schema {
 						content: inlineTags
 					}
 				]
+			},
+			{
+				tag: "code",
+				props: [{ name: "content", raw: true }]
 			}
 		]
 	};
