@@ -104,7 +104,7 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 			return { data: null, rawBody: true };
 		}
 
-		parent.props[headSchema.name] = headSchema.raw
+		data.props[headSchema.name] = headSchema.raw
 			? [headContent]
 			: this.inlineParser.parse(headContent, line, headStart, tag) || [];
 
@@ -122,7 +122,7 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 		this.loggerEnabled = false;
 	}
 
-	private emptyProps(...keys: string[]): { [key: string]: [] } {
+	private emptyProps(...keys: string[]): { [key: string]: IRNodeList } {
 		return Object.fromEntries(keys.map(x => [x, []]));
 	}
 }
