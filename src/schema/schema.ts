@@ -14,11 +14,11 @@ export interface Schema {
 }
 
 export interface BlockSchema {
+	tag: string;
+	head?: InlineProp;
 	defaultTag?: string;
 	invalidTag?: string;
 	props: [RawBlockProp] | BlockProp[];
-	tag: string;
-	head?: InlineProp;
 }
 
 export interface RawBlockProp {
@@ -28,7 +28,7 @@ export interface RawBlockProp {
 
 export interface BlockProp {
 	name: string;
-	raw: undefined;
+	raw?: undefined; // TODO remove this while keeping discriminated union
 	content: Array<{
 		tag: string;
 		cardinality: Cardinality;
@@ -55,7 +55,7 @@ export type InlineProp =
 	  }
 	| {
 			name: string;
-			raw: undefined;
+			raw?: undefined; // TODO remove this while keeping discriminated union
 			content: Array<{
 				schema: string;
 				tag: string;
