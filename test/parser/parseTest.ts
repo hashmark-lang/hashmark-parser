@@ -1,32 +1,31 @@
 import { assert } from "chai";
-import { toJSON } from "../../src/output/json";
-import { BlockParser } from "../../src/parser/BlockParser";
-import { FileInfo, filesIn } from "../utils";
+import { BlockElement, BlockParser, toJSON } from "../../src";
+import { filePairs } from "../utils";
 import { TestHandler } from "./TestHandler";
 
-/* tslint:disable:only-arrow-functions */
-describe("parse()", function() {
-	before(function() {
-		const handler = new TestHandler();
-		this.parser = new BlockParser(handler);
+describe("parse()", () => {
+	let parser: BlockParser<BlockElement>;
+	let handler: TestHandler;
+
+	before(() => {
+		handler = new TestHandler();
+		parser = new BlockParser(handler);
 	});
 
-	for (const output of filesIn("test/_resources/output/parser", ".json")) {
-		it(`works with ${output.name}`, function() {
-			const input = new FileInfo("test/_resources/input", output.name, ".hm");
+	for (const [input, output] of filePairs("parser", ".json")) {
+		it(`works with ${output.name}`, () => {
 			assert.strictEqual(
-				JSON.stringify(toJSON(this.parser.parse(input.readContent())), null, "\t"),
-				JSON.stringify(JSON.parse(output.readContent()), null, "\t")
+				JSON.stringify(toJSON(parser.parse(input.read())), null, "\t"),
+				JSON.stringify(JSON.parse(output.read()), null, "\t")
 			);
 		});
 	}
 
-	for (const output of filesIn("test/_resources/output/parser-fullast", ".json")) {
-		it(`works with ${output.name} (full ast)`, function() {
-			const input = new FileInfo("test/_resources/input", output.name, ".hm");
+	for (const [input, output] of filePairs("parser-fullast", ".json")) {
+		it(`works with ${output.name} (full ast)`, () => {
 			assert.strictEqual(
-				JSON.stringify(this.parser.parse(input.readContent()), null, "\t"),
-				JSON.stringify(JSON.parse(output.readContent()), null, "\t")
+				JSON.stringify(parser.parse(input.read()), null, "\t"),
+				JSON.stringify(JSON.parse(output.read()), null, "\t")
 			);
 		});
 	}

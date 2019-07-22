@@ -1,15 +1,14 @@
 import { assert } from "chai";
 import { toXML } from "../../src/output/xml";
 import { parse } from "../../src/parser/BlockParser";
-import { FileInfo, filesIn } from "../utils";
+import { filePairs } from "../utils";
 
 describe("xml", () => {
-	for (const output of filesIn("test/_resources/output/xml", ".xml")) {
+	for (const [input, output] of filePairs("xml", ".xml")) {
 		it(`works with ${output.name}`, () => {
-			const input = new FileInfo("test/_resources/input", output.name, ".hm");
-			const ast = parse(input.readContent());
+			const ast = parse(input.read());
 			const xml = toXML(ast);
-			assert.strictEqual(xml, output.readContent().trim());
+			assert.strictEqual(xml, output.read().trim());
 		});
 	}
 });
