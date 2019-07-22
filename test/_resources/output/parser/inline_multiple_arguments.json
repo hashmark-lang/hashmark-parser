@@ -8,10 +8,10 @@
 					"tag": "link",
 					"args": [
 						[
-							"Example"
+							"www.example.com"
 						],
 						[
-							"www.example.com"
+							"Example"
 						]
 					]
 				}

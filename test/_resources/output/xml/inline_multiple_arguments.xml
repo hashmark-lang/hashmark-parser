@@ -1,8 +1,8 @@
 <root>
 	<_default>
 		<head><link>
-			<arg>Example</arg>
 			<arg>www.example.com</arg>
+			<arg>Example</arg>
 		</link></head>
 	</_default>
 </root>
