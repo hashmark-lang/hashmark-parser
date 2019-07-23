@@ -1,51 +1,72 @@
 import { assert } from "chai";
-import { BlockParser, HMError } from "../../src";
+import { BlockParser, DisallowedDefaultTagError, HMError, UnknownBlockTagError } from "../../src";
 import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
 import { Cardinality, INVALID_TAG, ROOT, Schema } from "../../src/schema/schema";
-import { filePairs } from "../utils";
+import { filePairs, resourceFile } from "../utils";
 
-describe("parse IR", () => {
-	const schemas: ReadonlyArray<{ folder: string; schema: Schema }> = [
-		{
-			folder: "empty-schema",
-			schema: {
-				blocks: { [ROOT]: { props: [] } },
-				inline: {}
-			}
-		},
-		{
-			folder: "allow-all-schema",
-			schema: getAllowAllSchema()
-		},
-		{
-			folder: "document-schema",
-			schema: getDocumentSchema()
-		}
-	];
+describe("IRHandler", () => {
+	const errors: HMError[] = [];
+	const logger = (x: HMError) => errors.push(x);
 
-	for (const { folder, schema } of schemas) {
-		describe(folder, () => {
-			const errors: HMError[] = [];
-			let parser: BlockParser<IRNode | null>;
+	beforeEach(() => {
+		errors.length = 0;
+	});
 
-			before(() => {
-				parser = new BlockParser(new IRBlockHandler(schema, x => errors.push(x)));
-			});
+	let parser: BlockParser<IRNode | null>;
+	const makeParser = (schema: Schema) => {
+		parser = new BlockParser(new IRBlockHandler(schema, logger));
+	};
 
-			beforeEach(() => {
-				errors.length = 0; // clear
-			});
+	describe("empty-schema", () => {
+		before(() => makeParser(getEmptySchema()));
 
-			for (const [input, output] of filePairs(`parser-ir/${folder}`, ".json")) {
-				it(`works with ${input.name}`, () => {
-					assert.strictEqual(
-						JSON.stringify(parser.parse(input.read()), null, "\t"),
-						JSON.stringify(JSON.parse(output.read()), null, "\t")
-					);
-				});
-			}
+		it("logs UnknownBlockTagError when a block is used", () => {
+			const input = resourceFile("input", "block_tag.hm").read();
+			parser.parse(input);
+			const error = errors.find(e => e instanceof UnknownBlockTagError)!;
+			assert.notStrictEqual(error, undefined);
 		});
+
+		it("logs DisallowedDefaultTagError when a default is used", () => {
+			const input = resourceFile("input", "paragraphs.hm").read();
+			parser.parse(input);
+			const error = errors.find(e => e instanceof DisallowedDefaultTagError)!;
+			assert.notStrictEqual(error, undefined);
+		});
+
+		testOutput("empty-schema");
+	});
+
+	describe("document-schema", () => {
+		before(() => makeParser(getDocumentSchema()));
+
+		it("logs UnknownBlockTagError when an unknown block is used", () => {
+			const input = resourceFile("input", "nested_blocks.hm").read();
+			const res = parser.parse(input);
+			// #def is not in document schema
+			const error = errors.find(e => e instanceof UnknownBlockTagError)!;
+			assert.notStrictEqual(error, undefined);
+		});
+
+		testOutput("document-schema");
+	});
+
+	describe("allow-all-schema", () => {
+		before(() => makeParser(getAllowAllSchema()));
+
+		testOutput("allow-all-schema");
+	});
+
+	function testOutput(folder: string) {
+		for (const [input, output] of filePairs(`parser-ir/${folder}`, ".json")) {
+			it(`works with ${input.name}`, () => {
+				assert.strictEqual(
+					JSON.stringify(parser.parse(input.read()), null, "\t"),
+					JSON.stringify(JSON.parse(output.read()), null, "\t")
+				);
+			});
+		}
 	}
 });
 
@@ -65,6 +86,15 @@ function getAllowAllSchema(): Schema {
 			[ROOT]: blockContent,
 			["_default"]: blockContent,
 			[INVALID_TAG]: blockContent
+		},
+		inline: {}
+	};
+}
+
+function getEmptySchema(): Schema {
+	return {
+		blocks: {
+			[ROOT]: { props: [] }
 		},
 		inline: {}
 	};
