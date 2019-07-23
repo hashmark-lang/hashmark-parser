@@ -89,7 +89,7 @@ export class DisallowedInHeadError extends ValidationError {
 export class CardinalityError extends ValidationError {
 	constructor(
 		parent: BlockElement,
-		children: BlockElement[],
+		positions: Position[],
 		tag: string,
 		count: number,
 		cardinality: Cardinality

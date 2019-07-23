@@ -7,16 +7,20 @@ export const enum Reserved {
 	rawLine = "_raw_line"
 }
 
-export const INVALID_TAG = "_invalid_tag";
+export const ROOT = "root";
+export const INVALID_TAG = "*";
 
 export interface Schema {
-	root: Omit<BlockSchema, "tag" | "head">;
-	blockElements: BlockSchema[];
-	inlineElements: InlineSchema[];
+	blocks: {
+		[ROOT]: Omit<BlockSchema, "head">;
+		[tag: string]: BlockSchema;
+	};
+	inline: {
+		[tag: string]: InlineSchema;
+	};
 }
 
 export interface BlockSchema {
-	tag: string;
 	head?: InlineProp;
 	defaultTag?: string;
 	props: [RawBlockProp] | BlockProp[];
@@ -44,7 +48,6 @@ export const enum Cardinality {
 }
 
 export interface InlineSchema {
-	tag: string;
 	props: InlineProp[];
 	sugar?: Sugar;
 }

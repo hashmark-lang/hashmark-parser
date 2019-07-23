@@ -1,8 +1,8 @@
 import { assert } from "chai";
 import { BlockParser, HMError } from "../../src";
-import { IRHandler } from "../../src/ir/IRBlockHandler";
+import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
-import { Cardinality, Schema } from "../../src/schema/schema";
+import { Cardinality, INVALID_TAG, ROOT, Schema } from "../../src/schema/schema";
 import { filePairs } from "../utils";
 
 describe("parse IR", () => {
@@ -10,10 +10,13 @@ describe("parse IR", () => {
 		{
 			folder: "empty-schema",
 			schema: {
-				root: { props: [] },
-				blockElements: [],
-				inlineElements: []
+				blocks: { [ROOT]: { props: [] } },
+				inline: {}
 			}
+		},
+		{
+			folder: "allow-all-schema",
+			schema: getAllowAllSchema()
 		},
 		{
 			folder: "document-schema",
@@ -27,7 +30,7 @@ describe("parse IR", () => {
 			let parser: BlockParser<IRNode | null>;
 
 			before(() => {
-				parser = new BlockParser(new IRHandler(schema, x => errors.push(x)));
+				parser = new BlockParser(new IRBlockHandler(schema, x => errors.push(x)));
 			});
 
 			beforeEach(() => {
@@ -46,6 +49,27 @@ describe("parse IR", () => {
 	}
 });
 
+function getAllowAllSchema(): Schema {
+	const blockProps = [
+		{ name: "children", content: [{ tag: INVALID_TAG, cardinality: Cardinality.ZeroOrMore }] }
+	];
+
+	const blockContent = {
+		head: { name: "head", content: [] },
+		props: blockProps,
+		defaultTag: "_default"
+	};
+
+	return {
+		blocks: {
+			[ROOT]: blockContent,
+			["_default"]: blockContent,
+			[INVALID_TAG]: blockContent
+		},
+		inline: {}
+	};
+}
+
 function getDocumentSchema(): Schema {
 	const inlineTags = [
 		{ schema: "[base]", tag: "link" },
@@ -60,24 +84,21 @@ function getDocumentSchema(): Schema {
 	];
 
 	return {
-		root: {
-			defaultTag: "paragraph",
-			props: [
-				{
-					name: "content",
-					content: blockContent
-				}
-			]
-		},
-
-		blockElements: [
-			{
-				tag: "paragraph",
+		blocks: {
+			[ROOT]: {
+				defaultTag: "paragraph",
+				props: [
+					{
+						name: "content",
+						content: blockContent
+					}
+				]
+			},
+			["paragraph"]: {
 				head: { name: "text", content: inlineTags },
 				props: []
 			},
-			{
-				tag: "section",
+			["section"]: {
 				head: { name: "title", content: inlineTags },
 				defaultTag: "paragraph",
 				props: [
@@ -87,15 +108,13 @@ function getDocumentSchema(): Schema {
 					}
 				]
 			},
-			{
-				tag: "code",
+			["code"]: {
 				props: [{ name: "content", raw: true }]
 			}
-		],
+		},
 
-		inlineElements: [
-			{
-				tag: "link",
+		inline: {
+			["link"]: {
 				sugar: {
 					start: "[",
 					separator: "](",
@@ -106,16 +125,14 @@ function getDocumentSchema(): Schema {
 					{ name: "text", content: [{ schema: "[base]", tag: "bold" }] }
 				]
 			},
-			{
-				tag: "bold",
+			["bold"]: {
 				sugar: {
 					start: "*",
 					end: "*"
 				},
 				props: [{ name: "text", content: [{ schema: "[base]", tag: "link" }] }]
 			},
-			{
-				tag: "inline",
+			["inline"]: {
 				props: [
 					{
 						name: "inlineContent",
@@ -123,14 +140,13 @@ function getDocumentSchema(): Schema {
 					}
 				]
 			},
-			{
-				tag: "code",
+			["code"]: {
 				props: [{ name: "content", raw: true }],
 				sugar: {
 					start: "`",
 					end: "`"
 				}
 			}
-		]
+		}
 	};
 }
