@@ -27,22 +27,22 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 
 	constructor(private schema: Schema, private readonly logger: ErrorLogger) {
 		this.inlineParser = new InlineParser(new IRInlineHandler(schema, logger));
-		schema.blockElements.forEach(elem => this.buildMaps(elem));
-		this.buildMaps({ tag: "root", ...schema.root });
+		schema.blockElements.forEach(elem => this.fillMaps(elem));
+		this.fillMaps({ tag: "root", ...schema.root });
 	}
 
-	private buildMaps({ tag, props, head, defaultTag }: BlockSchema): void {
+	private fillMaps({ tag, props, head, defaultTag }: BlockSchema): void {
 		if (head) this.heads.set(tag, head);
 		if (defaultTag) this.defaultTags.set(tag, defaultTag);
 
-		const map = new Map();
-		this.propNames.set(tag, map);
+		const propMap = new Map<string, string>();
+		this.propNames.set(tag, propMap);
 		for (const prop of props) {
 			if (prop.raw) {
 				this.rawProps.set(tag, prop.name);
 			} else {
 				for (const rule of prop.content) {
-					map.set(rule.tag, prop.name);
+					propMap.set(rule.tag, prop.name);
 				}
 			}
 		}
