@@ -28,7 +28,7 @@ export function filePairs(
 ): Array<[File, File]> {
 	return filesIn(resourcePath("output", outputDir))
 		.filter(file => file.extension === outputExtension)
-		.map(file => [new File(resourcePath("input", file.name + inputExtension)), file]);
+		.map(file => [resourceFile("input", file.name + inputExtension), file]);
 }
 
 export function filesIn(dir: string): File[] {
@@ -39,6 +39,10 @@ export function filesIn(dir: string): File[] {
 
 export function resourcePath(...paths: string[]): string {
 	return path.join("test", "_resources", ...paths);
+}
+
+export function resourceFile(...paths: string[]): File {
+	return new File(resourcePath(...paths));
 }
 
 // De-indents a multiline string to match the indentation level of the first line
