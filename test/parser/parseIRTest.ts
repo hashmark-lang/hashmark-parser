@@ -27,7 +27,7 @@ describe("parse IR", () => {
 			let parser: BlockParser<IRNode | null>;
 
 			before(() => {
-				parser = new BlockParser(new IRHandler(schema, errors.push));
+				parser = new BlockParser(new IRHandler(schema, x => errors.push(x)));
 			});
 
 			beforeEach(() => {
@@ -38,8 +38,7 @@ describe("parse IR", () => {
 				it(`works with ${input.name}`, () => {
 					assert.strictEqual(
 						JSON.stringify(parser.parse(input.read()), null, "\t"),
-						JSON.stringify(JSON.parse(output.read()), null, "\t"),
-						errors.join("\n")
+						JSON.stringify(JSON.parse(output.read()), null, "\t")
 					);
 				});
 			}
