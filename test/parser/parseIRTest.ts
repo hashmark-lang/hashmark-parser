@@ -125,7 +125,11 @@ function getDocumentSchema(): Schema {
 			},
 			{
 				tag: "code",
-				props: [{ name: "content", raw: true }]
+				props: [{ name: "content", raw: true }],
+				sugar: {
+					start: "`",
+					end: "`"
+				}
 			}
 		]
 	};

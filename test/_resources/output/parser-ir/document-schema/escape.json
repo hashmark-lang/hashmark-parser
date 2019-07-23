@@ -1,0 +1,44 @@
+{
+	"tag": "root",
+	"namespace": "[base]",
+	"props": {
+		"content": [
+			{
+				"tag": "paragraph",
+				"namespace": "[base]",
+				"props": {
+					"text": [
+						"Lorem # Ipsum"
+					]
+				}
+			},
+			{
+				"tag": "paragraph",
+				"namespace": "[base]",
+				"props": {
+					"text": [
+						"# Lorem Ipsum"
+					]
+				}
+			},
+			{
+				"tag": "paragraph",
+				"namespace": "[base]",
+				"props": {
+					"text": [
+						"Lorem Ispum #"
+					]
+				}
+			},
+			{
+				"tag": "paragraph",
+				"namespace": "[base]",
+				"props": {
+					"text": [
+						"\\ # [ ]"
+					]
+				}
+			}
+		]
+	}
+}

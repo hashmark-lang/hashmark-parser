@@ -1,0 +1,17 @@
+{
+	"tag": "root",
+	"namespace": "[base]",
+	"props": {
+		"content": [
+			{
+				"tag": "paragraph",
+				"namespace": "[base]",
+				"props": {
+					"text": [
+						"¯\\_(ツ)_/¯"
+					]
+				}
+			}
+		]
+	}
+}
