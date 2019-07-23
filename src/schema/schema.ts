@@ -7,6 +7,8 @@ export const enum Reserved {
 	rawLine = "_raw_line"
 }
 
+export const INVALID_TAG = "_invalid_tag";
+
 export interface Schema {
 	root: Omit<BlockSchema, "tag" | "head">;
 	blockElements: BlockSchema[];
@@ -17,7 +19,6 @@ export interface BlockSchema {
 	tag: string;
 	head?: InlineProp;
 	defaultTag?: string;
-	invalidTag?: string;
 	props: [RawBlockProp] | BlockProp[];
 }
 
