@@ -2,20 +2,24 @@
 	"tag": "root",
 	"namespace": "[base]",
 	"props": {
-		"content": [
+		"head": [],
+		"children": [
 			{
 				"tag": "section",
 				"namespace": "[base]",
 				"props": {
-					"title": [],
-					"content": [
+					"head": [
+						"Introduction"
+					],
+					"children": [
 						{
-							"tag": "paragraph",
+							"tag": "_default",
 							"namespace": "[base]",
 							"props": {
-								"text": [
-									"some text"
-								]
+								"head": [
+									"Hello World"
+								],
+								"children": []
 							}
 						}
 					]
@@ -24,3 +28,4 @@
 		]
 	}
 }
+

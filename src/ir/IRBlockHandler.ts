@@ -5,131 +5,114 @@ import {
 	DisallowedHeadError,
 	DisallowedInBlockError,
 	ErrorLogger,
-	HMError,
-	UnknownBlockTagError,
-	ErrorPosition
+	UnknownBlockTagError
 } from "../schema/errors";
-import { BlockSchema, InlineProp, Schema, INVALID_TAG } from "../schema/schema";
+import { BlockSchema, INVALID_TAG, ROOT, Schema } from "../schema/schema";
 import { IRInlineHandler } from "./IRInlineHandler";
 import { IRNode, IRNodeList } from "./IRNode";
 
-export class IRHandler implements BlockHandler<IRNode | null> {
+interface BlockSchemaAugmented extends BlockSchema {
+	childTagToProp: Map<string, string>;
+	propsList: string[];
+	rawProp?: string;
+}
+
+export class IRBlockHandler implements BlockHandler<IRNode | null> {
 	protected readonly inlineParser: InlineParser<IRNodeList | null, IRNode | null, string>;
-	// Parent tag name => child tag name => prop name
-	private readonly propNames: Map<string, Map<string, string>> = new Map();
-	// Parent tag name => prop name
-	private readonly rawProps: Map<string, string> = new Map();
-	// Parent tag name => head name
-	private readonly heads: Map<string, InlineProp> = new Map();
-	// Parent tag name => default tag
-	private readonly defaultTags: Map<string, string> = new Map();
+	private readonly blockSchemas: Map<string, BlockSchemaAugmented> = new Map();
 
-	constructor(private schema: Schema, private readonly log: ErrorLogger) {
+	constructor(schema: Schema, private readonly log: ErrorLogger) {
 		this.inlineParser = new InlineParser(new IRInlineHandler(schema, log));
-		schema.blockElements.forEach(elem => this.fillMaps(elem));
-		this.fillMaps({ tag: "root", ...schema.root });
-	}
-
-	private fillMaps({ tag, props, head, defaultTag }: BlockSchema): void {
-		if (head) this.heads.set(tag, head);
-		if (defaultTag) this.defaultTags.set(tag, defaultTag);
-
-		const propMap = new Map<string, string>();
-		this.propNames.set(tag, propMap);
-		for (const prop of props) {
-			if (prop.raw) {
-				this.rawProps.set(tag, prop.name);
-			} else {
-				for (const rule of prop.content) {
-					propMap.set(rule.tag, prop.name);
-				}
-			}
+		for (const [tag, blockSchema] of Object.entries(schema.blocks)) {
+			this.blockSchemas.set(tag, IRBlockHandler.augmentBlockSchema(blockSchema));
 		}
 	}
 
-	rootBlock() {
-		const props = IRHandler.emptyProps(...this.propNames.get("root")!.values());
-		const data = { tag: "root", namespace: "[base]", props };
-		return { data, rawBody: false };
+	private static augmentBlockSchema(schema: BlockSchema): BlockSchemaAugmented {
+		const propsSet = new Set<string>();
+		const childTagToProp = new Map<string, string>();
+		let rawProp: string | undefined;
+		if (schema.head) propsSet.add(schema.head.name);
+		for (const prop of schema.props) {
+			if (prop.raw) {
+				if (rawProp) throw new Error("Should have only one raw prop!");
+				rawProp = prop.name;
+				propsSet.add(prop.name);
+			} else {
+				for (const rule of prop.content) {
+					propsSet.add(prop.name);
+					childTagToProp.set(rule.tag, prop.name);
+				}
+			}
+		}
+		return { ...schema, rawProp, childTagToProp, propsList: [...propsSet] };
 	}
 
-	private getProps(tag: string) {
-		return this.propNames.get(tag) || this.propNames.get(INVALID_TAG);
+	rootBlock() {
+		const data = IRBlockHandler.createNode("root", this.getBlockSchema(ROOT)!);
+		return { data, rawBody: false };
 	}
 
 	openBlock(
 		parent: IRNode | null,
-		tag: string | undefined,
+		tagString: string | undefined,
 		headContent: string,
 		line: number,
 		tagStart: number,
 		tagEnd: number,
 		headStart: number
 	) {
-		const data = this.appendChild(parent, tag, { line, startCol: tagStart, endCol: tagEnd });
+		if (!parent) return { data: null, rawBody: true };
 
-		if (data) {
-			const headSchema = this.heads.get(data.tag);
-			if (headSchema) {
-				data.props[headSchema.name] = headSchema.raw
-					? [headContent]
-					: this.inlineParser.parse(headContent, line, headStart, data.tag) || [];
-			} else {
-				this.log(
-					new DisallowedHeadError(data.tag, {
-						line,
-						startCol: headStart,
-						endCol: headStart + headContent.length
-					})
-				);
-			}
-		}
+		const parentSchema = this.getBlockSchema(parent.tag)!;
+		const pos = { line, startCol: tagStart, endCol: tagEnd };
 
-		return { data, rawBody: !data || this.rawProps.has(data.tag) };
-	}
-
-	private appendChild(
-		parent: IRNode | null,
-		tagString: string | undefined,
-		pos: ErrorPosition
-	): IRNode | null {
-		if (!parent) return null;
-
-		const tag = tagString || this.defaultTags.get(parent.tag);
+		const tag = tagString || parentSchema.defaultTag;
 		if (!tag) {
 			this.log(new DisallowedDefaultTagError(parent.tag, pos));
-			return null;
+			return { data: null, rawBody: true };
 		}
 
-		const childTagToProp = this.getProps(tag);
-		if (!childTagToProp) {
+		const childSchema = this.getBlockSchema(tag);
+		if (!childSchema) {
 			this.log(new UnknownBlockTagError(tag, pos));
-			return null;
+			return { data: null, rawBody: true };
 		}
 
-		const propName = this.getProps(parent.tag)!.get(tag);
+		const propName =
+			parentSchema.childTagToProp.get(tag) || parentSchema.childTagToProp.get(INVALID_TAG);
 		if (!propName) {
 			this.log(new DisallowedInBlockError(parent.tag, tag, pos));
-			return null;
+			return { data: null, rawBody: true };
 		}
 
-		const rawPropName = this.rawProps.get(tag);
-		const props = rawPropName
-			? IRHandler.emptyProps(rawPropName)
-			: IRHandler.emptyProps(...childTagToProp.values());
+		const data = IRBlockHandler.createNode(tag, childSchema);
+		parent.props[propName].push(data);
 
-		const node = { tag, namespace: "[base]", props };
-		parent.props[propName].push(node);
-		return node;
+		if (childSchema.head) {
+			data.props[childSchema.head.name] = childSchema.head.raw
+				? [headContent]
+				: this.inlineParser.parse(headContent, line, headStart, data.tag) || [];
+		} else if (headContent) {
+			const headPos = { line, startCol: headStart, endCol: headStart + headContent.length };
+			this.log(new DisallowedHeadError(data.tag, headPos));
+		}
+
+		return { data, rawBody: !data || Boolean(childSchema.rawProp) };
 	}
 
 	rawLine(parent: IRNode | null, content: string) {
 		if (!parent) return;
-		const rawPropName = this.rawProps.get(parent.tag)!;
+		const rawPropName = this.getBlockSchema(parent.tag)!.rawProp!;
 		parent.props[rawPropName].push(content);
 	}
 
-	private static emptyProps(...keys: string[]): { [key: string]: IRNodeList } {
-		return Object.fromEntries(keys.map(x => [x, []]));
+	private getBlockSchema(tag: string): BlockSchemaAugmented | undefined {
+		return this.blockSchemas.get(tag) || this.blockSchemas.get(INVALID_TAG);
+	}
+
+	private static createNode(tag: string, schema: BlockSchemaAugmented): IRNode {
+		const props = Object.fromEntries(schema.propsList.map(x => [x, []]));
+		return { tag, namespace: "[base]", props };
 	}
 }

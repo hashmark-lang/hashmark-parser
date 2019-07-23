@@ -13,12 +13,12 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 	constructor(schema: Schema, private readonly logger: ErrorLogger) {
 		const sugars: Map<string, Sugar> = new Map();
 
-		for (const { tag, sugar, props } of schema.inlineElements) {
+		for (const [tag, { sugar, props }] of Object.entries(schema.inline)) {
 			this.props.set(tag, props);
 			if (sugar) sugars.set(tag, { ...sugar, tag });
 		}
 
-		for (const { tag, props } of schema.inlineElements) {
+		for (const [tag, { props }] of Object.entries(schema.inline)) {
 			const sugarsMap: SugarsMap = new Map();
 			for (const prop of props) {
 				if (!prop.raw) {
@@ -33,7 +33,7 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 
 		this.allSugars = [...sugars.values()];
 
-		for (const { tag, head } of schema.blockElements) {
+		for (const [tag, { head }] of Object.entries(schema.blocks)) {
 			const sugarsMap: SugarsMap = new Map();
 			if (head && !head.raw) {
 				for (const { tag: childTag } of head.content) {
