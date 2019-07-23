@@ -94,10 +94,8 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 		const data = { tag, namespace: "[base]", props };
 		parent.props[propName].push(data);
 
-		if (!headContent) return { data: null, rawBody: true };
-
 		const headSchema = this.heads.get(tag);
-		if (!headSchema) {
+		if (headContent && !headSchema) {
 			this.log(
 				new DisallowedHeadError(tag, {
 					line,
@@ -105,7 +103,7 @@ export class IRHandler implements BlockHandler<IRNode | null> {
 					endCol: headStart + headContent.length
 				})
 			);
-		} else {
+		} else if (headSchema) {
 			data.props[headSchema.name] = headSchema.raw
 				? [headContent]
 				: this.inlineParser.parse(headContent, line, headStart, tag) || [];
