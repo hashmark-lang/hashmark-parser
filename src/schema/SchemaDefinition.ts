@@ -34,10 +34,12 @@ export interface RawBlockPropDefinition {
 export interface BlockPropDefinition {
 	name: string;
 	raw?: undefined; // TODO remove this while keeping discriminated union
-	content: Array<{
-		tag: string;
-		cardinality: Cardinality;
-	}>;
+	content: BlockPropContentDefinition[];
+}
+
+export interface BlockPropContentDefinition {
+	tag: string;
+	cardinality: Cardinality;
 }
 
 export const enum Cardinality {
@@ -52,19 +54,23 @@ export interface InlineSchemaDefinition {
 	sugar?: SugarDefinition;
 }
 
-export type InlinePropDefinition =
-	| {
-			name: string;
-			raw: true;
-	  }
-	| {
-			name: string;
-			raw?: undefined; // TODO remove this while keeping discriminated union
-			content: Array<{
-				schema: string;
-				tag: string;
-			}>;
-	  };
+export type InlinePropDefinition = RawInlinePropDefinition | ParsedInlinePropDefinition;
+
+export interface RawInlinePropDefinition {
+	name: string;
+	raw: true;
+}
+
+export interface ParsedInlinePropDefinition {
+	name: string;
+	raw?: undefined;
+	content: InlinePropContentDefinition[];
+}
+
+export interface InlinePropContentDefinition {
+	schema: string;
+	tag: string;
+}
 
 export interface SugarDefinition {
 	start: string;
