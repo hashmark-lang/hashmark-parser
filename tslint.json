@@ -9,6 +9,7 @@
 		"trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
 		"interface-name": false,
 		"semicolon": [true, "always", "ignore-bound-class-methods"],
+		"max-classes-per-file": false,
 		"curly": [true, "ignore-same-line"],
 		"member-ordering": false,
 		"object-literal-sort-keys": false,
