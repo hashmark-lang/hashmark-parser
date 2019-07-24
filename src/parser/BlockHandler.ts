@@ -3,6 +3,7 @@
  */
 export interface BlockHandler<BlockData> {
 	rootBlock(): BlockContext<BlockData>;
+
 	openBlock(
 		parent: BlockData,
 		tag: string | undefined,
@@ -12,6 +13,9 @@ export interface BlockHandler<BlockData> {
 		tagEnd: number,
 		headStart: number
 	): BlockContext<BlockData>;
+
+	// closeBlock(block: BlockData): void;
+
 	rawLine(parent: BlockData, content: string): void;
 }
 

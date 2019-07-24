@@ -1,61 +1,24 @@
 import { DisallowedArgError, ErrorLogger } from "..";
-import { InlineContext, InlineHandler, Sugar, SugarsMap } from "../parser/InlineHandler";
-import { InlineProp, Schema } from "../schema/schema";
-import { IRNode, IRNodeList } from "./IRNode";
+import { InlineContext, InlineHandler, NamedSugar } from "../parser/InlineHandler";
+import { SchemaDecorator } from "../schema/Schema";
+import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
 export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode | null, string> {
-	private props: Map<string, InlineProp[]> = new Map();
-	private argSugarsMaps: Map<string, SugarsMap> = new Map();
-	private headSugarsMaps: Map<string, SugarsMap> = new Map();
-	private heads: Map<string, InlineProp> = new Map();
-	private allSugars: Sugar[];
-
-	constructor(schema: Schema, private readonly logger: ErrorLogger) {
-		const sugars: Map<string, Sugar> = new Map();
-
-		for (const [tag, { sugar, props }] of Object.entries(schema.inline)) {
-			this.props.set(tag, props);
-			if (sugar) sugars.set(tag, { ...sugar, tag });
-		}
-
-		for (const [tag, { props }] of Object.entries(schema.inline)) {
-			const sugarsMap: SugarsMap = new Map();
-			for (const prop of props) {
-				if (!prop.raw) {
-					for (const { tag: childTag } of prop.content) {
-						const sugar = sugars.get(childTag);
-						if (sugar) sugarsMap.set(sugar.start, sugar);
-					}
-				}
-			}
-			this.argSugarsMaps.set(tag, sugarsMap);
-		}
-
-		this.allSugars = [...sugars.values()];
-
-		for (const [tag, { head }] of Object.entries(schema.blocks)) {
-			const sugarsMap: SugarsMap = new Map();
-			if (head && !head.raw) {
-				for (const { tag: childTag } of head.content) {
-					const sugar = sugars.get(childTag);
-					if (sugar) sugarsMap.set(sugar.start, sugar);
-				}
-			}
-			this.headSugarsMaps.set(tag, sugarsMap);
-			if (head) this.heads.set(tag, head);
-		}
-	}
+	constructor(private schema: SchemaDecorator, private readonly logger: ErrorLogger) {}
 
 	private isRawHead(parentTag: string): boolean {
-		const headSchema = this.heads.get(parentTag);
+		const parentSchema = this.schema.getBlockSchema(parentTag);
+		const headSchema = parentSchema && parentSchema.head;
 		return Boolean(headSchema && headSchema.raw);
 	}
 
 	rootInlineTag(parentTag: string): InlineContext<IRNodeList> {
+		const parentSchema = this.schema.getBlockSchema(parentTag);
+		const sugars = parentSchema ? parentSchema.headTokenToSugar : new Map<string, NamedSugar>();
 		return {
 			data: [],
 			raw: this.isRawHead(parentTag),
-			sugars: this.headSugarsMaps.get(parentTag) || new Map()
+			sugars
 		};
 	}
 
@@ -67,13 +30,14 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 		end: number
 	): IRNode | null {
 		if (!parent) return null;
-
+		const schema = this.schema.getInlineSchema(tag);
 		// TODO: check that tag is valid child of parent tag
-
+		// TODO: check that tag is known inline
+		const propNames = schema ? schema.propNames : [];
 		const data = {
 			tag,
 			namespace: "[base]",
-			props: Object.fromEntries(this.props.get(tag)!.map(prop => [prop.name, []]))
+			props: emptyBlockProps(propNames)
 		};
 		parent.push(data);
 		return data;
@@ -85,19 +49,21 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 		line: number,
 		start: number
 	): InlineContext<IRNodeList | null> {
-		if (!parent) return { data: null, raw: true, sugars: new Map() };
-		const propSchema = this.props.get(parent.tag)![index];
-		if (!propSchema) {
-			const length = this.props.get(parent.tag)!.length;
+		if (!parent) {
+			return { data: null, raw: true, sugars: new Map() };
+		}
+		const parentSchema = this.schema.getInlineSchema(parent.tag)!;
+		if (index >= parentSchema.numberArgs) {
 			const pos = { line, startCol: start, endCol: start };
 			this.logger(new DisallowedArgError(parent.tag, index, length, pos));
 			return { data: null, raw: true, sugars: new Map() };
 		}
-		const data = parent.props[propSchema.name];
+
+		const propName = parentSchema.getArgName(index);
 		return {
-			data,
-			raw: Boolean(propSchema.raw),
-			sugars: this.argSugarsMaps.get(parent.tag) || new Map()
+			data: parent.props[propName],
+			raw: parentSchema.isRawArg(index),
+			sugars: parentSchema.getAllowedSugars(index)
 		};
 	}
 
@@ -112,7 +78,7 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 		}
 	}
 
-	getAllSugars(): Sugar[] {
-		return this.allSugars;
+	getAllSugars(): NamedSugar[] {
+		return this.schema.allSugars;
 	}
 }

@@ -1,5 +1,4 @@
 import { BlockElement, InlineElement, InlineGroup } from "../ast/ast";
-import { Reserved } from "../schema/schema";
 
 export interface BlockElementJSON {
 	tag?: string;

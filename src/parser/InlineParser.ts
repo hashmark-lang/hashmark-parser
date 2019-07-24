@@ -1,5 +1,5 @@
 import { escapeRegExp, last } from "../utils";
-import { InlineHandler, Sugar } from "./InlineHandler";
+import { InlineHandler, NamedSugar } from "./InlineHandler";
 
 interface InlineSyntax {
 	separator?: string;
@@ -24,7 +24,7 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 	private current?: InlineGroupData;
 
 	// Map of sugar start character to sugar definition:
-	private sugars?: Map<string, Sugar>;
+	private sugars?: Map<string, NamedSugar>;
 	private isRaw?: boolean;
 
 	constructor(private readonly handler: InlineHandler<InlineGroupData, InlineData, ParentData>) {
