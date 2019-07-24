@@ -49,7 +49,7 @@ export const enum Cardinality {
 
 export interface InlineSchemaDefinition {
 	props: InlinePropDefinition[];
-	sugar?: SugarDefinition;
+	sugar?: SugarSyntax;
 }
 
 export type InlinePropDefinition =
@@ -66,7 +66,7 @@ export type InlinePropDefinition =
 			}>;
 	  };
 
-export interface SugarDefinition {
+export interface SugarSyntax {
 	start: string;
 	separator?: string;
 	end: string;

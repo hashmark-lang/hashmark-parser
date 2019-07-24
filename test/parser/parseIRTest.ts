@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { BlockParser, DisallowedDefaultTagError, HMError, UnknownBlockTagError } from "../../src";
 import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
-import { SchemaDecorator } from "../../src/schema/Schema";
+import { Schema } from "../../src/schema/Schema";
 import {
 	Cardinality,
 	INVALID_TAG,
@@ -21,7 +21,7 @@ describe("IRHandler", () => {
 
 	let parser: BlockParser<IRNode | null>;
 	const makeParser = (schema: SchemaDefinition) => {
-		parser = new BlockParser(new IRBlockHandler(new SchemaDecorator(schema), logger));
+		parser = new BlockParser(new IRBlockHandler(new Schema(schema), logger));
 	};
 
 	describe("empty-schema", () => {

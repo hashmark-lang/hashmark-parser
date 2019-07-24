@@ -1,10 +1,10 @@
 import { DisallowedArgError, ErrorLogger } from "..";
-import { InlineContext, InlineHandler, NamedSugar } from "../parser/InlineHandler";
-import { SchemaDecorator } from "../schema/Schema";
+import { InlineContext, InlineHandler, Sugar } from "../parser/InlineHandler";
+import { Schema } from "../schema/Schema";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
 export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode | null, string> {
-	constructor(private schema: SchemaDecorator, private readonly logger: ErrorLogger) {}
+	constructor(private schema: Schema, private readonly logger: ErrorLogger) {}
 
 	private isRawHead(parentTag: string): boolean {
 		const parentSchema = this.schema.getBlockSchema(parentTag);
@@ -14,12 +14,8 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 
 	rootInlineTag(parentTag: string): InlineContext<IRNodeList> {
 		const parentSchema = this.schema.getBlockSchema(parentTag);
-		const sugars = parentSchema ? parentSchema.headTokenToSugar : new Map<string, NamedSugar>();
-		return {
-			data: [],
-			raw: this.isRawHead(parentTag),
-			sugars
-		};
+		const sugars = parentSchema ? parentSchema.headSugarsByStart : new Map();
+		return { data: [], raw: this.isRawHead(parentTag), sugars };
 	}
 
 	openInlineTag(
@@ -78,7 +74,7 @@ export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode 
 		}
 	}
 
-	getAllSugars(): NamedSugar[] {
+	get allSugars(): Sugar[] {
 		return this.schema.allSugars;
 	}
 }

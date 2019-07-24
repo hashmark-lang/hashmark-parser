@@ -1,4 +1,4 @@
-import { SugarDefinition } from "../schema/SchemaDefinition";
+import { SugarSyntax } from "../schema/SchemaDefinition";
 
 /**
  * Takes instructions from [[InlineParser]] in order to build an AST.
@@ -19,17 +19,18 @@ export interface InlineHandler<InlineGroupData, InlineData, ParentData = undefin
 		start: number
 	): InlineContext<InlineGroupData>;
 	pushText(parent: InlineGroupData, content: string): void;
-	getAllSugars(): NamedSugar[];
+	allSugars: Sugar[];
 }
 
 export interface InlineContext<InlineGroupData> {
 	raw: boolean;
-	sugars: SugarsMap;
+	sugars: SugarsByStart;
 	data: InlineGroupData;
 }
 
-export interface NamedSugar extends SugarDefinition {
+export interface Sugar {
 	tag: string;
+	syntax: SugarSyntax;
 }
 
-export type SugarsMap = Map<string, NamedSugar>;
+export type SugarsByStart = Map<string, Sugar>;

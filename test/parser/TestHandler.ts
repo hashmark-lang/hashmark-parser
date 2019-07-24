@@ -3,29 +3,24 @@ import { AstHandler } from "../../src/ast/AstHandler";
 
 const sugars = [
 	{
-		start: "`",
-		end: "`",
+		syntax: { start: "`", end: "`" },
 		tag: "code"
 	},
 	{
-		start: "*",
-		end: "*",
+		syntax: { start: "*", end: "*" },
 		tag: "strong"
 	},
 	{
-		start: "_",
-		end: "_",
+		syntax: { start: "_", end: "_" },
 		tag: "emphasis"
 	},
 	{
-		start: "{",
-		separator: "|",
-		end: "}",
+		syntax: { start: "{", separator: "|", end: "}" },
 		tag: "set"
 	}
 ];
 
-const sugarsMap = new Map(sugars.map(_ => [_.start, _]));
+const sugarsMap = new Map(sugars.map(_ => [_.syntax.start, _]));
 
 export class TestHandler extends AstHandler {
 	openBlock(
@@ -66,7 +61,7 @@ export class TestHandler extends AstHandler {
 		};
 	}
 
-	getAllSugars() {
+	get allSugars() {
 		return sugars;
 	}
 }

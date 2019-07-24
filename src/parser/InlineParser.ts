@@ -1,5 +1,5 @@
-import { escapeRegExp, last } from "../utils";
-import { InlineHandler, NamedSugar } from "./InlineHandler";
+import { last, regexpUnion, stringToRegexp, unique } from "../utils";
+import { InlineHandler, Sugar } from "./InlineHandler";
 
 interface InlineSyntax {
 	separator?: string;
@@ -10,7 +10,7 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
-	private readonly inlineTag: InlineSyntax = { separator: "][", end: "]" };
+	private readonly inlineTagSyntax = { separator: "][", end: "]" };
 	// Stack of currently open inline elements:
 	private stack: Array<{
 		data?: InlineGroupData;
@@ -24,28 +24,17 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 	private current?: InlineGroupData;
 
 	// Map of sugar start character to sugar definition:
-	private sugars?: Map<string, NamedSugar>;
+	private sugars?: Map<string, Sugar>;
 	private isRaw?: boolean;
 
 	constructor(private readonly handler: InlineHandler<InlineGroupData, InlineData, ParentData>) {
-		const sugars = handler.getAllSugars();
-		this.regex = new RegExp(
-			"(" +
-				[
-					/#[^ \[]+\[?/.source,
-					/\\./.source,
-					...[this.inlineTag.separator ? [escapeRegExp(this.inlineTag.separator)] : []],
-					...[
-						this.inlineTag.end,
-						...sugars.map(_ => _.start),
-						...sugars.map(_ => _.separator).filter((_): _ is string => Boolean(_)),
-						...sugars.map(_ => _.end)
-					].map(escapeRegExp)
-				]
-					.map(_ => `(?:${_})`)
-					.join("|") +
-				")",
-			"g"
+		const customTokens = handler.allSugars.map(_ => _.syntax).flatMap(Object.values);
+		this.regex = regexpUnion(
+			/\\./,
+			/#[^ \[]+\[?/,
+			stringToRegexp(this.inlineTagSyntax.separator),
+			stringToRegexp(this.inlineTagSyntax.end),
+			...unique(customTokens.sort((a, b) => a.length - b.length)).map(stringToRegexp)
 		);
 	}
 
@@ -87,7 +76,7 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 				const tag = token.slice(1, endsWithBracket ? -1 : undefined);
 				this.open(
 					tag,
-					this.inlineTag,
+					this.inlineTagSyntax,
 					line,
 					column + 1,
 					column + 1 + tag.length,
@@ -117,7 +106,7 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 
 				const sugar = this.sugars!.get(token);
 				if (sugar) {
-					this.open(sugar.tag, sugar, line, column, column + token.length);
+					this.open(sugar.tag, sugar.syntax, line, column, column + token.length);
 					return;
 				}
 

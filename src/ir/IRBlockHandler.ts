@@ -7,7 +7,7 @@ import {
 	ErrorLogger,
 	UnknownBlockTagError
 } from "../schema/errors";
-import { SchemaDecorator } from "../schema/Schema";
+import { Schema } from "../schema/Schema";
 import { ROOT } from "../schema/SchemaDefinition";
 import { IRInlineHandler } from "./IRInlineHandler";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
@@ -15,7 +15,7 @@ import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 export class IRBlockHandler implements BlockHandler<IRNode | null> {
 	protected readonly inlineParser: InlineParser<IRNodeList | null, IRNode | null, string>;
 
-	constructor(private readonly schema: SchemaDecorator, private readonly log: ErrorLogger) {
+	constructor(private readonly schema: Schema, private readonly log: ErrorLogger) {
 		this.inlineParser = new InlineParser(new IRInlineHandler(schema, log));
 	}
 
