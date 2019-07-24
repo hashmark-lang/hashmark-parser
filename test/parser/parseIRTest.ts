@@ -2,7 +2,13 @@ import { assert } from "chai";
 import { BlockParser, DisallowedDefaultTagError, HMError, UnknownBlockTagError } from "../../src";
 import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
-import { Cardinality, INVALID_TAG, ROOT, Schema } from "../../src/schema/schema";
+import { SchemaDecorator } from "../../src/schema/Schema";
+import {
+	Cardinality,
+	INVALID_TAG,
+	ROOT,
+	SchemaDefinition
+} from "../../src/schema/SchemaDefinition";
 import { filePairs, resourceFile } from "../utils";
 
 describe("IRHandler", () => {
@@ -14,8 +20,8 @@ describe("IRHandler", () => {
 	});
 
 	let parser: BlockParser<IRNode | null>;
-	const makeParser = (schema: Schema) => {
-		parser = new BlockParser(new IRBlockHandler(schema, logger));
+	const makeParser = (schema: SchemaDefinition) => {
+		parser = new BlockParser(new IRBlockHandler(new SchemaDecorator(schema), logger));
 	};
 
 	describe("empty-schema", () => {
@@ -70,7 +76,7 @@ describe("IRHandler", () => {
 	}
 });
 
-function getAllowAllSchema(): Schema {
+function getAllowAllSchema(): SchemaDefinition {
 	const blockProps = [
 		{ name: "children", content: [{ tag: INVALID_TAG, cardinality: Cardinality.ZeroOrMore }] }
 	];
@@ -91,7 +97,7 @@ function getAllowAllSchema(): Schema {
 	};
 }
 
-function getEmptySchema(): Schema {
+function getEmptySchema(): SchemaDefinition {
 	return {
 		blocks: {
 			[ROOT]: { props: [] }
@@ -100,7 +106,7 @@ function getEmptySchema(): Schema {
 	};
 }
 
-function getDocumentSchema(): Schema {
+function getDocumentSchema(): SchemaDefinition {
 	const inlineTags = [
 		{ schema: "[base]", tag: "link" },
 		{ schema: "[base]", tag: "bold" },

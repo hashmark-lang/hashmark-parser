@@ -1,5 +1,5 @@
 import { BlockHandler } from "../parser/BlockHandler";
-import { InlineHandler, Sugar } from "../parser/InlineHandler";
+import { InlineHandler, NamedSugar } from "../parser/InlineHandler";
 import { InlineParser } from "../parser/InlineParser";
 import { BlockElement, InlineElement, InlineGroup } from "./ast";
 
@@ -78,7 +78,7 @@ export class AstHandler
 		}
 	}
 
-	getAllSugars(): Sugar[] {
+	getAllSugars(): NamedSugar[] {
 		return [];
 	}
 }

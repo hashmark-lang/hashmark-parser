@@ -10,28 +10,28 @@ export const enum Reserved {
 export const ROOT = "root";
 export const INVALID_TAG = "*";
 
-export interface Schema {
+export interface SchemaDefinition {
 	blocks: {
-		[ROOT]: Omit<BlockSchema, "head">;
-		[tag: string]: BlockSchema;
+		[ROOT]: Omit<BlockSchemaDefinition, "head">;
+		[tag: string]: BlockSchemaDefinition;
 	};
 	inline: {
-		[tag: string]: InlineSchema;
+		[tag: string]: InlineSchemaDefinition;
 	};
 }
 
-export interface BlockSchema {
-	head?: InlineProp;
+export interface BlockSchemaDefinition {
+	head?: InlinePropDefinition;
 	defaultTag?: string;
-	props: [RawBlockProp] | BlockProp[];
+	props: [RawBlockPropDefinition] | BlockPropDefinition[];
 }
 
-export interface RawBlockProp {
+export interface RawBlockPropDefinition {
 	name: string;
 	raw: true;
 }
 
-export interface BlockProp {
+export interface BlockPropDefinition {
 	name: string;
 	raw?: undefined; // TODO remove this while keeping discriminated union
 	content: Array<{
@@ -47,12 +47,12 @@ export const enum Cardinality {
 	Optional = "optional"
 }
 
-export interface InlineSchema {
-	props: InlineProp[];
-	sugar?: Sugar;
+export interface InlineSchemaDefinition {
+	props: InlinePropDefinition[];
+	sugar?: SugarDefinition;
 }
 
-export type InlineProp =
+export type InlinePropDefinition =
 	| {
 			name: string;
 			raw: true;
@@ -66,7 +66,7 @@ export type InlineProp =
 			}>;
 	  };
 
-export interface Sugar {
+export interface SugarDefinition {
 	start: string;
 	separator?: string;
 	end: string;

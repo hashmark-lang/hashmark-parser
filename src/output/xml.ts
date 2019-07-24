@@ -1,5 +1,5 @@
 import { BlockElement, InlineElement, InlineGroup } from "../ast/ast";
-import { Reserved } from "../schema/schema";
+import { Reserved } from "../schema/SchemaDefinition";
 
 export function toXML(root: BlockElement): string {
 	const children = root.children.map(toXML);
