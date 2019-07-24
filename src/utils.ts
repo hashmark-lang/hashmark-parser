@@ -1,6 +1,14 @@
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
-export function escapeRegExp(regexp: string): string {
-	return regexp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+export function stringToRegexp(regexp: string): RegExp {
+	return new RegExp(regexp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); // $& means the whole matched string
+}
+
+export function regexpUnion(...regExps: RegExp[]): RegExp {
+	return new RegExp("(" + regExps.map(_ => `(?:${_.source})`).join("|") + ")", "g");
+}
+
+export function unique<T>(seq: Iterable<T>): T[] {
+	return [...new Set<T>(seq)];
 }
 
 export function last<T>(seq: ArrayLike<T>): T {
