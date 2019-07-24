@@ -4,6 +4,16 @@ import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
 import { Schema } from "../../src/schema/Schema";
 import {
+	inlineProp,
+	lineTag,
+	prop,
+	rawInlineProp,
+	rawTag,
+	ref,
+	sugar,
+	zeroOrMore
+} from "../../src/schema/schema-generators";
+import {
 	Cardinality,
 	INVALID_TAG,
 	ROOT,
@@ -107,81 +117,39 @@ function getEmptySchema(): SchemaDefinition {
 }
 
 function getDocumentSchema(): SchemaDefinition {
-	const inlineTags = [
-		{ schema: "[base]", tag: "link" },
-		{ schema: "[base]", tag: "bold" },
-		{ schema: "[base]", tag: "inline" },
-		{ schema: "[base]", tag: "code" }
-	];
-	const blockContent = [
-		{ tag: "paragraph", cardinality: Cardinality.ZeroOrMore },
-		{ tag: "section", cardinality: Cardinality.ZeroOrMore },
-		{ tag: "code", cardinality: Cardinality.ZeroOrMore }
-	];
+	const inlineTags = ["link", "bold", "inline", "code"].map(tag => ref(tag));
+	const blockContent = ["paragraph", "section", "code"].map(tag => zeroOrMore(tag));
 
 	return {
 		blocks: {
 			[ROOT]: {
 				defaultTag: "paragraph",
-				props: [
-					{
-						name: "content",
-						content: blockContent
-					}
-				]
+				props: [prop("content", blockContent)]
 			},
-			["paragraph"]: {
-				head: { name: "text", content: inlineTags },
-				props: []
-			},
+			["paragraph"]: lineTag("text", inlineTags),
 			["section"]: {
-				head: { name: "title", content: inlineTags },
+				head: inlineProp("title", inlineTags),
 				defaultTag: "paragraph",
-				props: [
-					{
-						name: "content",
-						content: blockContent
-					}
-				]
+				props: [prop("content", blockContent)]
 			},
-			["code"]: {
-				props: [{ name: "content", raw: true }]
-			}
+			["code"]: rawTag("content")
 		},
 
 		inline: {
 			["link"]: {
-				sugar: {
-					start: "[",
-					separator: "](",
-					end: ")"
-				},
-				props: [
-					{ name: "url", raw: true },
-					{ name: "text", content: [{ schema: "[base]", tag: "bold" }] }
-				]
+				sugar: sugar("[", "](", ")"),
+				props: [rawInlineProp("url"), inlineProp("text", ref("bold"))]
 			},
 			["bold"]: {
-				sugar: {
-					start: "*",
-					end: "*"
-				},
-				props: [{ name: "text", content: [{ schema: "[base]", tag: "link" }] }]
+				sugar: sugar("*", "*"),
+				props: [inlineProp("text", ref("link"))]
 			},
 			["inline"]: {
-				props: [
-					{
-						name: "inlineContent",
-						content: inlineTags
-					}
-				]
+				props: [inlineProp("inlineContent", inlineTags)]
 			},
 			["code"]: {
-				props: [{ name: "content", raw: true }],
-				sugar: {
-					start: "`",
-					end: "`"
-				}
+				props: [rawInlineProp("content")],
+				sugar: sugar("`", "`")
 			}
 		}
 	};
