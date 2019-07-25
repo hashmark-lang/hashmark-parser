@@ -1,80 +1,105 @@
 import { BlockHandler } from "../parser/BlockHandler";
 import { InlineParser } from "../parser/InlineParser";
+import { InputPosition } from "../parser/InputPosition";
 import {
 	DisallowedDefaultTagError,
 	DisallowedHeadError,
 	DisallowedInBlockError,
 	ErrorLogger,
+	HMError,
 	UnknownBlockTagError
 } from "../schema/errors";
-import { Schema } from "../schema/Schema";
-import { ROOT } from "../schema/SchemaDefinition";
+import { BlockSchema, Schema } from "../schema/Schema";
+import { ParsedInlinePropDefinition, ROOT } from "../schema/SchemaDefinition";
+import { last } from "../utils";
 import { IRInlineHandler } from "./IRInlineHandler";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
-export class IRBlockHandler implements BlockHandler<IRNode | null> {
-	protected readonly inlineParser: InlineParser<IRNodeList | null, IRNode | null, string>;
+export class IRBlockHandler implements BlockHandler {
+	private readonly inlineHandler: IRInlineHandler;
+	private readonly inlineParser: InlineParser;
+	private readonly stack: Array<{ node: IRNode; schema: BlockSchema }> = [];
+	private ignoreFlag: boolean = false;
 
 	constructor(private readonly schema: Schema, private readonly log: ErrorLogger) {
-		this.inlineParser = new InlineParser(new IRInlineHandler(schema, log));
+		this.inlineHandler = new IRInlineHandler(schema, log);
+		this.inlineParser = new InlineParser(this.inlineHandler);
+		this.reset();
 	}
 
-	rootBlock() {
-		const schema = this.schema.getBlockSchema(ROOT)!;
-		const data = IRBlockHandler.createNode("root", emptyBlockProps(schema.propNames));
-		return { data, rawBody: false };
+	reset(): void {
+		this.stack.length = 0;
+		this.pushBlock(ROOT, this.schema.getBlockSchema(ROOT)!);
+		this.ignoreFlag = false;
 	}
 
-	openBlock(
-		parent: IRNode | null,
-		tagString: string | undefined,
-		headContent: string,
-		line: number,
-		tagStart: number,
-		tagEnd: number,
-		headStart: number
-	) {
-		if (!parent) return { data: null, rawBody: true };
+	getResult(): IRNode {
+		return this.stack[0].node;
+	}
 
-		const parentSchema = this.schema.getBlockSchema(parent.tag)!;
-		const pos = { line, startCol: tagStart, endCol: tagEnd };
-		const tag = tagString || parentSchema.defaultTag;
-		if (!tag) {
-			this.log(new DisallowedDefaultTagError(parent.tag, pos));
-			return { data: null, rawBody: true };
-		}
+	private pushBlock(tag: string, schema: BlockSchema): IRNode {
+		const node = IRBlockHandler.createNode(tag, emptyBlockProps(schema.propNames));
+		this.stack.push({ node, schema });
+		return node;
+	}
 
-		const childSchema = this.schema.getBlockSchema(tag);
-		if (!childSchema) {
-			this.log(new UnknownBlockTagError(tag, pos));
-			return { data: null, rawBody: true };
-		}
+	openBlock(tagString: string | undefined, pos: InputPosition): boolean {
+		const parent = last(this.stack);
 
-		const propName = parentSchema.getPropName(tag);
+		const tag = tagString || parent.schema.defaultTag;
+		if (!tag) return this.blockError(new DisallowedDefaultTagError(parent.node.tag, pos));
+
+		const schema = this.schema.getBlockSchema(tag);
+		if (!schema) return this.blockError(new UnknownBlockTagError(tag, pos));
+
+		const propName = parent.schema.getPropName(tag);
 		if (!propName) {
-			this.log(new DisallowedInBlockError(parent.tag, tag, pos));
-			return { data: null, rawBody: true };
+			return this.blockError(new DisallowedInBlockError(parent.node.tag, tag, pos));
 		}
 
-		const data = IRBlockHandler.createNode(tag, emptyBlockProps(childSchema.propNames));
-		parent.props[propName].push(data);
-
-		if (childSchema.head) {
-			data.props[childSchema.head.name] = childSchema.head.raw
-				? [headContent]
-				: this.inlineParser.parse(headContent, line, headStart, data.tag) || [];
-		} else if (headContent) {
-			const headPos = { line, startCol: headStart, endCol: headStart + headContent.length };
-			this.log(new DisallowedHeadError(data.tag, headPos));
-		}
-
-		return { data, rawBody: !data || Boolean(childSchema.rawPropName) };
+		const node = this.pushBlock(tag, schema);
+		parent.node.props[propName].push(node);
+		return !Boolean(schema.rawPropName);
 	}
 
-	rawLine(parent: IRNode | null, content: string) {
-		if (!parent) return;
-		const rawPropName = this.schema.getBlockSchema(parent.tag)!.rawPropName!;
-		parent.props[rawPropName].push(content);
+	closeBlock(): void {
+		if (this.ignoreFlag) {
+			this.ignoreFlag = false;
+			return;
+		}
+		this.stack.pop();
+	}
+
+	private blockError(error: HMError): false {
+		this.log(error);
+		this.ignoreFlag = true;
+		return false;
+	}
+
+	head(content: string, pos: InputPosition) {
+		const parent = last(this.stack);
+		const headSchema = parent.schema.head;
+
+		if (!headSchema) {
+			this.log(new DisallowedHeadError(parent.node.tag, pos));
+			return;
+		}
+
+		parent.node.props[headSchema.name] = headSchema.raw
+			? [content]
+			: this.parseHead(content, parent.schema, pos);
+	}
+
+	private parseHead(content: string, parentSchema: BlockSchema, pos: InputPosition): IRNodeList {
+		this.inlineHandler.reset();
+		this.inlineParser.parse(content, parentSchema.headSugarsByStart, pos);
+		return this.inlineHandler.getResult();
+	}
+
+	rawLine(content: string, pos: InputPosition) {
+		if (this.ignoreFlag) return;
+		const parent = last(this.stack);
+		parent.node.props[parent.schema.rawPropName!].push(content);
 	}
 
 	private static createNode(tag: string, props: IRNode["props"]): IRNode {

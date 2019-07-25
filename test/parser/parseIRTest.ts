@@ -29,9 +29,15 @@ describe("IRHandler", () => {
 		errors.length = 0;
 	});
 
-	let parser: BlockParser<IRNode | null>;
+	let parse: (input: string) => IRNode;
 	const makeParser = (schema: SchemaDefinition) => {
-		parser = new BlockParser(new IRBlockHandler(new Schema(schema), logger));
+		const handler = new IRBlockHandler(new Schema(schema), logger);
+		const parser = new BlockParser(handler);
+		parse = (input: string): IRNode => {
+			handler.reset();
+			parser.parse(input);
+			return handler.getResult();
+		};
 	};
 
 	describe("empty-schema", () => {
@@ -39,14 +45,14 @@ describe("IRHandler", () => {
 
 		it("logs UnknownBlockTagError when a block is used", () => {
 			const input = resourceFile("input", "block_tag.hm").read();
-			parser.parse(input);
+			parse(input);
 			const error = errors.find(e => e instanceof UnknownBlockTagError)!;
 			assert.notStrictEqual(error, undefined);
 		});
 
 		it("logs DisallowedDefaultTagError when a default is used", () => {
 			const input = resourceFile("input", "paragraphs.hm").read();
-			parser.parse(input);
+			parse(input);
 			const error = errors.find(e => e instanceof DisallowedDefaultTagError)!;
 			assert.notStrictEqual(error, undefined);
 		});
@@ -59,7 +65,7 @@ describe("IRHandler", () => {
 
 		it("logs UnknownBlockTagError when an unknown block is used", () => {
 			const input = resourceFile("input", "nested_blocks.hm").read();
-			const res = parser.parse(input);
+			parse(input);
 			// #def is not in document schema
 			const error = errors.find(e => e instanceof UnknownBlockTagError)!;
 			assert.notStrictEqual(error, undefined);
@@ -78,7 +84,7 @@ describe("IRHandler", () => {
 		for (const [input, output] of filePairs(`parser-ir/${folder}`, ".json")) {
 			it(`works with ${input.name}`, () => {
 				assert.strictEqual(
-					JSON.stringify(parser.parse(input.read()), null, "\t"),
+					JSON.stringify(parse(input.read()), null, "\t"),
 					JSON.stringify(JSON.parse(output.read()), null, "\t")
 				);
 			});

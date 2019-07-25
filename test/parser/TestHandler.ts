@@ -1,5 +1,7 @@
-import { BlockElement, InlineElement } from "../../src";
 import { AstHandler } from "../../src/ast/AstHandler";
+import { Sugar, SugarsByStart } from "../../src/parser/InlineHandler";
+import { InputPosition } from "../../src/parser/InputPosition";
+import { last } from "../../src/utils";
 
 const sugars = [
 	{
@@ -20,48 +22,34 @@ const sugars = [
 	}
 ];
 
-const sugarsMap = new Map(sugars.map(_ => [_.syntax.start, _]));
+const sugarsMap: SugarsByStart = new Map(sugars.map(_ => [_.syntax.start, _]));
 
 export class TestHandler extends AstHandler {
-	openBlock(
-		parent: BlockElement,
-		tag: string | undefined,
-		headContent: string,
-		line: number,
-		tagStart: number,
-		tagEnd: number,
-		headStart: number
-	) {
-		return {
-			...super.openBlock(parent, tag, headContent, line, tagStart, tagEnd, headStart),
-			rawBody: tag === "rawBody"
-		};
+	private rawHead: boolean = false;
+
+	constructor() {
+		super();
 	}
 
-	protected parseHead(
-		parentTag: string | undefined,
-		content: string,
-		line: number,
-		column: number
-	) {
-		return parentTag === "rawHead"
-			? [content]
-			: this.inlineParser.parse(content, line, column, undefined);
+	openBlock(tag: string | undefined, pos: InputPosition) {
+		super.openBlock(tag, pos);
+		this.rawHead = tag === "rawHead";
+		return tag !== "rawBody";
 	}
 
-	rootInlineTag() {
-		return { ...super.rootInlineTag(), sugars: sugarsMap };
+	head(content: string, pos: InputPosition) {
+		if (!this.rawHead) this.inlineParser.parse(content, sugarsMap, pos);
+		else this.pushText(content);
 	}
 
-	openArgument(parent: InlineElement, index: number, line: number, start: number) {
-		return {
-			...super.openArgument(parent, index, line, start),
-			sugars: sugarsMap,
-			raw: parent.tag === "code" || (parent.tag === "rawFirstArg" && index === 0)
-		};
+	openArgument(index: number, pos: InputPosition): false | SugarsByStart {
+		super.openArgument(index, pos);
+		const parent = last(this.inlineElementStack);
+		if (parent.tag === "code" || (parent.tag === "rawFirstArg" && index === 0)) return false;
+		return sugarsMap;
 	}
 
-	get allSugars() {
+	get allSugars(): Sugar[] {
 		return sugars;
 	}
 }

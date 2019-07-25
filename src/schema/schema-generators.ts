@@ -7,7 +7,7 @@ import {
 	InlinePropDefinition,
 	RawBlockPropDefinition,
 	RawInlinePropDefinition,
-	SugarDefinition
+	SugarSyntax
 } from "./SchemaDefinition";
 
 type Nested<T> = Array<T | T[]>;
@@ -32,10 +32,10 @@ export function optional(tag: string): BlockPropContentDefinition {
 
 // Sugar:
 
-export function sugar(start: string, end: string): SugarDefinition;
+export function sugar(start: string, end: string): SugarSyntax;
 // tslint:disable-next-line:unified-signatures
-export function sugar(start: string, separator: string, end: string): SugarDefinition;
-export function sugar(a: string, b: string, c?: string): SugarDefinition {
+export function sugar(start: string, separator: string, end: string): SugarSyntax;
+export function sugar(a: string, b: string, c?: string): SugarSyntax {
 	if (c) {
 		return { start: a, separator: b, end: c };
 	} else {

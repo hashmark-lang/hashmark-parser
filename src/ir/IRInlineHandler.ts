@@ -1,69 +1,75 @@
 import { DisallowedArgError, ErrorLogger } from "..";
-import { InlineContext, InlineHandler, Sugar } from "../parser/InlineHandler";
-import { Schema } from "../schema/Schema";
+import { InlineHandler, Sugar, SugarsByStart } from "../parser/InlineHandler";
+import { InputPosition } from "../parser/InputPosition";
+import { HMError } from "../schema/errors";
+import { InlineSchema, Schema } from "../schema/Schema";
+import { last } from "../utils";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
-export class IRInlineHandler implements InlineHandler<IRNodeList | null, IRNode | null, string> {
+export class IRInlineHandler implements InlineHandler {
+	protected readonly inlineGroupStack: IRNodeList[] = [];
+	protected readonly inlineElementStack: Array<{ node: IRNode; schema: InlineSchema }> = [];
+	protected ignoreFlag: boolean = false;
+
 	constructor(private schema: Schema, private readonly logger: ErrorLogger) {}
 
-	private isRawHead(parentTag: string): boolean {
-		const parentSchema = this.schema.getBlockSchema(parentTag);
-		const headSchema = parentSchema && parentSchema.head;
-		return Boolean(headSchema && headSchema.raw);
+	getResult(): IRNodeList {
+		return this.inlineGroupStack[0];
 	}
 
-	rootInlineTag(parentTag: string): InlineContext<IRNodeList> {
-		const parentSchema = this.schema.getBlockSchema(parentTag);
-		const sugars = parentSchema ? parentSchema.headSugarsByStart : new Map();
-		return { data: [], raw: this.isRawHead(parentTag), sugars };
+	reset() {
+		this.inlineGroupStack.length = 0;
+		this.inlineElementStack.length = 0;
+		this.inlineGroupStack.push([]);
+		this.ignoreFlag = false;
 	}
 
-	openInlineTag(
-		parent: IRNodeList | null,
-		tag: string,
-		line: number,
-		start: number,
-		end: number
-	): IRNode | null {
-		if (!parent) return null;
+	openInlineTag(tag: string, pos: InputPosition): void {
+		if (this.ignoreFlag) return;
+		const parent = last(this.inlineGroupStack);
 		const schema = this.schema.getInlineSchema(tag);
+		if (!schema) throw new Error("blop");
 		// TODO: check that tag is valid child of parent tag
 		// TODO: check that tag is known inline
 		const propNames = schema ? schema.propNames : [];
-		const data = {
-			tag,
-			namespace: "[base]",
-			props: emptyBlockProps(propNames)
-		};
-		parent.push(data);
-		return data;
+		const node = { tag, namespace: "[base]", props: emptyBlockProps(propNames) };
+		parent.push(node);
+		this.inlineElementStack.push({ node, schema });
 	}
 
-	openArgument(
-		parent: IRNode | null,
-		index: number,
-		line: number,
-		start: number
-	): InlineContext<IRNodeList | null> {
-		if (!parent) {
-			return { data: null, raw: true, sugars: new Map() };
-		}
-		const parentSchema = this.schema.getInlineSchema(parent.tag)!;
-		if (index >= parentSchema.numberArgs) {
-			const pos = { line, startCol: start, endCol: start };
-			this.logger(new DisallowedArgError(parent.tag, index, length, pos));
-			return { data: null, raw: true, sugars: new Map() };
-		}
-
-		const propName = parentSchema.getArgName(index);
-		return {
-			data: parent.props[propName],
-			raw: parentSchema.isRawArg(index),
-			sugars: parentSchema.getAllowedSugars(index)
-		};
+	closeInlineTag(pos: InputPosition): void {
+		if (this.ignoreFlag) return;
+		this.inlineElementStack.pop();
 	}
 
-	pushText(parent: IRNodeList | null, content: string): void {
+	openArgument(index: number, pos: InputPosition): false | SugarsByStart {
+		const parent = last(this.inlineElementStack);
+		if (index >= parent.schema.numberArgs) {
+			return this.argError(new DisallowedArgError(parent.schema.tag, index, length, pos));
+		}
+
+		const propName = parent.schema.getArgName(index);
+		this.inlineGroupStack.push(parent.node.props[propName]);
+		if (parent.schema.isRawArg(index)) return false;
+		return parent.schema.getAllowedSugars(index);
+	}
+
+	closeArgument() {
+		if (this.ignoreFlag) {
+			this.ignoreFlag = false;
+			return;
+		}
+		this.inlineGroupStack.pop();
+	}
+
+	private argError(error: HMError): false {
+		this.ignoreFlag = true;
+		this.logger(error);
+		return false;
+	}
+
+	pushText(content: string): void {
+		const parent = last(this.inlineGroupStack);
 		if (parent) {
 			const lastIndex = parent.length - 1;
 			if (lastIndex < 0 || typeof parent[lastIndex] !== "string") {

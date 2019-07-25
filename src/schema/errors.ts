@@ -1,4 +1,5 @@
 import { BlockElement, InlineElement } from "../ast/ast";
+import { InputPosition } from "../parser/InputPosition";
 import { ordinal } from "../utils";
 
 enum Cardinality {
@@ -31,32 +32,26 @@ export const enum ErrorCode {
 	DISALLOWED_DEFAULT_TAG
 }
 
-export interface ErrorPosition {
-	line: number;
-	startCol: number;
-	endCol: number;
-}
-
 //////////////////////////////
 // Schema validation errors //
 //////////////////////////////
 
 export abstract class ValidationError extends HMError {
-	readonly positions: ErrorPosition[];
-	constructor(code: ErrorCode, message: string, ...positions: ErrorPosition[]) {
+	readonly positions: InputPosition[];
+	constructor(code: ErrorCode, message: string, ...positions: InputPosition[]) {
 		super(code, message);
-		this.positions = positions;
+		this.positions = positions.map(pos => ({ ...pos })); // Clone positions
 	}
 }
 
 export class UnknownBlockTagError extends ValidationError {
-	constructor(tag: string, pos: ErrorPosition) {
+	constructor(tag: string, pos: InputPosition) {
 		super(ErrorCode.UNKNOWN_TAG, `Unknown block tag '${tag}'`, pos);
 	}
 }
 
 export class DisallowedInBlockError extends ValidationError {
-	constructor(parentTag: string, childTag: string, pos: ErrorPosition) {
+	constructor(parentTag: string, childTag: string, pos: InputPosition) {
 		super(
 			ErrorCode.DISALLOWED_IN_BLOCK,
 			`Tag '#${childTag}' is not allowed in '#${parentTag}'`,
@@ -66,7 +61,7 @@ export class DisallowedInBlockError extends ValidationError {
 }
 
 export class DisallowedInArgError extends ValidationError {
-	constructor(tag: string, arg: string, pos: ErrorPosition) {
+	constructor(tag: string, arg: string, pos: InputPosition) {
 		super(
 			ErrorCode.DISALLOWED_IN_ARG,
 			`Tag '#${tag}' is not allowed in the '${arg}' argument`,
@@ -76,7 +71,7 @@ export class DisallowedInArgError extends ValidationError {
 }
 
 export class DisallowedInHeadError extends ValidationError {
-	constructor(tag: string, parentTag: string, pos: ErrorPosition) {
+	constructor(tag: string, parentTag: string, pos: InputPosition) {
 		super(
 			ErrorCode.DISALLOWED_IN_HEAD,
 			`Tag '#${tag}' is not allowed in the head of '#${parentTag}'`,
@@ -117,7 +112,7 @@ export class CardinalityError extends ValidationError {
 }
 
 export class DisallowedArgError extends ValidationError {
-	constructor(tag: string, index: number, expectedLength: number, pos: ErrorPosition) {
+	constructor(tag: string, index: number, expectedLength: number, pos: InputPosition) {
 		super(
 			ErrorCode.DISALLOWED_ARG,
 			`Disallowed ${ordinal(
@@ -129,13 +124,13 @@ export class DisallowedArgError extends ValidationError {
 }
 
 export class DisallowedHeadError extends ValidationError {
-	constructor(parentTag: string, pos: ErrorPosition) {
+	constructor(parentTag: string, pos: InputPosition) {
 		super(ErrorCode.DISALLOWED_HEAD, `Block '#${parentTag}' cannot have a head`, pos);
 	}
 }
 
 export class DisallowedDefaultTagError extends ValidationError {
-	constructor(parentTag: string, pos: ErrorPosition) {
+	constructor(parentTag: string, pos: InputPosition) {
 		super(
 			ErrorCode.DISALLOWED_DEFAULT_TAG,
 			`Default tags are not allowed in block '#${parentTag}'`,
