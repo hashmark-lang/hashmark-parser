@@ -1,7 +1,7 @@
 # Hashmark parser
 [![npm version](https://badge.fury.io/js/%40hashmark%2Fparser.svg)](https://www.npmjs.com/package/@hashmark/parser)
-[![Build Status](https://travis-ci.org/hashmark-lang/hashmark-parser.svg?branch=master)](https://travis-ci.org/hashmark-lang/hashmark-parser)
-[![Coverage Status](https://coveralls.io/repos/github/hashmark-lang/hashmark-parser/badge.svg?branch=master)](https://coveralls.io/github/hashmark-lang/hashmark-parser?branch=master)
+[![Build Status](https://travis-ci.org/hashml/hashml.svg?branch=master)](https://travis-ci.org/hashml/hashml)
+[![Coverage Status](https://coveralls.io/repos/github/hashml/hashml/badge.svg?branch=master)](https://coveralls.io/github/hashml/hashml?branch=master)
 
 ## Installation
 ```
