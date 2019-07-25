@@ -1,5 +1,15 @@
 <root>
-	<paragraph>
-		<head>text <inline>attr</inline> text</head>
-	</paragraph>
+	<content>
+		<paragraph>
+			<text>
+				text 
+				<inline>
+					<inlineContent>
+						attr
+					</inlineContent>
+				</inline>
+				 text
+			</text>
+		</paragraph>
+	</content>
 </root>

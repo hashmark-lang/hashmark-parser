@@ -1,5 +1,13 @@
 <root>
-	<paragraph>
-		<head>lorem <inline/> ipsum</head>
-	</paragraph>
+	<content>
+		<paragraph>
+			<text>
+				lorem 
+				<inline>
+					<inlineContent/>
+				</inline>
+				 ipsum
+			</text>
+		</paragraph>
+	</content>
 </root>

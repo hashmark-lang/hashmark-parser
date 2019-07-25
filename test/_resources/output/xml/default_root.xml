@@ -1,5 +1,9 @@
 <root>
-	<_default>
-		<head>Hello World</head>
-	</_default>
+	<content>
+		<paragraph>
+			<text>
+				Hello World
+			</text>
+		</paragraph>
+	</content>
 </root>

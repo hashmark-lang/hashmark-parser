@@ -1,5 +1,13 @@
 <root>
-	<_default>
-		<head><strong>id</strong></head>
-	</_default>
+	<content>
+		<paragraph>
+			<text>
+				<strong>
+					<text>
+						id
+					</text>
+				</strong>
+			</text>
+		</paragraph>
+	</content>
 </root>

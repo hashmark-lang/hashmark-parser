@@ -1,26 +1,28 @@
 <root>
-	<_default>
-		<head>Here&apos;s an example XML tag: <code>&lt;test id=&quot;test&quot;&gt;Hello world&lt;/test&gt;</code></head>
-	</_default>
-	<_default>
-		<head>Here&apos;s a more complete code sample:</head>
-	</_default>
-	<code>
-		<head>xml</head>
-		<_default>
-			<head>&lt;!-- This should be all be escaped in the XML output &lt;test&gt; &amp; &lt;example&gt; --&gt;</head>
-		</_default>
-		<_default>
-			<head>&lt;example id=&quot;example&quot;&gt;</head>
-			<_default>
-				<head>&lt;test/&gt;</head>
-			</_default>
-			<_default>
-				<head>&lt;test id=&apos;hello&apos;&gt;world &amp; planet&lt;/test&gt;</head>
-			</_default>
-		</_default>
-		<_default>
-			<head>&lt;/example&gt;</head>
-		</_default>
-	</code>
+	<content>
+		<paragraph>
+			<text>
+				Here&apos;s an example XML tag: 
+				<code>
+					<content>
+						&lt;test id=&quot;test&quot;&gt;Hello world&lt;/test&gt;
+					</content>
+				</code>
+			</text>
+		</paragraph>
+		<paragraph>
+			<text>
+				Here&apos;s a more complete code sample:
+			</text>
+		</paragraph>
+		<code>
+			<content>
+				&lt;!-- This should be all be escaped in the XML output &lt;test&gt; &amp; &lt;example&gt; --&gt;
+				&lt;example id=&quot;example&quot;&gt;
+				&#09;&lt;test/&gt;
+				&#09;&lt;test id=&apos;hello&apos;&gt;world &amp; planet&lt;/test&gt;
+				&lt;/example&gt;
+			</content>
+		</code>
+	</content>
 </root>
