@@ -1,62 +1,53 @@
 import { last, regexpUnion, stringToRegexp, unique } from "../utils";
-import { InlineHandler, Sugar } from "./InlineHandler";
+import { InlineHandler, Sugar, SugarsByStart } from "./InlineHandler";
+import { InputPosition } from "./InputPosition";
 
 interface InlineSyntax {
 	separator?: string;
 	end: string;
 }
 
-export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
+export class InlineParser {
 	// Regex matching inline tags and inline sugars:
 	private readonly regex: RegExp;
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
 	private readonly inlineTagSyntax = { separator: "][", end: "]" };
 	// Stack of currently open inline elements:
-	private stack: Array<{
-		data?: InlineGroupData;
-		tagData: InlineData;
-		syntax: InlineSyntax;
-		length: number;
-	}> = [];
-	// Inline group at nesting level 0:
-	private root?: InlineGroupData;
-	// Inline group at current nesting level:
-	private current?: InlineGroupData;
+	private stack: Array<{ syntax: InlineSyntax; length: number }> = [];
 
 	// Map of sugar start character to sugar definition:
 	private sugars?: Map<string, Sugar>;
 	private isRaw?: boolean;
 
-	constructor(private readonly handler: InlineHandler<InlineGroupData, InlineData, ParentData>) {
+	constructor(private readonly handler: InlineHandler) {
 		const customTokens = handler.allSugars.map(_ => _.syntax).flatMap(Object.values);
 		this.regex = regexpUnion(
 			/\\./,
 			/#[^ \[]+\[?/,
 			stringToRegexp(this.inlineTagSyntax.separator),
 			stringToRegexp(this.inlineTagSyntax.end),
-			...unique(customTokens.sort((a, b) => a.length - b.length)).map(stringToRegexp)
+			...unique(customTokens)
+				.sort((a, b) => a.length - b.length)
+				.map(stringToRegexp)
 		);
 	}
 
-	parse(input: string, line: number, column: number, parentData: ParentData): InlineGroupData {
+	parse(input: string, sugars: SugarsByStart, pos: InputPosition): void {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
-		const { data, raw, sugars } = this.handler.rootInlineTag(parentData);
 		this.sugars = sugars;
-		this.current = this.root = data;
-		this.isRaw = raw;
+		this.isRaw = false;
 
 		for (let i = 0; i < tokens.length; ++i) {
 			const token = tokens[i];
+			pos.length = token.length;
 			if (i % 2 === 0 || (this.isRaw && !this.isRawEnd(token))) {
-				if (token) this.handler.pushText(this.current, token);
+				if (token) this.handler.pushText(token);
 			} else {
-				this.handleToken(token, line, column);
+				this.handleToken(token, pos);
 			}
-			column += token.length;
+			pos.column += token.length;
 		}
-
-		return this.root;
 	}
 
 	/**
@@ -65,23 +56,16 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 	 * @param line line number in the source file (1-based)
 	 * @param column column number in the source file of the token start (1-based)
 	 */
-	private handleToken(token: string, line: number, column: number) {
+	private handleToken(token: string, pos: InputPosition) {
 		switch (token[0]) {
 			case "\\": {
-				this.handler.pushText(this.current!, token[1]);
+				this.handler.pushText(token[1]);
 				return;
 			}
 			case "#": {
 				const endsWithBracket = last(token) === "[";
 				const tag = token.slice(1, endsWithBracket ? -1 : undefined);
-				this.open(
-					tag,
-					this.inlineTagSyntax,
-					line,
-					column + 1,
-					column + 1 + tag.length,
-					!endsWithBracket
-				);
+				this.open(tag, this.inlineTagSyntax, pos, !endsWithBracket);
 				return;
 			}
 			default: {
@@ -90,7 +74,7 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 				//   *#inline[Test*
 				for (let j = this.stack.length - 1; j >= 0; --j) {
 					if (this.stack[j].syntax.end === token) {
-						this.close(j);
+						this.close(j, pos);
 						return;
 					}
 				}
@@ -98,56 +82,46 @@ export class InlineParser<InlineGroupData, InlineData, ParentData = undefined> {
 				// Close arg, and open next arg for separators:
 				for (let j = this.stack.length - 1; j >= 0; --j) {
 					if (this.stack[j].syntax.separator === token) {
-						this.close(j + 1);
-						this.openArg();
+						this.close(j + 1, pos);
+						this.openArg(pos);
 						return;
 					}
 				}
 
 				const sugar = this.sugars!.get(token);
 				if (sugar) {
-					this.open(sugar.tag, sugar.syntax, line, column, column + token.length);
+					this.open(sugar.tag, sugar.syntax, pos);
 					return;
 				}
 
-				this.handler.pushText(this.current!, token);
+				this.handler.pushText(token);
 			}
 		}
 	}
 
-	private open(
-		tag: string,
-		syntax: InlineSyntax,
-		line: number,
-		tagStart: number,
-		tagEnd: number,
-		closed: boolean = false
-	) {
-		const tagData = this.handler.openInlineTag(this.current!, tag, line, tagStart, tagEnd);
+	private open(tag: string, syntax: InlineSyntax, pos: InputPosition, closed: boolean = false) {
+		this.handler.openInlineTag(tag, pos);
 		if (!closed) {
-			this.stack.push({ tagData, syntax, length: 0 });
-			this.openArg();
+			this.stack.push({ syntax, length: 0 });
+			this.openArg(pos);
 		}
 	}
 
-	private openArg() {
+	private openArg(pos: InputPosition) {
 		const parent = last(this.stack);
-		const { data, raw, sugars } = this.handler.openArgument(
-			parent.tagData,
-			parent.length,
-			0,
-			0
-		);
-		parent.data = this.current = data;
-		this.isRaw = raw;
-		this.sugars = sugars;
+		const returnValue = this.handler.openArgument(parent.length, pos);
+		if (returnValue) this.sugars = returnValue;
+		this.isRaw = !returnValue;
 		++parent.length;
 	}
 
-	private close(index: number = this.stack.length - 1) {
+	private close(index: number = this.stack.length - 1, pos: InputPosition) {
 		if (index === this.stack.length) return;
-		this.stack.length = index;
-		this.current = this.stack.length > 0 ? last(this.stack).data! : this.root;
+		while (this.stack.length > index) {
+			this.handler.closeInlineTag(pos);
+			this.stack.pop();
+		}
+		this.handler.closeArgument(pos);
 		this.isRaw = false;
 	}
 

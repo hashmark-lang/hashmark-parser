@@ -1,21 +1,27 @@
 import { assert } from "chai";
-import { BlockElement, BlockParser, toJSON } from "../../src";
+import { BlockElement } from "../../src/ast/ast";
+import { toJSON } from "../../src/output/json";
+import { BlockParser } from "../../src/parser/BlockParser";
 import { filePairs } from "../utils";
 import { TestHandler } from "./TestHandler";
 
 describe("parse AST", () => {
-	let parser: BlockParser<BlockElement>;
-	let handler: TestHandler;
+	let parse: (input: string) => BlockElement;
 
 	before(() => {
-		handler = new TestHandler();
-		parser = new BlockParser(handler);
+		const handler = new TestHandler();
+		const parser = new BlockParser(handler);
+		parse = (input: string): BlockElement => {
+			handler.reset();
+			parser.parse(input);
+			return handler.getResult();
+		};
 	});
 
 	for (const [input, output] of filePairs("parser", ".json")) {
 		it(`works with ${output.name}`, () => {
 			assert.strictEqual(
-				JSON.stringify(toJSON(parser.parse(input.read())), null, "\t"),
+				JSON.stringify(toJSON(parse(input.read())), null, "\t"),
 				JSON.stringify(JSON.parse(output.read()), null, "\t")
 			);
 		});
@@ -24,7 +30,7 @@ describe("parse AST", () => {
 	for (const [input, output] of filePairs("parser-fullast", ".json")) {
 		it(`works with ${output.name} (full ast)`, () => {
 			assert.strictEqual(
-				JSON.stringify(parser.parse(input.read()), null, "\t"),
+				JSON.stringify(parse(input.read()), null, "\t"),
 				JSON.stringify(JSON.parse(output.read()), null, "\t")
 			);
 		});

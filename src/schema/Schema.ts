@@ -21,7 +21,7 @@ export class Schema {
 		this.allSugars = Array.from(allSugars.values());
 
 		for (const [tag, inlineSchema] of Object.entries(schema.inline)) {
-			this.inlineSchemas.set(tag, new InlineSchema(inlineSchema, allSugars));
+			this.inlineSchemas.set(tag, new InlineSchema(tag, inlineSchema, allSugars));
 		}
 
 		for (const [tag, blockSchema] of Object.entries(schema.blocks)) {
@@ -94,7 +94,7 @@ export class InlineSchema {
 	private readonly argsSugarsByStarts: SugarsByStart[];
 	private readonly props: InlinePropDefinition[];
 
-	constructor(schema: InlineSchemaDefinition, allSugars: SugarsByTag) {
+	constructor(readonly tag: string, schema: InlineSchemaDefinition, allSugars: SugarsByTag) {
 		this.numberArgs = schema.props.length;
 		this.sugar = schema.sugar;
 		this.props = schema.props;
