@@ -1,36 +1,29 @@
-import { BlockElement, InlineElement, InlineGroup } from "../ast/ast";
-import { Reserved } from "../schema/SchemaDefinition";
+import { IRNode, IRNodeList } from "../ir/IRNode";
 
-export function toXML(root: BlockElement): string {
-	const children = root.children.map(toXML);
-	const tag = root.tag || Reserved.defaultTag;
-	if (root.head.length > 0) {
-		return xmlTag(tag, false, xmlTag("head", true, lineToXML(root.head)), ...children);
-	} else {
-		return xmlTag(tag, false, ...children);
-	}
+export function toXML(root: IRNode, indentation: number = 0): string {
+	const children = Object.entries(root.props).map(([tag, nodeList]) =>
+		propToXML(tag, nodeList, indentation + 1)
+	);
+	return xmlTag(root.tag, indentation, ...children);
 }
 
-function inlineToXML(inline: InlineElement): string {
-	const singleArg = inline.args.length <= 1;
-	const args = singleArg
-		? inline.args.flatMap(lineToXML) // No <arg> for single inline arg
-		: inline.args.map(arg => xmlTag("arg", true, lineToXML(arg))); // <arg> for multiple args
-	return xmlTag(inline.tag, singleArg, ...args);
+function propToXML(tag: string, content: IRNodeList, indentation: number): string {
+	const children = content.map(node =>
+		typeof node === "string"
+			? indent(escapeXML(node), indentation + 1)
+			: toXML(node, indentation + 1)
+	);
+	return xmlTag(tag, indentation, ...children);
 }
 
-function lineToXML(line: InlineGroup): string {
-	return line
-		.map(value => (typeof value === "string" ? escapeXML(value) : inlineToXML(value)))
-		.join("");
-}
-
-function xmlTag(name: string, inline: boolean, ...children: string[]): string {
+function xmlTag(name: string, indentation: number, ...children: string[]): string {
 	if (children.length === 0) {
-		return `<${name}/>`;
+		return indent(`<${name}/>`, indentation);
 	} else {
-		const content = inline ? children : "\n" + indent(children) + "\n";
-		return `<${name}>${content}</${name}>`;
+		const openTag = indent(`<${name}>`, indentation);
+		const content = children.join("\n");
+		const closeTag = indent(`</${name}>`, indentation);
+		return `${openTag}\n${content}\n${closeTag}`;
 	}
 }
 
@@ -40,9 +33,10 @@ function escapeXML(str: string): string {
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
 		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&apos;");
+		.replace(/'/g, "&apos;")
+		.replace(/\t/g, "&#09;");
 }
 
-function indent(lines: string[]): string {
-	return lines.flatMap(line => line.split("\n").map(l => "\t" + l)).join("\n");
+function indent(line: string, indentation: number): string {
+	return "\t".repeat(indentation) + line;
 }

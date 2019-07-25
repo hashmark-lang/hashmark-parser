@@ -1,8 +1,16 @@
 <root>
-	<_default>
-		<head><link>
-			<arg>www.example.com</arg>
-			<arg>Example</arg>
-		</link></head>
-	</_default>
+	<content>
+		<paragraph>
+			<text>
+				<link>
+					<url>
+						www.example.com
+					</url>
+					<text>
+						Example
+					</text>
+				</link>
+			</text>
+		</paragraph>
+	</content>
 </root>

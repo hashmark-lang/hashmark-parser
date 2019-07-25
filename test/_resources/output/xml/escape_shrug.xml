@@ -1,5 +1,9 @@
 <root>
-	<_default>
-		<head>¯\_(ツ)_/¯</head>
-	</_default>
+	<content>
+		<paragraph>
+			<text>
+				¯\_(ツ)_/¯
+			</text>
+		</paragraph>
+	</content>
 </root>

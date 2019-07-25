@@ -1,8 +1,16 @@
 <root>
-	<section>
-		<head>Introduction</head>
-		<_default>
-			<head>Hello World</head>
-		</_default>
-	</section>
+	<content>
+		<section>
+			<title>
+				Introduction
+			</title>
+			<content>
+				<paragraph>
+					<text>
+						Hello World
+					</text>
+				</paragraph>
+			</content>
+		</section>
+	</content>
 </root>
