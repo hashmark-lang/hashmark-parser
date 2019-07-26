@@ -28,7 +28,8 @@ export const enum ErrorCode {
 	DUPLICATE_PROP_ASSIGNMENT,
 
 	// Validation errors:
-	UNKNOWN_TAG = 200,
+	UNKNOWN_BLOCK_TAG = 100,
+	UNKNOWN_INLINE_TAG,
 	DISALLOWED_IN_BLOCK,
 	DISALLOWED_IN_ARG,
 	DISALLOWED_IN_HEAD,
@@ -97,7 +98,13 @@ export abstract class ValidationError extends HMError {
 
 export class UnknownBlockTagError extends ValidationError {
 	constructor(tag: string, pos: InputPosition) {
-		super(ErrorCode.UNKNOWN_TAG, `Unknown block tag '${tag}'`, pos);
+		super(ErrorCode.UNKNOWN_BLOCK_TAG, `Unknown block tag '${tag}'`, pos);
+	}
+}
+
+export class UnknownInlineTagError extends ValidationError {
+	constructor(tag: string, pos: InputPosition) {
+		super(ErrorCode.UNKNOWN_INLINE_TAG, `Unknown inline tag '${tag}'`, pos);
 	}
 }
 

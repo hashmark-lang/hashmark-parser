@@ -85,15 +85,14 @@ export class IRBlockHandler implements BlockHandler {
 			return;
 		}
 
-		parent.node.props[headSchema.name] = headSchema.raw
-			? [content]
-			: this.parseHead(content, parent.schema, pos);
-	}
+		if (headSchema.raw) {
+			parent.node.props[headSchema.name] = [content];
+			return;
+		}
 
-	private parseHead(content: string, parentSchema: BlockSchema, pos: InputPosition): IRNodeList {
-		this.inlineHandler.reset();
-		this.inlineParser.parse(content, parentSchema.headSugarsByStart, pos);
-		return this.inlineHandler.getResult();
+		this.inlineHandler.reset(headSchema);
+		this.inlineParser.parse(content, parent.schema.headSugarsByStart, pos);
+		parent.node.props[headSchema.name] = this.inlineHandler.getResult();
 	}
 
 	rawLine(content: string, pos: InputPosition) {
