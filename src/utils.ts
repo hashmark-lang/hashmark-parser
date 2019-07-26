@@ -11,11 +11,6 @@ export function unique<T>(seq: Iterable<T>): T[] {
 	return [...new Set<T>(seq)];
 }
 
-export function intersection<T>(a: Iterable<T>, b: Iterable<T>): Set<T> {
-	const bSet = new Set([...b]);
-	return new Set([...a].filter(x => bSet.has(x)));
-}
-
 export function last<T>(seq: ArrayLike<T>): T {
 	return seq[seq.length - 1];
 }
