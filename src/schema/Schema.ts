@@ -7,6 +7,7 @@ import {
 	SchemaDefinition,
 	SugarSyntax
 } from "./SchemaDefinition";
+import { schemaErrors } from "./schemaErrors";
 
 type SugarsByTag = Map<string, Sugar>;
 
@@ -17,6 +18,11 @@ export class Schema {
 	readonly allSugars: Sugar[];
 
 	constructor(schema: SchemaDefinition) {
+		const errors = schemaErrors(schema);
+		if (errors.length > 0) {
+			throw new Error("Invalid schema. " + errors.map(e => e.toString()).join("\n"));
+		}
+
 		const allSugars = Schema.getSugars(schema);
 		this.allSugars = Array.from(allSugars.values());
 
