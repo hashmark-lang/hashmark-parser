@@ -3,7 +3,6 @@ import {
 	BlockPropDefinition,
 	BlockSchemaDefinition,
 	Cardinality,
-	InlinePropContentDefinition,
 	InlinePropDefinition,
 	RawBlockPropDefinition,
 	RawInlinePropDefinition,
@@ -56,11 +55,8 @@ export function rawProp(name: string): [RawBlockPropDefinition] {
 	return [{ name, raw: true }];
 }
 
-export function inlineProp(
-	name: string,
-	...content: Nested<InlinePropContentDefinition>
-): InlinePropDefinition {
-	return { name, content: content.flat() };
+export function inlineProp(name: string, content: string[]): InlinePropDefinition {
+	return { name, content: new Set(content) };
 }
 
 export function rawInlineProp(name: string): RawInlinePropDefinition {
@@ -73,17 +69,6 @@ export function flagTag(tag: string) {
 	return { tag, props: [] };
 }
 
-export function lineTag(
-	headName: string,
-	...headContent: Nested<InlinePropContentDefinition>
-): BlockSchemaDefinition {
-	return { head: { name: headName, content: headContent.flat() }, props: [] };
-}
-
 export function rawTag(bodyPropName: string): BlockSchemaDefinition {
 	return { props: [{ name: bodyPropName, raw: true }] };
-}
-
-export function ref(tag: string, schema: string = "[base]") {
-	return { tag, schema };
 }

@@ -98,22 +98,14 @@ export class InlineSchema {
 	readonly propNames: string[];
 
 	private readonly argsSugarsByStarts: SugarsByStart[];
-	private readonly props: InlinePropDefinition[];
+	readonly argsSchemas: ReadonlyArray<InlinePropDefinition>;
 
 	constructor(readonly tag: string, schema: InlineSchemaDefinition, allSugars: SugarsByTag) {
 		this.numberArgs = schema.props.length;
 		this.sugar = schema.sugar;
-		this.props = schema.props;
+		this.argsSchemas = schema.props;
 		this.propNames = schema.props.map(_ => _.name);
 		this.argsSugarsByStarts = schema.props.map(_ => getSugarsByStart(_, allSugars));
-	}
-
-	getArgName(index: number): string {
-		return this.props[index].name;
-	}
-
-	isRawArg(index: number): boolean {
-		return Boolean(this.props[index].raw);
 	}
 
 	getAllowedSugars(index: number): SugarsByStart {
@@ -123,14 +115,10 @@ export class InlineSchema {
 
 function getSugarsByStart(prop: InlinePropDefinition, allSugars: SugarsByTag): SugarsByStart {
 	if (prop.raw) return new Map();
-	const tags = prop.content.map(_ => _.tag);
-	const values = tags
-		.map(tag => allSugars.get(tag))
-		.filter((sugar): sugar is Sugar => sugar !== undefined);
-	return indexBy(sugar => sugar.syntax.start, values);
-}
-
-function indexBy<K, V>(keyGetter: (item: V) => K, array: V[]): Map<K, V> {
-	const entries = array.map(item => [keyGetter(item), item] as [K, V]);
-	return new Map(entries);
+	const result = new Map();
+	for (const tag of prop.content) {
+		const sugar = allSugars.get(tag);
+		if (sugar) result.set(sugar.syntax.start, sugar);
+	}
+	return result;
 }

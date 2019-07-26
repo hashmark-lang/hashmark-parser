@@ -1,10 +1,28 @@
 import { assert } from "chai";
-import { BlockParser, DisallowedDefaultTagError, HMError, UnknownBlockTagError } from "../../src";
+import {
+	BlockParser,
+	DisallowedDefaultTagError,
+	HMError,
+	UnknownBlockTagError,
+	UnknownInlineTagError
+} from "../../src";
 import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
 import { Schema } from "../../src/schema/Schema";
-import { SchemaDefinition } from "../../src/schema/SchemaDefinition";
-import { getAllowAllSchema, getDocumentSchema, getEmptySchema } from "../schemas";
+import {
+	inlineProp,
+	prop,
+	rawInlineProp,
+	rawTag,
+	sugar,
+	zeroOrMore
+} from "../../src/schema/schema-generators";
+import {
+	Cardinality,
+	INVALID_TAG,
+	ROOT,
+	SchemaDefinition
+} from "../../src/schema/SchemaDefinition";
 import { filePairs, resourceFile } from "../utils";
 
 describe("IRHandler", () => {
@@ -57,6 +75,11 @@ describe("IRHandler", () => {
 			assert.notStrictEqual(error, undefined);
 		});
 
+		it("logs UnknownInlineError when an inline element is used", () => {
+			parse(resourceFile("input", "inline_start_of_line.hm").read());
+			assert.exists(errors.find(e => e instanceof UnknownInlineTagError));
+		});
+
 		testOutput("document-schema");
 	});
 
@@ -77,3 +100,72 @@ describe("IRHandler", () => {
 		}
 	}
 });
+
+function getAllowAllSchema(): SchemaDefinition {
+	const blockProps = [
+		{ name: "children", content: [{ tag: INVALID_TAG, cardinality: Cardinality.ZeroOrMore }] }
+	];
+
+	const blockContent = {
+		head: { name: "head", content: new Set<string>() },
+		props: blockProps,
+		defaultTag: "_default"
+	};
+
+	return {
+		blocks: {
+			[ROOT]: blockContent,
+			["_default"]: blockContent,
+			[INVALID_TAG]: blockContent
+		},
+		inline: {}
+	};
+}
+
+function getEmptySchema(): SchemaDefinition {
+	return {
+		blocks: {
+			[ROOT]: { props: [] }
+		},
+		inline: {}
+	};
+}
+
+function getDocumentSchema(): SchemaDefinition {
+	const inlineTags = ["link", "bold", "inline", "code"];
+	const blockContent = ["paragraph", "section", "code"].map(tag => zeroOrMore(tag));
+
+	return {
+		blocks: {
+			[ROOT]: {
+				defaultTag: "paragraph",
+				props: [prop("content", blockContent)]
+			},
+			["paragraph"]: {
+				head: inlineProp("text", inlineTags),
+				props: []
+			},
+			["section"]: {
+				head: inlineProp("title", inlineTags),
+				defaultTag: "paragraph",
+				props: [prop("content", blockContent)]
+			},
+			["code"]: rawTag("content")
+		},
+
+		inline: {
+			["link"]: {
+				sugar: sugar("[", "](", ")"),
+				props: [rawInlineProp("url"), inlineProp("text", ["bold"])]
+			},
+			["bold"]: {
+				sugar: sugar("*", "*"),
+				props: [inlineProp("text", ["link"])]
+			},
+			["code"]: {
+				props: [rawInlineProp("content")],
+				sugar: sugar("`", "`")
+			}
+		}
+	};
+}

@@ -61,12 +61,7 @@ export interface RawInlinePropDefinition {
 export interface ParsedInlinePropDefinition {
 	name: string;
 	raw?: undefined;
-	content: InlinePropContentDefinition[];
-}
-
-export interface InlinePropContentDefinition {
-	schema: string;
-	tag: string;
+	content: ReadonlySet<string>;
 }
 
 export interface SugarSyntax {
