@@ -22,7 +22,13 @@ export abstract class HMError extends Error {
 }
 
 export const enum ErrorCode {
-	UNKNOWN_TAG = 100,
+	// Definition errors:
+	DUPLICATE_PROP_NAME = 100,
+	DUPLICATE_PROP_CONTENT,
+	DUPLICATE_PROP_ASSIGNMENT,
+
+	// Validation errors:
+	UNKNOWN_TAG = 200,
 	DISALLOWED_IN_BLOCK,
 	DISALLOWED_IN_ARG,
 	DISALLOWED_IN_HEAD,
@@ -30,6 +36,46 @@ export const enum ErrorCode {
 	DISALLOWED_ARG,
 	DISALLOWED_HEAD,
 	DISALLOWED_DEFAULT_TAG
+}
+
+//////////////////////////////
+// Schema definition errors //
+//////////////////////////////
+
+export abstract class SchemaDefinitionError extends HMError {
+	constructor(code: ErrorCode, message: string) {
+		super(code, message);
+	}
+}
+
+export class DuplicatePropNameError extends SchemaDefinitionError {
+	constructor(tag: string, propName: string, repetitions: number) {
+		super(
+			ErrorCode.DUPLICATE_PROP_NAME,
+			`Each prop name must be unique within a tag schema, ` +
+				`but prop '${propName}' in the schema for tag '${tag}' was defined ${repetitions} times`
+		);
+	}
+}
+
+export class DuplicatePropTagsError extends SchemaDefinitionError {
+	constructor(tag: string, propName: string, contentTag: string, repetitions: number) {
+		super(
+			ErrorCode.DUPLICATE_PROP_CONTENT,
+			`Each tag can be placed at most once in a prop content, ` +
+				`but tag '${contentTag}' was placed ${repetitions} times in prop '${propName}' in the schema for tag '${tag}'`
+		);
+	}
+}
+
+export class DuplicatePropAssignmentError extends SchemaDefinitionError {
+	constructor(tag: string, propNames: string[], contentTag: string) {
+		super(
+			ErrorCode.DUPLICATE_PROP_ASSIGNMENT,
+			`A tag can be assigned to at most one prop, but in the schema for '${tag}', ` +
+				`${contentTag} was assigned to ${propNames.join(", ")}`
+		);
+	}
 }
 
 //////////////////////////////

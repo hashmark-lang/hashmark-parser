@@ -1,4 +1,10 @@
-import { countOccurrences, intersection, unique } from "../utils";
+import { countOccurrences, unique } from "../utils";
+import {
+	DuplicatePropAssignmentError,
+	DuplicatePropNameError,
+	DuplicatePropTagsError,
+	SchemaDefinitionError
+} from "./errors";
 import { BlockPropDefinition, RawBlockPropDefinition, SchemaDefinition } from "./SchemaDefinition";
 
 // Schema rules:
@@ -6,77 +12,73 @@ import { BlockPropDefinition, RawBlockPropDefinition, SchemaDefinition } from ".
 //   2) All block prop content tags must be declared once
 //   3) The pairwise intersection of block prop contents must be empty
 
-export function checkSchemaDefinition(schema: SchemaDefinition): Error[] {
-	function* checkBlockProps(): IterableIterator<Error> {
-		for (const [tag, tagSchema] of Object.entries(schema.blocks)) {
-			const props = tagSchema.props;
-			if (!isRawBlockProp(props)) {
-				const propNames = props.map(prop => prop.name);
-				const propContentTags = props.map(({ name, content }) => ({
-					name,
-					content: content.map(_ => _.tag)
-				}));
+export function checkSchemaDefinition(schema: SchemaDefinition): SchemaDefinitionError[] {
+	const errors: SchemaDefinitionError[] = [];
 
-				yield* duplicatePropNameErrors(tag, propNames); // Rule 1
-				yield* duplicateTagNameErrors(tag, propContentTags); // Rule 2
-				yield* propsIntersectionErrors(tag, propContentTags); // Rule 3
-			}
-		}
-	}
+	for (const [tag, tagSchema] of Object.entries(schema.blocks)) {
+		const props = tagSchema.props;
+		if (!isRawBlockProp(props)) {
+			const propNames = props.map(prop => prop.name);
+			const propContentTags = props.map(({ name, content }) => ({
+				name,
+				content: content.map(_ => _.tag)
+			}));
 
-	function* checkInlineProps(): IterableIterator<Error> {
-		for (const [tag, tagSchema] of Object.entries(schema.inline)) {
-			const propNames = tagSchema.props.map(prop => prop.name);
-			yield* duplicatePropNameErrors(tag, propNames); // Rule 1
-		}
-	}
-
-	return [...checkBlockProps(), ...checkInlineProps()];
-}
-
-function* propsIntersectionErrors(
-	tag: string,
-	props: Array<{ name: string; content: string[] }>
-): IterableIterator<Error> {
-	for (let i = 0; i < props.length; ++i) {
-		for (let j = i + 1; j < props.length; ++j) {
-			const common = intersection(props[i].content, props[j].content);
-			if (common.size > 0) {
-				const commonString = [...common].join(", ");
-				yield new Error(
-					`Props '${props[i].name}' and '${props[j].name}' in schema for '${tag}' cannot have elements in common,` +
-						`but have the following items in common: ${commonString}`
-				);
-			}
-		}
-	}
-}
-
-function* duplicateTagNameErrors(
-	tag: string,
-	props: Array<{ name: string; content: string[] }>
-): IterableIterator<Error> {
-	for (const { name, content } of props) {
-		if (hasDuplicates(content)) {
-			const errors = findDuplicates(content)
-				.map(
-					([contentTag, count]) => `Content tag '${contentTag}' is defined ${count} times`
-				)
-				.join("; ");
-			yield new Error(
-				`All content tags in prop '${name}' of tag '${tag}' must be unique. ${errors}`
+			errors.push(
+				...duplicatePropNameErrors(tag, propNames), // Rule 1
+				...duplicatePropTagsErrors(tag, propContentTags), // Rule 2
+				...duplicatePropAssignmentErrors(tag, propContentTags) // Rule 3
 			);
 		}
 	}
+
+	for (const [tag, tagSchema] of Object.entries(schema.inline)) {
+		const propNames = tagSchema.props.map(prop => prop.name);
+		errors.push(...duplicatePropNameErrors(tag, propNames)); // Rule 1
+	}
+
+	return errors;
 }
 
-function* duplicatePropNameErrors(tag: string, propNames: string[]): IterableIterator<Error> {
-	if (hasDuplicates(propNames)) {
-		const errors = findDuplicates(propNames)
-			.map(([propName, count]) => `Prop '${propName}' is defined ${count} times`)
-			.join("; ");
-		yield new Error(`All prop names in '${tag}' schema must be unique. ${errors}`);
+function duplicatePropAssignmentErrors(
+	tag: string,
+	props: Array<{ name: string; content: string[] }>
+): DuplicatePropAssignmentError[] {
+	const propsSets = props.map(({ name, content }) => ({ name, content: new Set(content) }));
+	const contentTags: Set<string> = new Set(props.flatMap(prop => prop.content));
+	const errors: DuplicatePropAssignmentError[] = [];
+	for (const contentTag of contentTags) {
+		const assignments = propsSets.filter(propSet => propSet.content.has(contentTag));
+		if (assignments.length > 1) {
+			errors.push(
+				new DuplicatePropAssignmentError(tag, assignments.map(_ => _.name), contentTag)
+			);
+		}
 	}
+	return errors;
+}
+
+function duplicatePropTagsErrors(
+	tag: string,
+	props: Array<{ name: string; content: string[] }>
+): DuplicatePropTagsError[] {
+	return props
+		.filter(prop => hasDuplicates(prop.content))
+		.flatMap(prop =>
+			findDuplicates(prop.content).map(
+				([contentTag, count]) =>
+					new DuplicatePropTagsError(tag, prop.name, contentTag, count)
+			)
+		);
+}
+
+function duplicatePropNameErrors(tag: string, propNames: string[]): DuplicatePropNameError[] {
+	if (hasDuplicates(propNames)) {
+		return findDuplicates(propNames).map(
+			([propName, count]) => new DuplicatePropNameError(tag, propName, count)
+		);
+	}
+	return [];
 }
 
 function hasDuplicates<T>(seq: T[]): boolean {
