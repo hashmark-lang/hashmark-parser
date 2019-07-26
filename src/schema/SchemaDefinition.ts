@@ -1,6 +1,3 @@
-// Additional rule:
-//   All prop names within an element must be different
-
 export const enum Reserved {
 	rootTag = "root",
 	defaultTag = "_default",
