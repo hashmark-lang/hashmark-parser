@@ -49,7 +49,7 @@ export abstract class SchemaDefinitionError extends HMError {
 }
 
 export class DuplicatePropNameError extends SchemaDefinitionError {
-	constructor(tag: string, propName: string, repetitions: number) {
+	constructor(readonly tag: string, readonly propName: string, readonly repetitions: number) {
 		super(
 			ErrorCode.DUPLICATE_PROP_NAME,
 			`Each prop name must be unique within a tag schema, ` +
@@ -59,7 +59,12 @@ export class DuplicatePropNameError extends SchemaDefinitionError {
 }
 
 export class DuplicatePropTagsError extends SchemaDefinitionError {
-	constructor(tag: string, propName: string, contentTag: string, repetitions: number) {
+	constructor(
+		readonly tag: string,
+		readonly propName: string,
+		readonly contentTag: string,
+		readonly repetitions: number
+	) {
 		super(
 			ErrorCode.DUPLICATE_PROP_CONTENT,
 			`Each tag can be placed at most once in a prop content, ` +
@@ -69,7 +74,7 @@ export class DuplicatePropTagsError extends SchemaDefinitionError {
 }
 
 export class DuplicatePropAssignmentError extends SchemaDefinitionError {
-	constructor(tag: string, propNames: string[], contentTag: string) {
+	constructor(readonly tag: string, readonly propNames: string[], readonly contentTag: string) {
 		super(
 			ErrorCode.DUPLICATE_PROP_ASSIGNMENT,
 			`A tag can be assigned to at most one prop, but in the schema for '${tag}', ` +
