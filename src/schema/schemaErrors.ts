@@ -12,7 +12,7 @@ import { BlockPropDefinition, RawBlockPropDefinition, SchemaDefinition } from ".
 //   2) All block prop content tags must be declared once
 //   3) The pairwise intersection of block prop contents must be empty
 
-export function checkSchemaDefinition(schema: SchemaDefinition): SchemaDefinitionError[] {
+export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] {
 	const errors: SchemaDefinitionError[] = [];
 
 	for (const [tag, tagSchema] of Object.entries(schema.blocks)) {
