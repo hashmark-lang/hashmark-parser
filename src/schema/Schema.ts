@@ -31,7 +31,7 @@ export class Schema {
 		}
 
 		for (const [tag, blockSchema] of Object.entries(schema.blocks)) {
-			this.blockSchemas.set(tag, new BlockSchema(blockSchema, allSugars));
+			this.blockSchemas.set(tag, new BlockSchema(tag, blockSchema, allSugars));
 		}
 	}
 
@@ -57,14 +57,14 @@ export class BlockSchema {
 	private childTagToProp: Map<string, string> = new Map();
 
 	readonly defaultTag?: string;
-	readonly head?: InlinePropDefinition;
+	readonly head?: InlineGroupSchema;
 	readonly headSugarsByStart: SugarsByStart = new Map();
 
 	readonly propNames: string[];
 	readonly rawPropName?: string;
 
-	constructor(schema: BlockSchemaDefinition, allSugars: SugarsByTag) {
-		this.head = schema.head;
+	constructor(readonly tag: string, schema: BlockSchemaDefinition, allSugars: SugarsByTag) {
+		this.head = schema.head ? new InlineGroupSchema(tag, schema.head) : undefined;
 		this.defaultTag = schema.defaultTag;
 
 		const propsSet = new Set<string>(); // set of prop names
@@ -98,18 +98,34 @@ export class InlineSchema {
 	readonly propNames: string[];
 
 	private readonly argsSugarsByStarts: SugarsByStart[];
-	readonly argsSchemas: ReadonlyArray<InlinePropDefinition>;
+	readonly argsSchemas: ReadonlyArray<InlineGroupSchema>;
 
 	constructor(readonly tag: string, schema: InlineSchemaDefinition, allSugars: SugarsByTag) {
 		this.numberArgs = schema.props.length;
 		this.sugar = schema.sugar;
-		this.argsSchemas = schema.props;
+		this.argsSchemas = schema.props.map(_ => new InlineGroupSchema(tag, _));
 		this.propNames = schema.props.map(_ => _.name);
 		this.argsSugarsByStarts = schema.props.map(_ => getSugarsByStart(_, allSugars));
 	}
 
 	getAllowedSugars(index: number): SugarsByStart {
 		return this.argsSugarsByStarts[index];
+	}
+}
+
+export class InlineGroupSchema {
+	readonly name: string;
+	readonly raw: boolean;
+	private readonly validChildren: Set<string>;
+
+	constructor(readonly parentTag: string, schema: InlinePropDefinition) {
+		this.name = schema.name;
+		this.raw = Boolean(schema.raw);
+		this.validChildren = new Set(schema.raw ? [] : schema.content);
+	}
+
+	isValidChild(tag: string) {
+		return this.validChildren.has(tag);
 	}
 }
 
