@@ -34,12 +34,7 @@ describe("xml", () => {
 });
 
 function getDocumentSchema(): SchemaDefinition {
-	const inlineTags = [
-		{ schema: "[base]", tag: "link" },
-		{ schema: "[base]", tag: "strong" },
-		{ schema: "[base]", tag: "inline" },
-		{ schema: "[base]", tag: "code" }
-	];
+	const inlineTags = ["link", "strong", "inline", "code"];
 	const blockContent = [
 		{ tag: "paragraph", cardinality: Cardinality.ZeroOrMore },
 		{ tag: "section", cardinality: Cardinality.ZeroOrMore },
@@ -83,17 +78,14 @@ function getDocumentSchema(): SchemaDefinition {
 					separator: "](",
 					end: ")"
 				},
-				props: [
-					{ name: "url", raw: true },
-					{ name: "text", content: [{ schema: "[base]", tag: "strong" }] }
-				]
+				props: [{ name: "url", raw: true }, { name: "text", content: ["strong"] }]
 			},
 			["strong"]: {
 				sugar: {
 					start: "*",
 					end: "*"
 				},
-				props: [{ name: "text", content: [{ schema: "[base]", tag: "link" }] }]
+				props: [{ name: "text", content: ["link"] }]
 			},
 			["inline"]: {
 				props: [
