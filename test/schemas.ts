@@ -1,10 +1,8 @@
 import {
 	inlineProp,
-	lineTag,
 	prop,
 	rawInlineProp,
 	rawTag,
-	ref,
 	sugar,
 	zeroOrMore
 } from "../src/schema/schema-generators";
@@ -41,7 +39,7 @@ export function getEmptySchema(): SchemaDefinition {
 }
 
 export function getDocumentSchema(): SchemaDefinition {
-	const inlineTags = ["link", "bold", "inline", "code"].map(tag => ref(tag));
+	const inlineTags = ["link", "bold", "inline", "code"];
 	const blockContent = ["paragraph", "section", "code"].map(tag => zeroOrMore(tag));
 
 	return {
@@ -50,7 +48,10 @@ export function getDocumentSchema(): SchemaDefinition {
 				defaultTag: "paragraph",
 				props: [prop("content", blockContent)]
 			},
-			["paragraph"]: lineTag("text", inlineTags),
+			["paragraph"]: {
+				head: inlineProp("title", inlineTags),
+				props: []
+			},
 			["section"]: {
 				head: inlineProp("title", inlineTags),
 				defaultTag: "paragraph",
@@ -62,11 +63,11 @@ export function getDocumentSchema(): SchemaDefinition {
 		inline: {
 			["link"]: {
 				sugar: sugar("[", "](", ")"),
-				props: [rawInlineProp("url"), inlineProp("text", ref("bold"))]
+				props: [rawInlineProp("url"), inlineProp("text", ["bold"])]
 			},
 			["bold"]: {
 				sugar: sugar("*", "*"),
-				props: [inlineProp("text", ref("link"))]
+				props: [inlineProp("text", ["link"])]
 			},
 			["inline"]: {
 				props: [inlineProp("inlineContent", inlineTags)]
