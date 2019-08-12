@@ -6,7 +6,7 @@ import {
 	DisallowedInHeadError,
 	UnknownInlineTagError
 } from "../schema/errors";
-import { InlineSchema, Schema } from "../schema/Schema";
+import { InlineGroupSchema, InlineSchema, Schema } from "../schema/Schema";
 import { InlinePropDefinition } from "../schema/SchemaDefinition";
 import { last } from "../utils";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
@@ -14,7 +14,7 @@ import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 export class IRInlineHandler implements InlineHandler {
 	protected readonly inlineGroupStack: Array<{
 		nodeList: IRNodeList;
-		schema: InlinePropDefinition;
+		schema: InlineGroupSchema;
 	} | null> = [];
 	protected readonly inlineElementStack: Array<{
 		node: IRNode;
@@ -27,7 +27,7 @@ export class IRInlineHandler implements InlineHandler {
 		return this.inlineGroupStack[0]!.nodeList;
 	}
 
-	reset(rootSchema: InlinePropDefinition) {
+	reset(rootSchema: InlineGroupSchema) {
 		this.inlineGroupStack.length = 0;
 		this.inlineElementStack.length = 0;
 		this.inlineGroupStack.push({ nodeList: [], schema: rootSchema });
@@ -47,11 +47,11 @@ export class IRInlineHandler implements InlineHandler {
 
 		if (parent.schema.raw) throw new Error("");
 
-		if (!parent.schema.content.includes(tag)) {
+		if (!parent.schema.isValidChild(tag)) {
 			if (this.inlineElementStack.length > 0) {
 				this.log(new DisallowedInArgError(tag, parent.schema.name, pos));
 			} else {
-				this.log(new DisallowedInHeadError(tag, "[parent]", pos));
+				this.log(new DisallowedInHeadError(tag, parent.schema.parentTag, pos));
 			}
 			return;
 		}
