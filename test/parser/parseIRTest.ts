@@ -107,7 +107,7 @@ function getAllowAllSchema(): SchemaDefinition {
 	];
 
 	const blockContent = {
-		head: { name: "head", content: new Set<string>() },
+		head: { name: "head", content: [] },
 		props: blockProps,
 		defaultTag: "_default"
 	};

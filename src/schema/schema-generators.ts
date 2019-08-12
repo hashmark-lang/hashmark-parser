@@ -51,7 +51,7 @@ export function rawProp(name: string): [RawBlockPropDefinition] {
 }
 
 export function inlineProp(name: string, content: string[]): InlinePropDefinition {
-	return { name, content: new Set(content) };
+	return { name, content };
 }
 
 export function rawInlineProp(name: string): RawInlinePropDefinition {
