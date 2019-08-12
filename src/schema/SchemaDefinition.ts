@@ -61,7 +61,7 @@ export interface RawInlinePropDefinition {
 export interface ParsedInlinePropDefinition {
 	name: string;
 	raw?: undefined;
-	content: ReadonlySet<string>;
+	content: string[];
 }
 
 export interface SugarSyntax {
