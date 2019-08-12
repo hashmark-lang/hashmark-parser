@@ -78,7 +78,7 @@ describe("schemaErrors()", () => {
 		const schema: SchemaDefinition = {
 			blocks: {
 				[ROOT]: {
-					props: [prop("foo", zeroOrMore("bar"), oneOrMore("bar"))]
+					props: [prop("foo", [zeroOrMore("bar"), oneOrMore("bar")])]
 				}
 			},
 			inline: {}
@@ -100,9 +100,9 @@ describe("schemaErrors()", () => {
 			blocks: {
 				[ROOT]: {
 					props: [
-						prop("foo", zeroOrMore("bar")),
-						prop("baz", oneOrMore("bar")),
-						prop("qux", oneOrMore("bar"))
+						prop("foo", [zeroOrMore("bar")]),
+						prop("baz", [oneOrMore("bar")]),
+						prop("qux", [oneOrMore("bar")])
 					]
 				}
 			},

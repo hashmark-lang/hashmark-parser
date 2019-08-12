@@ -9,8 +9,6 @@ import {
 	SugarSyntax
 } from "./SchemaDefinition";
 
-type Nested<T> = Array<T | T[]>;
-
 // Cardinality:
 
 export function oneOrMore(tag: string): BlockPropContentDefinition {
@@ -44,10 +42,7 @@ export function sugar(a: string, b: string, c?: string): SugarSyntax {
 
 // Props:
 
-export function prop(
-	name: string,
-	...content: Nested<BlockPropContentDefinition>
-): BlockPropDefinition {
+export function prop(name: string, content: BlockPropContentDefinition[]): BlockPropDefinition {
 	return { name, content: content.flat() };
 }
 
