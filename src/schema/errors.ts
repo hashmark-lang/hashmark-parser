@@ -1,4 +1,4 @@
-import { BlockElement, InlineElement } from "../ast/ast";
+import { BlockElement } from "../ast/ast";
 import { InputPosition } from "../parser/InputPosition";
 import { ordinal } from "../utils";
 

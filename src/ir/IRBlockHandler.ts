@@ -10,10 +10,10 @@ import {
 	UnknownBlockTagError
 } from "../schema/errors";
 import { BlockSchema, Schema } from "../schema/Schema";
-import { ParsedInlinePropDefinition, ROOT } from "../schema/SchemaDefinition";
+import { ROOT } from "../schema/SchemaDefinition";
 import { last } from "../utils";
 import { IRInlineHandler } from "./IRInlineHandler";
-import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
+import { emptyBlockProps, IRNode } from "./IRNode";
 
 export class IRBlockHandler implements BlockHandler {
 	private readonly inlineHandler: IRInlineHandler;
