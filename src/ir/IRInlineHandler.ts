@@ -7,7 +7,6 @@ import {
 	UnknownInlineTagError
 } from "../schema/errors";
 import { InlineGroupSchema, InlineSchema, Schema } from "../schema/Schema";
-import { InlinePropDefinition } from "../schema/SchemaDefinition";
 import { last } from "../utils";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
