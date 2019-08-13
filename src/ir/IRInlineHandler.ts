@@ -71,13 +71,13 @@ export class IRInlineHandler implements InlineHandler {
 			this.inlineGroupStack.push(null);
 			return false;
 		}
-		if (index >= parent.schema.numberArgs) {
+		if (index >= parent.schema.args.length) {
 			this.log(new DisallowedArgError(parent.schema.tag, index, length, pos));
 			this.inlineGroupStack.push(null);
 			return false;
 		}
 
-		const schema = parent.schema.argsSchemas[index];
+		const schema = parent.schema.args[index];
 		this.inlineGroupStack.push({ nodeList: parent.node.props[schema.name], schema });
 		return !schema.raw;
 	}
