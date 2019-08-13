@@ -1,14 +1,11 @@
 import { assert } from "chai";
 import {
-	BlockParser,
 	DisallowedDefaultTagError,
 	HMError,
 	UnknownBlockTagError,
 	UnknownInlineTagError
 } from "../../src";
-import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
-import { Schema } from "../../src/schema/Schema";
 import {
 	inlineProp,
 	prop,
@@ -23,68 +20,56 @@ import {
 	ROOT,
 	SchemaDefinition
 } from "../../src/schema/SchemaDefinition";
-import { filePairs, resourceFile } from "../utils";
+import { filePairs, makeTestParser, resourceFile } from "../utils";
+
+// tslint:disable-next-line:ban-types
+function assertError(result: HMError[] | IRNode, expected: Function) {
+	assert.instanceOf(result, Array, "Expected the result to be a list of errors");
+	const error = (result as HMError[]).find(err => err instanceof expected);
+	assert.exists(error, `Expected to see a ${expected.name} error`);
+}
 
 describe("IRHandler", () => {
-	const errors: HMError[] = [];
-	const logger = (x: HMError) => errors.push(x);
-
-	beforeEach(() => {
-		errors.length = 0;
-	});
-
-	let parse: (input: string) => IRNode;
-	const makeParser = (schema: SchemaDefinition) => {
-		const handler = new IRBlockHandler(new Schema(schema), logger);
-		const parser = new BlockParser(handler);
-		parse = (input: string): IRNode => {
-			handler.reset();
-			parser.parse(input);
-			return handler.getResult();
-		};
-	};
+	let parse: (input: string) => [HMError[], IRNode];
 
 	describe("empty-schema", () => {
-		before(() => makeParser(getEmptySchema()));
+		before(() => (parse = makeTestParser(getEmptySchema())));
 
 		it("logs UnknownBlockTagError when a block is used", () => {
 			const input = resourceFile("input", "block_tag.hm").read();
-			parse(input);
-			const error = errors.find(e => e instanceof UnknownBlockTagError)!;
-			assert.notStrictEqual(error, undefined);
+			const [errors] = parse(input);
+			assertError(errors, UnknownBlockTagError);
 		});
 
 		it("logs DisallowedDefaultTagError when a default is used", () => {
 			const input = resourceFile("input", "paragraphs.hm").read();
-			parse(input);
-			const error = errors.find(e => e instanceof DisallowedDefaultTagError)!;
-			assert.notStrictEqual(error, undefined);
+			const [errors] = parse(input);
+			assertError(errors, DisallowedDefaultTagError);
 		});
 
 		testOutput("empty-schema");
 	});
 
 	describe("document-schema", () => {
-		before(() => makeParser(getDocumentSchema()));
+		before(() => (parse = makeTestParser(getDocumentSchema())));
 
 		it("logs UnknownBlockTagError when an unknown block is used", () => {
 			const input = resourceFile("input", "nested_blocks.hm").read();
-			parse(input);
-			// #def is not in document schema
-			const error = errors.find(e => e instanceof UnknownBlockTagError)!;
-			assert.notStrictEqual(error, undefined);
+			const [errors] = parse(input);
+			assertError(errors, UnknownBlockTagError); // #def is not in document schema
 		});
 
 		it("logs UnknownInlineError when an inline element is used", () => {
-			parse(resourceFile("input", "inline_start_of_line.hm").read());
-			assert.exists(errors.find(e => e instanceof UnknownInlineTagError));
+			const input = resourceFile("input", "inline_start_of_line.hm").read();
+			const [errors] = parse(input);
+			assertError(errors, UnknownInlineTagError);
 		});
 
 		testOutput("document-schema");
 	});
 
 	describe("allow-all-schema", () => {
-		before(() => makeParser(getAllowAllSchema()));
+		before(() => (parse = makeTestParser(getAllowAllSchema())));
 
 		testOutput("allow-all-schema");
 	});
@@ -92,9 +77,11 @@ describe("IRHandler", () => {
 	function testOutput(folder: string) {
 		for (const [input, output] of filePairs(`parser-ir/${folder}`, ".json")) {
 			it(`works with ${input.name}`, () => {
+				const [, result] = parse(input.read());
+				const expected = JSON.parse(output.read());
 				assert.strictEqual(
-					JSON.stringify(parse(input.read()), null, "\t"),
-					JSON.stringify(JSON.parse(output.read()), null, "\t")
+					JSON.stringify(result, null, "\t"),
+					JSON.stringify(expected, null, "\t")
 				);
 			});
 		}

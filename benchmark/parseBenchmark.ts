@@ -17,7 +17,7 @@ import { formatBytes, generateBenchmarkInput } from "./utils";
 			JSON.parse(jsonAst);
 		})
 		.add("String.matchAll", () => {
-			for (const token of input.matchAll(
+			for (const _ of input.matchAll(
 				/(?:((?:\r\n|\n|\r|^)(\t*)[\t ]*(?:#([^ \[\r\n]+)(?: |$))?)|(#([^ \[]+)(\[)?)|(]\[)|(\[)|(\\(.)))/g
 			));
 		})

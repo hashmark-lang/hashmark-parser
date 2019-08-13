@@ -1,5 +1,9 @@
 import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
+import { HMError } from "../src";
+import { IRNode } from "../src/ir/IRNode";
+import { makeParser } from "../src/parser/parse";
+import { SchemaDefinition } from "../src/schema/SchemaDefinition";
 
 export class File {
 	constructor(readonly filePath: string) {}
@@ -54,4 +58,15 @@ export function deindent(multiline: string): string {
 	const indentation = lines[0].search(/[^\t]/);
 	const deindented = lines.map(line => line.substring(indentation)).join("\n");
 	return deindented;
+}
+
+export function makeTestParser(schema: SchemaDefinition): (input: string) => [HMError[], IRNode] {
+	const errors: HMError[] = [];
+	const logger = (error: HMError) => errors.push(error);
+	const parse = makeParser(schema, logger);
+	return (input: string) => {
+		errors.length = 0;
+		const result = parse(input);
+		return [errors, result];
+	};
 }

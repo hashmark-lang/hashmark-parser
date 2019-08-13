@@ -1,22 +1,16 @@
 /* tslint:disable:no-console */
 import { Event, Suite } from "benchmark";
-import { IRBlockHandler } from "../src/ir/IRBlockHandler";
 import { toXML } from "../src/output/xml";
-import { BlockParser } from "../src/parser/BlockParser";
-import { SchemaDecorator } from "../src/schema/Schema";
-import { Cardinality, INVALID_TAG, ROOT, SchemaDefinition } from "../src/schema/SchemaDefinition";
+import { getAllowAllSchema } from "../test/schemas";
+import { makeTestParser } from "../test/utils";
 import { formatBytes, generateBenchmarkInput } from "./utils";
 
 const input = generateBenchmarkInput();
 console.log("Size of test input: " + formatBytes(input.length));
 
-const parser = new BlockParser(
-	new IRBlockHandler(new SchemaDecorator(getAllowAllSchema()), item => item)
-);
-
-const ast = parser.parse(input);
-if (ast === null) {
-	throw new Error("AST was null");
+const [errors, ast] = makeTestParser(getAllowAllSchema())(input);
+if (errors.length > 0) {
+	throw new Error("There were parsing errors. " + errors);
 }
 
 new Suite("XML serialization")
@@ -35,28 +29,3 @@ new Suite("XML serialization")
 	})
 	// run async
 	.run({ async: true });
-
-function getAllowAllSchema(): SchemaDefinition {
-	const blockProps = [
-		{ name: "children", content: [{ tag: INVALID_TAG, cardinality: Cardinality.ZeroOrMore }] }
-	];
-
-	const blockContent = {
-		head: { name: "head", content: [] },
-		props: blockProps,
-		defaultTag: "_default"
-	};
-
-	return {
-		blocks: {
-			[ROOT]: blockContent,
-			["_default"]: blockContent,
-			[INVALID_TAG]: blockContent
-		},
-		inline: {
-			[INVALID_TAG]: {
-				props: [{ name: "arg", content: [{ tag: INVALID_TAG, schema: "[base]" }] }]
-			}
-		}
-	};
-}
