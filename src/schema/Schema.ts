@@ -77,13 +77,11 @@ export class BlockSchema {
 }
 
 export class InlineSchema {
-	readonly numberArgs: number;
 	readonly propNames: string[];
-	readonly argsSchemas: ReadonlyArray<InlineGroupSchema>;
+	readonly args: ReadonlyArray<InlineGroupSchema>;
 
 	constructor(readonly tag: string, schema: InlineSchemaDefinition) {
-		this.numberArgs = schema.props.length;
-		this.argsSchemas = schema.props.map(_ => new InlineGroupSchema(tag, _));
+		this.args = schema.props.map(_ => new InlineGroupSchema(tag, _));
 		this.propNames = schema.props.map(_ => _.name);
 	}
 }
