@@ -1,6 +1,7 @@
 import { last, regexpUnion, stringToRegexp, unique } from "../utils";
-import { InlineHandler, Sugar, SugarsByStart } from "./InlineHandler";
+import { InlineHandler } from "./InlineHandler";
 import { InputPosition } from "./InputPosition";
+import { Sugar } from "./Sugar";
 
 interface InlineSyntax {
 	separator?: string;
@@ -13,14 +14,15 @@ export class InlineParser {
 	// An inline tag can be treated as a explicitly named version of inline sugar with ][ separator, and ] end tag:
 	private readonly inlineTagSyntax = { separator: "][", end: "]" };
 	// Stack of currently open inline elements:
-	private stack: Array<{ syntax: InlineSyntax; length: number }> = [];
+	private readonly stack: Array<{ syntax: InlineSyntax; length: number }> = [];
 
 	// Map of sugar start character to sugar definition:
-	private sugars?: Map<string, Sugar>;
+	private readonly sugarsByStart: Map<string, Sugar>;
 	private isRaw?: boolean;
 
-	constructor(private readonly handler: InlineHandler) {
-		const customTokens = handler.allSugars.map(_ => _.syntax).flatMap(Object.values);
+	constructor(private readonly handler: InlineHandler, sugars: Sugar[] = []) {
+		const customTokens = sugars.map(_ => _.syntax).flatMap(Object.values);
+		this.sugarsByStart = new Map(sugars.map(_ => [_.syntax.start, _]));
 		this.regex = regexpUnion(
 			/\\./,
 			/#[^ \[]+\[?/,
@@ -32,10 +34,9 @@ export class InlineParser {
 		);
 	}
 
-	parse(input: string, sugars: SugarsByStart, pos: InputPosition): void {
+	parse(input: string, pos: InputPosition): void {
 		const tokens = input.split(this.regex);
 		this.stack.length = 0;
-		this.sugars = sugars;
 		this.isRaw = false;
 
 		for (let i = 0; i < tokens.length; ++i) {
@@ -88,7 +89,7 @@ export class InlineParser {
 					}
 				}
 
-				const sugar = this.sugars!.get(token);
+				const sugar = this.sugarsByStart.get(token);
 				if (sugar) {
 					this.open(sugar.tag, sugar.syntax, pos);
 					return;
@@ -110,7 +111,6 @@ export class InlineParser {
 	private openArg(pos: InputPosition) {
 		const parent = last(this.stack);
 		const returnValue = this.handler.openArgument(parent.length, pos);
-		if (returnValue) this.sugars = returnValue;
 		this.isRaw = !returnValue;
 		++parent.length;
 	}

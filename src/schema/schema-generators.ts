@@ -1,3 +1,4 @@
+import { SugarSyntax } from "../parser/Sugar";
 import {
 	BlockPropContentDefinition,
 	BlockPropDefinition,
@@ -5,8 +6,7 @@ import {
 	Cardinality,
 	InlinePropDefinition,
 	RawBlockPropDefinition,
-	RawInlinePropDefinition,
-	SugarSyntax
+	RawInlinePropDefinition
 } from "./SchemaDefinition";
 
 // Cardinality:

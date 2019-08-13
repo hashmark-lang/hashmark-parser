@@ -1,5 +1,5 @@
 import { BlockHandler } from "../parser/BlockHandler";
-import { InlineHandler, Sugar, SugarsByStart } from "../parser/InlineHandler";
+import { InlineHandler } from "../parser/InlineHandler";
 import { InlineParser } from "../parser/InlineParser";
 import { InputPosition } from "../parser/InputPosition";
 import { last } from "../utils";
@@ -44,7 +44,7 @@ export class AstHandler implements BlockHandler, InlineHandler {
 	}
 
 	head(content: string, pos: InputPosition): void {
-		this.inlineParser.parse(content, new Map(), pos);
+		this.inlineParser.parse(content, pos);
 	}
 
 	rawLine(content: string, pos: InputPosition): void {
@@ -67,11 +67,11 @@ export class AstHandler implements BlockHandler, InlineHandler {
 		this.inlineElementStack.pop();
 	}
 
-	openArgument(index: number, pos: InputPosition): false | SugarsByStart {
+	openArgument(index: number, pos: InputPosition): boolean {
 		const arg: InlineGroup = [];
 		this.inlineGroupStack.push(arg);
 		last(this.inlineElementStack).args.push(arg);
-		return new Map();
+		return true;
 	}
 
 	closeArgument(): void {
@@ -86,9 +86,5 @@ export class AstHandler implements BlockHandler, InlineHandler {
 		} else {
 			parent[lastIndex] += content;
 		}
-	}
-
-	get allSugars(): Sugar[] {
-		return [];
 	}
 }
