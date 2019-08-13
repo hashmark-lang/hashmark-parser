@@ -1,17 +1,13 @@
 {
-	"tag": "root",
-	"namespace": "[base]",
-	"props": {
-		"content": [
-			{
-				"tag": "paragraph",
-				"namespace": "[base]",
-				"props": {
-					"text": [
-						"Hello World"
-					]
-				}
-			}
-		]
-	}
+    "tag": "root",
+    "props": {
+        "content": [{
+            "tag": "paragraph",
+            "props": {
+                "text": [
+                    "Hello World"
+                ]
+            }
+        }]
+    }
 }

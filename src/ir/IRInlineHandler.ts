@@ -56,7 +56,7 @@ export class IRInlineHandler implements InlineHandler {
 		}
 
 		const propNames = schema ? schema.propNames : [];
-		const node = { tag, namespace: "[base]", props: emptyBlockProps(propNames) };
+		const node = { tag, props: emptyBlockProps(propNames) };
 		parent.nodeList.push(node);
 		this.inlineElementStack.push({ node, schema });
 	}

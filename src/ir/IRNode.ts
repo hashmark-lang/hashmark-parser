@@ -1,5 +1,4 @@
 export interface IRNode {
-	namespace: string;
 	tag: string;
 	props: {
 		[name: string]: IRNodeList;

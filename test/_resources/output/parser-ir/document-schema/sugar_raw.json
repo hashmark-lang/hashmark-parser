@@ -1,25 +1,18 @@
 {
     "tag": "root",
-    "namespace": "[base]",
     "props": {
-        "content": [
-            {
-                "tag": "paragraph",
-                "namespace": "[base]",
-                "props": {
-                    "text": [
-                        {
-                            "tag": "code",
-                            "namespace": "[base]",
-                            "props": {
-                                "content": [
-                                    "#notInterpreted[lorem] ipsum *dolor* sit"
-                                ]
-                            }
-                        }
-                    ]
-                }
+        "content": [{
+            "tag": "paragraph",
+            "props": {
+                "text": [{
+                    "tag": "code",
+                    "props": {
+                        "content": [
+                            "#notInterpreted[lorem] ipsum *dolor* sit"
+                        ]
+                    }
+                }]
             }
-        ]
+        }]
     }
 }

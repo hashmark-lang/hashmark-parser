@@ -1,25 +1,18 @@
 {
-	"tag": "root",
-	"namespace": "[base]",
-	"props": {
-		"content": [
-			{
-				"tag": "paragraph",
-				"namespace": "[base]",
-				"props": {
-					"text": [
-						{
-							"tag": "bold",
-							"namespace": "[base]",
-							"props": {
-								"text": [
-									"hello"
-								]
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "tag": "root",
+    "props": {
+        "content": [{
+            "tag": "paragraph",
+            "props": {
+                "text": [{
+                    "tag": "bold",
+                    "props": {
+                        "text": [
+                            "hello"
+                        ]
+                    }
+                }]
+            }
+        }]
+    }
 }

@@ -1,31 +1,23 @@
 {
-	"tag": "root",
-	"namespace": "[base]",
-	"props": {
-		"head": [],
-		"children": [
-			{
-				"tag": "section",
-				"namespace": "[base]",
-				"props": {
-					"head": [
-						"Introduction"
-					],
-					"children": [
-						{
-							"tag": "_default",
-							"namespace": "[base]",
-							"props": {
-								"head": [
-									"Hello World"
-								],
-								"children": []
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "tag": "root",
+    "props": {
+        "head": [],
+        "children": [{
+            "tag": "section",
+            "props": {
+                "head": [
+                    "Introduction"
+                ],
+                "children": [{
+                    "tag": "_default",
+                    "props": {
+                        "head": [
+                            "Hello World"
+                        ],
+                        "children": []
+                    }
+                }]
+            }
+        }]
+    }
 }
-

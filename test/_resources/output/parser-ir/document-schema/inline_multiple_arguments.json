@@ -1,28 +1,21 @@
 {
-	"tag": "root",
-	"namespace": "[base]",
-	"props": {
-		"content": [
-			{
-				"tag": "paragraph",
-				"namespace": "[base]",
-				"props": {
-					"text": [
-						{
-							"tag": "link",
-							"namespace": "[base]",
-							"props": {
-								"url": [
-									"www.example.com"
-								],
-								"text": [
-									"Example"
-								]
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "tag": "root",
+    "props": {
+        "content": [{
+            "tag": "paragraph",
+            "props": {
+                "text": [{
+                    "tag": "link",
+                    "props": {
+                        "url": [
+                            "www.example.com"
+                        ],
+                        "text": [
+                            "Example"
+                        ]
+                    }
+                }]
+            }
+        }]
+    }
 }

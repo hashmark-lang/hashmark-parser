@@ -38,7 +38,7 @@ export class IRBlockHandler implements BlockHandler {
 	}
 
 	private pushBlock(tag: string, schema: BlockSchema): IRNode {
-		const node = IRBlockHandler.createNode(tag, emptyBlockProps(schema.propNames));
+		const node = { tag, props: emptyBlockProps(schema.propNames) };
 		this.stack.push({ node, schema });
 		return node;
 	}
@@ -99,9 +99,5 @@ export class IRBlockHandler implements BlockHandler {
 		if (this.ignoreFlag) return;
 		const parent = last(this.stack);
 		parent.node.props[parent.schema.rawPropName!].push(content);
-	}
-
-	private static createNode(tag: string, props: IRNode["props"]): IRNode {
-		return { tag, namespace: "[base]", props };
 	}
 }
