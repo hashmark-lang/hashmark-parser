@@ -23,7 +23,7 @@ export class IRBlockHandler implements BlockHandler {
 
 	constructor(private readonly schema: Schema, private readonly log: ErrorLogger) {
 		this.inlineHandler = new IRInlineHandler(schema, log);
-		this.inlineParser = new InlineParser(this.inlineHandler);
+		this.inlineParser = new InlineParser(this.inlineHandler, schema.sugars);
 		this.reset();
 	}
 
@@ -91,7 +91,7 @@ export class IRBlockHandler implements BlockHandler {
 		}
 
 		this.inlineHandler.reset(headSchema);
-		this.inlineParser.parse(content, parent.schema.headSugarsByStart, pos);
+		this.inlineParser.parse(content, pos);
 		parent.node.props[headSchema.name] = this.inlineHandler.getResult();
 	}
 

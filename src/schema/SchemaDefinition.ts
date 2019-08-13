@@ -1,3 +1,5 @@
+import { SugarSyntax } from "../parser/Sugar";
+
 export const enum Reserved {
 	rootTag = "root",
 	defaultTag = "_default",
@@ -62,10 +64,4 @@ export interface ParsedInlinePropDefinition {
 	name: string;
 	raw?: undefined;
 	content: string[];
-}
-
-export interface SugarSyntax {
-	start: string;
-	separator?: string;
-	end: string;
 }

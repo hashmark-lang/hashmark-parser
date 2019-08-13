@@ -1,5 +1,5 @@
 import { DisallowedArgError, ErrorLogger } from "..";
-import { InlineHandler, Sugar, SugarsByStart } from "../parser/InlineHandler";
+import { InlineHandler } from "../parser/InlineHandler";
 import { InputPosition } from "../parser/InputPosition";
 import {
 	DisallowedInArgError,
@@ -65,7 +65,7 @@ export class IRInlineHandler implements InlineHandler {
 		this.inlineElementStack.pop();
 	}
 
-	openArgument(index: number, pos: InputPosition): false | SugarsByStart {
+	openArgument(index: number, pos: InputPosition): boolean {
 		const parent = last(this.inlineElementStack);
 		if (!parent) {
 			this.inlineGroupStack.push(null);
@@ -79,8 +79,7 @@ export class IRInlineHandler implements InlineHandler {
 
 		const schema = parent.schema.argsSchemas[index];
 		this.inlineGroupStack.push({ nodeList: parent.node.props[schema.name], schema });
-		if (schema.raw) return false;
-		return parent.schema.getAllowedSugars(index);
+		return !schema.raw;
 	}
 
 	closeArgument() {
@@ -97,9 +96,5 @@ export class IRInlineHandler implements InlineHandler {
 		} else {
 			nodeList[lastIndex] += content;
 		}
-	}
-
-	get allSugars(): Sugar[] {
-		return this.schema.allSugars;
 	}
 }

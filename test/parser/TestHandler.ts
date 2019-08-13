@@ -1,5 +1,5 @@
 import { AstHandler } from "../../src/ast/AstHandler";
-import { Sugar, SugarsByStart } from "../../src/parser/InlineHandler";
+import { InlineParser } from "../../src/parser/InlineParser";
 import { InputPosition } from "../../src/parser/InputPosition";
 import { last } from "../../src/utils";
 
@@ -22,9 +22,8 @@ const sugars = [
 	}
 ];
 
-const sugarsMap: SugarsByStart = new Map(sugars.map(_ => [_.syntax.start, _]));
-
 export class TestHandler extends AstHandler {
+	protected readonly inlineParser = new InlineParser(this, sugars);
 	private rawHead: boolean = false;
 
 	constructor() {
@@ -38,18 +37,13 @@ export class TestHandler extends AstHandler {
 	}
 
 	head(content: string, pos: InputPosition) {
-		if (!this.rawHead) this.inlineParser.parse(content, sugarsMap, pos);
+		if (!this.rawHead) this.inlineParser.parse(content, pos);
 		else this.pushText(content);
 	}
 
-	openArgument(index: number, pos: InputPosition): false | SugarsByStart {
+	openArgument(index: number, pos: InputPosition): boolean {
 		super.openArgument(index, pos);
 		const parent = last(this.inlineElementStack);
-		if (parent.tag === "code" || (parent.tag === "rawFirstArg" && index === 0)) return false;
-		return sugarsMap;
-	}
-
-	get allSugars(): Sugar[] {
-		return sugars;
+		return !(parent.tag === "code" || (parent.tag === "rawFirstArg" && index === 0));
 	}
 }
