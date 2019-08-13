@@ -5,6 +5,15 @@ import { AstHandler } from "../src/ast/AstHandler";
 import { toJSON } from "../src/output/json";
 import { formatBytes, generateBenchmarkInput } from "./utils";
 
+const handler = new AstHandler();
+const parser = new BlockParser(handler);
+
+function parse(input: string): BlockElement {
+	handler.reset();
+	parser.parse(input);
+	return handler.getResult();
+}
+
 (function run() {
 	const input = generateBenchmarkInput();
 	console.log("Size of test input: " + formatBytes(input.length));
@@ -46,12 +55,3 @@ import { formatBytes, generateBenchmarkInput } from "./utils";
 		// run async
 		.run({ async: true });
 })();
-
-const handler = new AstHandler();
-const parser = new BlockParser(handler);
-
-function parse(input: string): BlockElement {
-	handler.reset();
-	parser.parse(input);
-	return handler.getResult();
-}
