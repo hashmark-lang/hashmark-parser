@@ -1,0 +1,32 @@
+{
+    "tag": "root",
+    "props": {
+        "head": [],
+        "children": [
+            {
+                "tag": "_default",
+                "props": {
+                    "head": [
+                        {
+                            "tag": "inline",
+                            "props": {
+                                "arg": [
+                                    {
+                                        "tag": "inline",
+                                        "props": {
+                                            "arg": [
+                                                "lorem"
+                                            ]
+                                        }
+                                    },
+                                    " ipsum"
+                                ]
+                            }
+                        }
+                    ],
+                    "children": []
+                }
+            }
+        ]
+    }
+}

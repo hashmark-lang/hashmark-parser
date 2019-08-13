@@ -1,0 +1,26 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "paragraph",
+				"props": {
+					"head": [
+						"text ",
+						{
+							"tag": "inline",
+							"props": {
+								"arg": [
+									"attr"
+								]
+							}
+						},
+						" text"
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

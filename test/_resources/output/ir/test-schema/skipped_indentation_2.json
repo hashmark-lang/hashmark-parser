@@ -1,0 +1,102 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "block",
+				"props": {
+					"head": [
+						"title"
+					],
+					"children": [
+						{
+							"tag": "head",
+							"props": {
+								"head": [],
+								"children": [
+									{
+										"tag": "_default",
+										"props": {
+											"head": [
+												"inline"
+											],
+											"children": []
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"tag": "inline",
+				"props": {
+					"head": [
+						"inline"
+					],
+					"children": [
+						{
+							"tag": "arg",
+							"props": {
+								"head": [],
+								"children": [
+									{
+										"tag": "content",
+										"props": {
+											"head": [],
+											"children": [
+												{
+													"tag": "_default",
+													"props": {
+														"head": [
+															"bold"
+														],
+														"children": []
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						},
+						{
+							"tag": "arg",
+							"props": {
+								"head": [],
+								"children": [
+									{
+										"tag": "raw",
+										"props": {
+											"head": [],
+											"children": []
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"tag": "inline",
+				"props": {
+					"head": [
+						"bold"
+					],
+					"children": [
+						{
+							"tag": "arg",
+							"props": {
+								"head": [],
+								"children": []
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}

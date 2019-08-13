@@ -1,0 +1,37 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "document",
+				"props": {
+					"head": [
+						"Document"
+					],
+					"children": [
+						{
+							"tag": "definition",
+							"props": {
+								"head": [
+									"Def"
+								],
+								"children": [
+									{
+										"tag": "_default",
+										"props": {
+											"head": [
+												"Lorem"
+											],
+											"children": []
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,43 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "tag\\#",
+				"props": {
+					"head": [],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						{
+							"tag": "tag\\",
+							"props": {
+								"arg": []
+							}
+						}
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "tag\\\\",
+				"props": {
+					"head": [],
+					"children": []
+				}
+			},
+			{
+				"tag": "ta\\g",
+				"props": {
+					"head": [],
+					"children": []
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "section",
+				"props": {
+					"head": [
+						"1"
+					],
+					"children": [
+						{
+							"tag": "section",
+							"props": {
+								"head": [
+									"2"
+								],
+								"children": []
+							}
+						},
+						{
+							"tag": "section",
+							"props": {
+								"head": [
+									"3"
+								],
+								"children": [
+									{
+										"tag": "section",
+										"props": {
+											"head": [
+												"4"
+											],
+											"children": []
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "paragraph",
+				"props": {
+					"head": [
+						"lorem ",
+						{
+							"tag": "inline",
+							"props": {
+								"arg": []
+							}
+						},
+						" ipsum"
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

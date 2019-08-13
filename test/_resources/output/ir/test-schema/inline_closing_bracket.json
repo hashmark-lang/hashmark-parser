@@ -1,0 +1,25 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"] ][ test ",
+						{
+							"tag": "inline",
+							"props": {
+								"arg": [
+									"inline"
+								]
+							}
+						}
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

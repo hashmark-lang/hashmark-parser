@@ -3,7 +3,7 @@ const MAX_DEPTH = 3;
 
 const LINE_CONTENT =
 	// tslint:disable-next-line:max-line-length
-	"#tag Lorem \\# ipsum #tag[dolor *sit* amet, consectetur] adipiscing elit. #tag[Integer convallis nec turpis] quis \\[ ullamcorper. _Integer_ ultricies velit accumsan volutpat viverra. Nulla et nibh \\# sed nisl interdum \\[ fringilla \\[ id in leo. #tag[Integer laoreet leo mi, _non_ accumsan] diam sodales eu. Praesent sagittis _efficitur_ turpis, non ullamcorper velit dictum ac. _In_ hac habitasse #tag[platea #tag[dictumst]. Donec molestie #tag[#tag[#tag[eros] a nisi] elementum]], eu eleifend velit #tag[blandit]. #tag[Maecenas] ac neque in sapien tempus \\\\ ullamcorper quis vel magna. Morbi sed justo quis orci mattis dapibus. #tag Nulla #tag[tristique] elit magna.\n";
+	"#inline Lorem \\# ipsum #inline[dolor *sit* amet, consectetur] adipiscing elit. #inline[Integer convallis nec turpis] quis \\[ ullamcorper. _Integer_ ultricies velit accumsan volutpat viverra. Nulla et nibh \\# sed nisl interdum \\[ fringilla \\[ id in leo. #inline[Integer laoreet leo mi, _non_ accumsan] diam sodales eu. Praesent sagittis _efficitur_ turpis, non ullamcorper velit dictum ac. _In_ hac habitasse #inline[platea #inline[dictumst]. Donec molestie #inline[#inline[#inline[eros] a nisi] elementum]], eu eleifend velit #inline[blandit]. #inline[Maecenas] ac neque in sapien tempus \\\\ ullamcorper quis vel magna. Morbi sed justo quis orci mattis dapibus. #inline Nulla #inline[tristique] elit magna.\n";
 
 export function generateBenchmarkInput(indent = "", depth = 0): string {
 	if (depth > MAX_DEPTH) return "";

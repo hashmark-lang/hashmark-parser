@@ -1,0 +1,31 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						{
+							"tag": "strong",
+							"props": {
+								"content": [
+									{
+										"tag": "emphasis",
+										"props": {
+											"content": [
+												"Hello"
+											]
+										}
+									}
+								]
+							}
+						}
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

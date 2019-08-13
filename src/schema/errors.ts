@@ -1,4 +1,4 @@
-import { BlockElement } from "../ast/ast";
+import { IRNode } from "../ir/IRNode";
 import { InputPosition } from "../parser/InputPosition";
 import { ordinal } from "../utils";
 
@@ -140,7 +140,7 @@ export class DisallowedInHeadError extends ValidationError {
 
 export class CardinalityError extends ValidationError {
 	constructor(
-		parent: BlockElement,
+		parent: IRNode,
 		positions: Position[],
 		tag: string,
 		count: number,
