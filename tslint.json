@@ -13,6 +13,7 @@
 		"curly": [true, "ignore-same-line"],
 		"member-ordering": false,
 		"object-literal-sort-keys": false,
-		"no-default-export": true
+		"no-default-export": true,
+		"no-restricted-globals": true
 	}
 }

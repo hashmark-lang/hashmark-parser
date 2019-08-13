@@ -71,7 +71,8 @@ export class IRInlineHandler implements InlineHandler {
 			this.inlineGroupStack.push(null);
 			return false;
 		}
-		if (index >= parent.schema.args.length) {
+		const length = parent.schema.args.length;
+		if (index >= length) {
 			this.log(new DisallowedArgError(parent.schema.tag, index, length, pos));
 			this.inlineGroupStack.push(null);
 			return false;
