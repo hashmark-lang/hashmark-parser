@@ -1,0 +1,17 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "tag#tag",
+				"props": {
+					"head": [
+						"is not an error"
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

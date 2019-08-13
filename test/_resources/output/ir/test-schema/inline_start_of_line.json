@@ -1,0 +1,44 @@
+{
+    "tag": "root",
+    "props": {
+        "head": [],
+        "children": [
+            {
+                "tag": "section",
+                "props": {
+                    "head": [
+                        "My section"
+                    ],
+                    "children": [
+                        {
+                            "tag": "_default",
+                            "props": {
+                                "head": [
+                                    {
+                                        "tag": "inline",
+                                        "props": {
+                                            "arg": [
+                                                "content"
+                                            ]
+                                        }
+                                    },
+                                    " Text"
+                                ],
+                                "children": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "tag": "_default",
+                "props": {
+                    "head": [
+                        "Text"
+                    ],
+                    "children": []
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,44 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"Hello"
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"World"
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"Hello"
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"World"
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

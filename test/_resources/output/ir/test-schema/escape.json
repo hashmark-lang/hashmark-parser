@@ -1,0 +1,44 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"Lorem # Ipsum"
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"# Lorem Ipsum"
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"Lorem Ispum #"
+					],
+					"children": []
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"\\ # [ ]"
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

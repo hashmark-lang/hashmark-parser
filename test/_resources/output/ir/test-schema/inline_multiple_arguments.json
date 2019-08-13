@@ -1,0 +1,27 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						{
+							"tag": "link",
+							"props": {
+								"url": [
+									"www.example.com"
+								],
+								"title": [
+									"Example"
+								]
+							}
+						}
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

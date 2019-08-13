@@ -1,0 +1,28 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "rawBody",
+				"props": {
+					"content": [
+						"Lorem",
+						"\tIpsum",
+						"  Dolor",
+						"Sit"
+					]
+				}
+			},
+			{
+				"tag": "_default",
+				"props": {
+					"head": [
+						"Amet"
+					],
+					"children": []
+				}
+			}
+		]
+	}
+}

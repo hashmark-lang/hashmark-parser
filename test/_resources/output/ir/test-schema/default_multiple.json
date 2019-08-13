@@ -1,0 +1,43 @@
+{
+	"tag": "root",
+	"props": {
+		"head": [],
+		"children": [
+			{
+				"tag": "list",
+				"props": {
+					"head": [],
+					"children": [
+						{
+							"tag": "_default",
+							"props": {
+								"head": [
+									"Banana"
+								],
+								"children": []
+							}
+						},
+						{
+							"tag": "_default",
+							"props": {
+								"head": [
+									"Pear"
+								],
+								"children": []
+							}
+						},
+						{
+							"tag": "_default",
+							"props": {
+								"head": [
+									"Apple"
+								],
+								"children": []
+							}
+						}
+					]
+				}
+			}
+		]
+	}
+}
