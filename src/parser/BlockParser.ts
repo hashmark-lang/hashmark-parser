@@ -3,7 +3,7 @@ import { BlockHandler } from "./BlockHandler";
 import { InputPosition } from "./InputPosition";
 
 /**
- * Parses Hashmark blocks. A block is a Hashmark tag with a body. For example:
+ * Parses Hashml blocks. A block is a Hashml tag with a body. For example:
  * ```
  * #block head
  * 		block content

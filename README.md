@@ -1,33 +1,33 @@
-# Hashmark parser
-[![npm version](https://badge.fury.io/js/%40hashmark%2Fparser.svg)](https://www.npmjs.com/package/@hashmark/parser)
+# Hashml parser
+[![npm version](https://badge.fury.io/js/%40hashml.svg)](https://www.npmjs.com/package/@hashml/hashml)
 [![Build Status](https://travis-ci.org/hashml/hashml.svg?branch=master)](https://travis-ci.org/hashml/hashml)
 [![Coverage Status](https://coveralls.io/repos/github/hashml/hashml/badge.svg?branch=master)](https://coveralls.io/github/hashml/hashml?branch=master)
 
 ## Installation
 ```
-npm install @hashmark/parser
+npm install @hashml/hashml
 ```
 
-## What is Hashmark?
-Hashmark is a markup language. It's more structured than Markdown, but less verbose than XML. Here's what this README would look like in Hashmark:
+## What is Hashml?
+Hashml is a markup language. It's more structured than Markdown, but less verbose than XML. Here's what this README would look like in Hashml:
 
-```hashmark
-#document Hashmark parser
+```
+#document Hashml parser
 	#section Installation
 		#code bash
-			npm install @hashmark/parser
+			npm install @hashml/hashml
 
-	#section What is Hasmark?
-		Hashmark is a markup language. It's more structured than Markdown, ...
+	#section What is Hashml?
+		Hashml is a markup language. It's more structured than Markdown, ...
 ```
 
-You can read more about the Hashmark language [in the docs](docs/what-is-hashmark.md).
+You can read more about the Hashml language [in the docs](docs/README.md).
 
 ## Usage
-To parse a Hashmark document, 
+To parse a Hashml document from a Typescript program:
 
 ```typescript
-import { parse, ParsedSchema } from "@hashmark/parser";
+import { parse, ParsedSchema } from "@hashml/hashml";
 
 const file = "#tag example";
 const schemaFile = "#block tag"
@@ -53,10 +53,10 @@ const errors = schema.validateBlock(doc);
 To export the document to JSON or XML:
 
 ```typescript
-import { toXML, toJSON} from "@hashmark/parser";
+import { toXML, toJSON} from "@hashml/hashml";
 const xml: string = toXML(doc);
 const json: string = toJSON(doc);
 ```
 
 ## CLI
-See the [@hashmark/cli](https://www.npmjs.com/package/@hashmark/cli) package.
+See the [@hashml/cli](https://www.npmjs.com/package/@hashml/cli) package.

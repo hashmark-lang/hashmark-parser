@@ -9,7 +9,7 @@ const input = generateBenchmarkInput();
 console.log("Size of test input: " + formatBytes(input.length));
 const jsonAst = JSON.stringify(parse(input));
 new Benchmark.Suite("compare")
-	.add("Parse Hashmark", () => {
+	.add("Parse Hashml", () => {
 		parse(input);
 	})
 	.add("Parse JSON", () => {
@@ -38,7 +38,7 @@ new Benchmark.Suite("compare")
 		console.log(String(event.target));
 	})
 	.on("complete", function(this: Benchmark[]) {
-		console.log("JSON/Hashmark ratio: " + (this[1].stats.mean / this[0].stats.mean).toFixed(2));
+		console.log("JSON/Hashml ratio: " + (this[1].stats.mean / this[0].stats.mean).toFixed(2));
 	})
 	// run async
 	.run({ async: true });

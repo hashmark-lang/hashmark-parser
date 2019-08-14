@@ -1,4 +1,4 @@
-# Hashmark documentation
+# Hashml documentation
 
-- [What is Hashmark?](./what-is-hashmark.md)
-- [Hashmark Schemas](./schemas.md)
+- [What is Hashml?](./what-is-hashml.md)
+- [Hashml Schemas](./schemas.md)
