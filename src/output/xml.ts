@@ -1,5 +1,14 @@
 import { IRNode, IRNodeList } from "../ir/IRNode";
 
+/**
+ * Convert an IR tree to an XML string.
+ * Child nodes are indented with a tab `\t` character.
+ *
+ * @param root Root of the IR tree
+ * @param indentation Indentation level
+ *
+ * @returns Tab-indented XML representation of the IR tree.
+ */
 export function toXML(root: IRNode, indentation: number = 0): string {
 	const children = Object.entries(root.props).map(([tag, nodeList]) =>
 		propToXML(tag, nodeList, indentation + 1)
