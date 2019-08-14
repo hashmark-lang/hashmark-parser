@@ -10,7 +10,7 @@ script:
 - npm run build
 - npm run format:check
 - npm run tslint
-- npm run test
+- npm run coveralls
 deploy:
   skip_cleanup: true
   provider: npm
