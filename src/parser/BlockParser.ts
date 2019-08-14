@@ -4,12 +4,11 @@ import { InputPosition } from "./InputPosition";
 
 /**
  * Parses Hashml blocks. A block is a Hashml tag with a body. For example:
+ *
  * ```
  * #block head
  * 		block content
  * ```
- *
- * @typeparam BlockData		Type of produced block objects
  */
 export class BlockParser {
 	private readonly regex = /(?:\r\n|\n|\r|^)(\t*)(.*)/gm;

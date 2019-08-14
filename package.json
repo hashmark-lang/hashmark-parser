@@ -36,6 +36,7 @@
 		"source-map-support": "^0.5.12",
 		"ts-node": "^8.3.0",
 		"tslint": "^5.18.0",
+		"typedoc": "^0.15.0",
 		"typescript": "^3.5.2"
 	},
 	"scripts": {
@@ -48,6 +49,7 @@
 		"coverage": "nyc mocha --require source-map-support/register",
 		"coveralls": "npm run coverage && nyc report --reporter=text-lcov | coveralls",
 		"check": "npm test && npm run format:check && npm run tslint",
+		"docs": "typedoc --out typedoc src/",
 		"preversion": "npm run check",
 		"postversion": "git push && git push --tags",
 		"benchmark": "node --require ts-node/register benchmark/parseBenchmark.ts"

@@ -7,11 +7,22 @@ import {
 } from "./errors";
 import { BlockPropDefinition, RawBlockPropDefinition, SchemaDefinition } from "./SchemaDefinition";
 
-// Schema rules:
-//   1) All prop names within an element must be different
-//   2) All block prop content tags must be declared once
-//   3) The pairwise intersection of block prop contents must be empty
-
+/**
+ * Check a schema definition for errors. The rules of a schema definition are:
+ *
+ * 1. All prop names within an element must be different
+ * 2. All block prop content tags must be declared once
+ * 3. The pairwise intersection of block prop contents must be empty.
+ *
+ * There is an error for each of these rules:
+ *
+ * 1. [[DuplicatePropNameError]]
+ * 2. [[DuplicatePropTagsError]]
+ * 3. [[DuplicatePropAssignmentError]]
+ *
+ * @param schema Schema definition object.
+ * @returns Array of schema definition errors, or an empty array if no errors were found.
+ */
 export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] {
 	const errors: SchemaDefinitionError[] = [];
 
