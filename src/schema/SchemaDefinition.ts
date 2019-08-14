@@ -1,4 +1,5 @@
 import { SugarSyntax } from "../parser/Sugar";
+import { Cardinality } from "./Cardinality";
 
 export const enum Reserved {
 	rootTag = "root",
@@ -39,13 +40,6 @@ export interface BlockPropDefinition {
 export interface BlockPropContentDefinition {
 	tag: string;
 	cardinality: Cardinality;
-}
-
-export const enum Cardinality {
-	ZeroOrMore = "zeroOrMore",
-	OneOrMore = "oneOrMore",
-	One = "one",
-	Optional = "optional"
 }
 
 export interface InlineSchemaDefinition {

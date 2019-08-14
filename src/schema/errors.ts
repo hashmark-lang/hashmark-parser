@@ -1,13 +1,7 @@
 import { IRNode } from "../ir/IRNode";
 import { InputPosition } from "../parser/InputPosition";
 import { ordinal } from "../utils";
-
-enum Cardinality {
-	ZeroOrMore = "zeroOrMore",
-	OneOrMore = "oneOrMore",
-	One = "one",
-	Optional = "optional"
-}
+import { Cardinality, cardinalityToString } from "./Cardinality";
 
 export type ErrorLogger = (error: HMError) => void;
 
@@ -150,22 +144,8 @@ export class CardinalityError extends ValidationError {
 			ErrorCode.CARDINALITY,
 			`Saw ${count} occurrences of '#${tag}' in '#${
 				parent.tag
-			}', but the schema requires ${CardinalityError.cardinalityToString(cardinality)} in '#${
-				parent.tag
-			}'`
+			}', but the schema requires ${cardinalityToString(cardinality)} in '#${parent.tag}'`
 		);
-	}
-
-	static cardinalityToString(cardinality: Cardinality): string {
-		if (cardinality === Cardinality.ZeroOrMore) {
-			throw new Error(`${cardinality} should never be the cause of a cardinality error`);
-		}
-		const strings = {
-			[Cardinality.One]: "exactly one",
-			[Cardinality.OneOrMore]: "one or more",
-			[Cardinality.Optional]: "zero or one"
-		};
-		return strings[cardinality];
 	}
 }
 

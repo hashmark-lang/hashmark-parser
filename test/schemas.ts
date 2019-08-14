@@ -1,3 +1,4 @@
+import { Cardinality } from "../src/schema/Cardinality";
 import {
 	inlineProp,
 	prop,
@@ -6,7 +7,7 @@ import {
 	sugar,
 	zeroOrMore
 } from "../src/schema/schema-generators";
-import { Cardinality, INVALID_TAG, ROOT, SchemaDefinition } from "../src/schema/SchemaDefinition";
+import { INVALID_TAG, ROOT, SchemaDefinition } from "../src/schema/SchemaDefinition";
 
 export function getTestSchema(): SchemaDefinition {
 	const inlineTags = [

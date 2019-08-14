@@ -4,8 +4,9 @@ import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
 import { toXML } from "../../src/output/xml";
 import { BlockParser } from "../../src/parser/BlockParser";
+import { Cardinality } from "../../src/schema/Cardinality";
 import { Schema } from "../../src/schema/Schema";
-import { Cardinality, ROOT, SchemaDefinition } from "../../src/schema/SchemaDefinition";
+import { ROOT, SchemaDefinition } from "../../src/schema/SchemaDefinition";
 import { filePairs } from "../utils";
 
 describe("xml", () => {
