@@ -49,5 +49,7 @@ export class BlockParser {
 
 			++pos.line;
 		}
+
+		indentStack.forEach(_ => this.handler.closeBlock(pos));
 	}
 }
