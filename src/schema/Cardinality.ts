@@ -5,6 +5,20 @@ export const enum Cardinality {
 	Optional = "optional"
 }
 
+export interface CardinalityConstraint {
+	/** Minimum number of occurrences, inclusive */
+	min: number;
+	/** Maximum number of occurrences, inclusive */
+	max: number;
+}
+
+export const cardinalityConstraints = {
+	[Cardinality.One]: { min: 1, max: 1 },
+	[Cardinality.OneOrMore]: { min: 1, max: Infinity },
+	[Cardinality.Optional]: { min: 0, max: 1 },
+	[Cardinality.ZeroOrMore]: { min: 0, max: Infinity }
+};
+
 export function cardinalityToString(cardinality: Cardinality): string {
 	const strings = {
 		[Cardinality.One]: "exactly one",
@@ -13,29 +27,4 @@ export function cardinalityToString(cardinality: Cardinality): string {
 		[Cardinality.ZeroOrMore]: "zero or more"
 	};
 	return strings[cardinality];
-}
-
-/**
- * Returns whether a count is acceptable according to a given cardinality
- * constraint.
- *
- * @remarks
- * The behaviour of this function is undefined for anything else than positive
- * integers.
- *
- * @param count positive integer representing the count to check
- * @param constraint cardinality to check whether `count` is valid for
- * @returns `true` if `count` is allowed by `cardinality`, `false` otherwise
- */
-export function isValidCount(count: number, constraint: Cardinality): boolean {
-	switch (constraint) {
-		case Cardinality.One:
-			return count === 1;
-		case Cardinality.OneOrMore:
-			return count >= 1;
-		case Cardinality.Optional:
-			return count <= 1;
-		case Cardinality.ZeroOrMore:
-			return true;
-	}
 }

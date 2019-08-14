@@ -2,6 +2,7 @@ import { BlockHandler } from "../parser/BlockHandler";
 import { InlineParser } from "../parser/InlineParser";
 import { InputPosition } from "../parser/InputPosition";
 import {
+	CardinalityError,
 	DisallowedDefaultTagError,
 	DisallowedHeadError,
 	DisallowedInBlockError,
@@ -18,7 +19,12 @@ import { emptyBlockProps, IRNode } from "./IRNode";
 export class IRBlockHandler implements BlockHandler {
 	private readonly inlineHandler: IRInlineHandler;
 	private readonly inlineParser: InlineParser;
-	private readonly stack: Array<{ node: IRNode; schema: BlockSchema }> = [];
+	private root!: IRNode;
+	private readonly stack: Array<{
+		node: IRNode;
+		schema: BlockSchema;
+		childCount: Map<string, number>;
+	}> = [];
 	private ignoreFlag: boolean = false;
 
 	constructor(private readonly schema: Schema, private readonly log: ErrorLogger) {
@@ -29,17 +35,18 @@ export class IRBlockHandler implements BlockHandler {
 
 	reset(): void {
 		this.stack.length = 0;
-		this.pushBlock(ROOT, this.schema.getBlockSchema(ROOT)!);
+		this.root = this.pushBlock(ROOT, this.schema.getBlockSchema(ROOT)!);
 		this.ignoreFlag = false;
 	}
 
 	getResult(): IRNode {
-		return this.stack[0].node;
+		return this.root;
 	}
 
 	private pushBlock(tag: string, schema: BlockSchema): IRNode {
 		const node = { tag, props: emptyBlockProps(schema.propNames) };
-		this.stack.push({ node, schema });
+		const childCount = new Map<string, number>();
+		this.stack.push({ node, schema, childCount });
 		return node;
 	}
 
@@ -57,6 +64,13 @@ export class IRBlockHandler implements BlockHandler {
 			return this.blockError(new DisallowedInBlockError(parent.node.tag, tag, pos));
 		}
 
+		const count = (parent.childCount.get(tag) || 0) + 1;
+		const [cardinality, { max }] = parent.schema.getCardinality(tag)!;
+		parent.childCount.set(tag, count);
+		if (count > max) {
+			this.log(new CardinalityError(parent.node, [pos], tag, count, cardinality));
+		}
+
 		const node = this.pushBlock(tag, schema);
 		parent.node.props[propName].push(node);
 		return !Boolean(schema.rawPropName);
@@ -67,7 +81,16 @@ export class IRBlockHandler implements BlockHandler {
 			this.ignoreFlag = false;
 			return;
 		}
-		this.stack.pop();
+		const top = this.stack.pop();
+		if (top) {
+			const constraints = top.schema.getAllCardinalityConstraints().entries();
+			for (const [child, [cardinality, { min }]] of constraints) {
+				const count = top.childCount.get(child) || 0;
+				if (count < min) {
+					this.log(new CardinalityError(top.node, [], child, count, cardinality));
+				}
+			}
+		}
 	}
 
 	private blockError(error: HMError): false {

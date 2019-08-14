@@ -1,4 +1,5 @@
 import { Sugar } from "../parser/Sugar";
+import { Cardinality, CardinalityConstraint, cardinalityConstraints } from "./Cardinality";
 import {
 	BlockSchemaDefinition,
 	InlinePropDefinition,
@@ -40,6 +41,7 @@ export class Schema {
 }
 
 export class BlockSchema {
+	private childTagToCardinality: Map<string, [Cardinality, CardinalityConstraint]> = new Map();
 	private childTagToProp: Map<string, string> = new Map();
 
 	readonly defaultTag?: string;
@@ -64,7 +66,13 @@ export class BlockSchema {
 				if (this.rawPropName) throw new Error("Should have only one raw prop!");
 				this.rawPropName = prop.name;
 			} else {
-				prop.content.forEach(rule => this.childTagToProp.set(rule.tag, prop.name));
+				for (const rule of prop.content) {
+					this.childTagToCardinality.set(rule.tag, [
+						rule.cardinality,
+						cardinalityConstraints[rule.cardinality]
+					]);
+					this.childTagToProp.set(rule.tag, prop.name);
+				}
 			}
 		}
 
@@ -73,6 +81,16 @@ export class BlockSchema {
 
 	getPropName(child: string): string | undefined {
 		return this.childTagToProp.get(child) || this.childTagToProp.get(INVALID_TAG);
+	}
+
+	getCardinality(childName: string): [Cardinality, CardinalityConstraint] | undefined {
+		return (
+			this.childTagToCardinality.get(childName) || this.childTagToCardinality.get(INVALID_TAG)
+		);
+	}
+
+	getAllCardinalityConstraints(): ReadonlyMap<string, [Cardinality, CardinalityConstraint]> {
+		return this.childTagToCardinality;
 	}
 }
 
