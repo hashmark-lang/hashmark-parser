@@ -135,7 +135,7 @@ export class DisallowedInHeadError extends ValidationError {
 export class CardinalityError extends ValidationError {
 	constructor(
 		parent: IRNode,
-		positions: Position[],
+		positions: InputPosition[],
 		tag: string,
 		count: number,
 		cardinality: Cardinality
@@ -144,7 +144,8 @@ export class CardinalityError extends ValidationError {
 			ErrorCode.CARDINALITY,
 			`Saw ${count} occurrences of '#${tag}' in '#${
 				parent.tag
-			}', but the schema requires ${cardinalityToString(cardinality)} in '#${parent.tag}'`
+			}', but the schema requires ${cardinalityToString(cardinality)} in '#${parent.tag}'`,
+			...positions
 		);
 	}
 }
