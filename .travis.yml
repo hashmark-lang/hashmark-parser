@@ -6,17 +6,27 @@ cache:
   - node_modules
 notifications:
   email: false
+env:
+  matrix:
+    secure: f0Miqm9zC//imy3uTxTn2kMi9rUlxrTe/3VNyW2O2+nM8aXu3wcmlXX1/wsSBH4SiQcNSedsdRZcfldeTzcP/IT0VGXOMlqKKRlwFB99WDVETngPD9b5XYb0wT7ujC4nvB8iVQW9M24CDADbi41fbJVA1Mgi7u7p/BZTuYIXn8WfIj97jjihx2MmjuDXxZ7R01TJDulcFDAMH86PM2lRByj5WA6ZYqtBrljVgkQDU/cqbb6i16devxEeGAJK2XluFo5qN5xl+gbqDHlbIn/QC0vi+/B3fBdaLy2K/FGmXYsdmkJQ0w2dDhQ7p/+MOL8jfGCbRSZMa2614Zw6vUD8Z480rVUmd0wTJbA/S3DAZYB5dI5y+q3RgNaLNzJD7fh+2K2EihpHmX6+Sgg+9Ta7N9jkMVOMrusTMZe2oDwRhUznJjXzmomSAv2mEQS8z0t0+xVFRA2XNKRVFMkOtkwruLrE2ELbgwgCUX/2wFCG1u1auL6cfxp8werLGYxo4iwQSrQVtDsVTxsAMyWoQLfyzEAnMjwAbrTjgwQnGtZ0qb8cAJgj7XJo0yz46km6/CDTvUBbfApCDGzvMIN9tNwp11vjs6fTxG7ii4bOmxtUxG4Gj+U3LeVsgkCZnhmQnnumH7GJ7wBom9RaB0E0zvMOP5jgMdRinLwOFGZPUKF9MRE=
 script:
 - npm run build
 - npm run format:check
 - npm run tslint
 - npm run coveralls
+- npm run docs
 deploy:
+- provider: npm
   skip_cleanup: true
-  provider: npm
   email: maxime.kjaer@gmail.com
   api_key:
     secure: PLy5Ud4b9OU5KFLRsQRchZn7KnWDruDDOoxpdJrl23j5LN3b5r7fsb42I2lV03eY42lxbkH7vzPC4CZUyhdkkYhrjqHBTEACYQfD/7q82SlHip/6NqKvXn0XddEFGUuPu9zFyv2Hv5E3ZYMoVccJ8JFikLljWWLznTmlyvezJaFMIQHeCJgQmiW7ZudaTT9zLMV2TQ2jpFvXHyslXSjxCaF1eYNVTWN6vwYZIzEpCWAifNzdNcDunfFMZkzIDroPsM+EU17Cy3cT+fmZam6TWB7P+6mOlZRLVFw2b1tm4rvwQrHf0+SBbmb8RIcFt9ZGLgF8pygxkrMB42iyyzA/H9yC6qhV0D9MDv9NP36AW1gpnPOswvtvCOA2l+g0J8tvOCy50gZFImPLGch8DtVOHB1SRckeShpKApnmvClMhYO85dpyYtjl8jYLVfK8KpudJJMdJ/mk2C32faV6/OM4EQFBYAt52WCxDIHRT0Nr26MjDOQ3Kc7apSt+p3JEzg4d5vEDe2L5aGAJDsfrlKQ9OYxdy55kwwvafWIHt2VUXPoOIFXHo0ToVJ1+0CuEb7hSYig7JY51kPekLLEgGin89TxZY1oXAUOR+H4Ja5lRKw8w8KM5jORi/Cst7pJA/VTIQwX6I/fL01h25ee7f9jf6TA6sAMxJhn7hWtnSeyneKc=
   on:
     tags: true
-    repo: "hashml/hashml"
+    repo: hashml/hashml
+- provider: pages
+  skip_cleanup: true
+  local_dir: typedoc
+  github_token: "$GITHUB_TOKEN"
+  on:
+    branch: master
