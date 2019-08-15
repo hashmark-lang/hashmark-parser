@@ -16,23 +16,19 @@ import { filePairs, makeTestParser, resourceFile } from "../utils";
 // tslint:disable-next-line:ban-types
 function assertError(errors: HMError[], expected: Function) {
 	const error = errors.find(err => err instanceof expected)!;
-	assert.exists(error, `Expected to see a ${expected.name} error`);
+	assert.exists(error, `Expected to see a ${expected.name} error in ${errors.join(", ")}`);
 }
 
 describe("IRHandler", () => {
-	let parse: (input: string) => [HMError[], IRNode];
-
 	describe("Schemas", () => {
 		const testSchemas = [
-			{ name: "test-schema", schemaGetter: getTestSchema },
-			{ name: "empty-schema", schemaGetter: getEmptySchema },
-			{ name: "document-schema", schemaGetter: getDocumentSchema }
+			{ name: "empty-schema", parse: makeTestParser(getEmptySchema()) },
+			{ name: "test-schema", parse: makeTestParser(getTestSchema()) },
+			{ name: "document-schema", parse: makeTestParser(getDocumentSchema()) }
 		];
 
-		for (const { name, schemaGetter } of testSchemas) {
+		for (const { name, parse } of testSchemas) {
 			describe(name, () => {
-				before(() => (parse = makeTestParser(schemaGetter())));
-
 				for (const [input, output] of filePairs(`ir/${name}`, ".json")) {
 					it(`works with ${input.name}`, () => {
 						const [, result] = parse(input.read());
@@ -48,36 +44,40 @@ describe("IRHandler", () => {
 	});
 
 	describe("ValidationError", () => {
+		let emptyParser: (input: string) => [HMError[], IRNode];
+		let documentParser: (input: string) => [HMError[], IRNode];
+
+		beforeEach(() => {
+			emptyParser = makeTestParser(getEmptySchema());
+			documentParser = makeTestParser(getDocumentSchema());
+		});
+
 		describe("UnknownBlockTagError", () => {
 			it("is returned when a block is used in empty schema", () => {
-				before(() => (parse = makeTestParser(getEmptySchema())));
 				const input = resourceFile("input", "block_tag.hm").read();
-				const [errors] = parse(input);
+				const [errors] = emptyParser(input);
 				assertError(errors, UnknownBlockTagError);
 			});
 
 			it("is returned when an unknown block is used", () => {
-				before(() => (parse = makeTestParser(getDocumentSchema())));
 				const input = resourceFile("input", "nested_blocks.hm").read();
-				const [errors] = parse(input);
+				const [errors] = documentParser(input);
 				assertError(errors, UnknownBlockTagError); // #def is not in document schema
 			});
 		});
 
 		describe("DisallowedDefaultTagError", () => {
 			it("is returned when a disallowed default is used", () => {
-				before(() => (parse = makeTestParser(getEmptySchema())));
 				const input = resourceFile("input", "paragraphs.hm").read();
-				const [errors] = parse(input);
+				const [errors] = emptyParser(input);
 				assertError(errors, DisallowedDefaultTagError);
 			});
 		});
 
 		describe("UnknownInlineError", () => {
-			it("is returned when an inline element is used in empty schema", () => {
-				before(() => (parse = makeTestParser(getEmptySchema())));
+			it("is returned when an inline element is used", () => {
 				const input = resourceFile("input", "inline_start_of_line.hm").read();
-				const [errors] = parse(input);
+				const [errors] = documentParser(input);
 				assertError(errors, UnknownInlineTagError);
 			});
 		});
@@ -92,6 +92,7 @@ describe("IRHandler", () => {
 
 			for (const { cardinality, accepts } of tests) {
 				describe(cardinality, () => {
+					let parse: (input: string) => [HMError[], IRNode];
 					beforeEach(() => {
 						parse = makeTestParser({
 							blocks: {
