@@ -14,7 +14,7 @@ script:
 - npm run format:check
 - npm run tslint
 - npm run coveralls
-- npm run docs
+- npm run docs && touch typedoc/.nojekyll
 deploy:
 - provider: npm
   skip_cleanup: true
