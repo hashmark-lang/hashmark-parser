@@ -9,7 +9,7 @@ import { Schema } from "../../src/schema/Schema";
 import { ROOT, SchemaDefinition } from "../../src/schema/SchemaDefinition";
 import { filePairs } from "../utils";
 
-describe("xml", () => {
+describe("toXML()", () => {
 	const errors: HMError[] = [];
 	const logger = (x: HMError) => errors.push(x);
 	let parse: (input: string) => IRNode;
