@@ -3,6 +3,7 @@ export * from "./parser/InlineParser";
 export * from "./ir/IRNode";
 export * from "./schema/errors";
 export * from "./schema/SchemaDefinition";
+export * from "./schema/schema-generators";
 export * from "./parser/parse";
 export * from "./parser/BlockParser";
 export * from "./parser/InputPosition";
