@@ -1,31 +1,34 @@
 import { assert } from "chai";
 import {
+	CardinalityError,
 	DisallowedDefaultTagError,
 	HMError,
+	ROOT,
 	UnknownBlockTagError,
 	UnknownInlineTagError
 } from "../../src";
 import { IRNode } from "../../src/ir/IRNode";
+import { Cardinality } from "../../src/schema/Cardinality";
+import { prop } from "../../src/schema/schema-generators";
 import { getDocumentSchema, getEmptySchema, getTestSchema } from "../schemas";
 import { filePairs, makeTestParser, resourceFile } from "../utils";
 
 // tslint:disable-next-line:ban-types
-function assertError(result: HMError[] | IRNode, expected: Function) {
-	assert.instanceOf(result, Array, "Expected the result to be a list of errors");
-	const error = (result as HMError[]).find(err => err instanceof expected);
+function assertError(errors: HMError[], expected: Function) {
+	const error = errors.find(err => err instanceof expected)!;
 	assert.exists(error, `Expected to see a ${expected.name} error`);
 }
 
 describe("IRHandler", () => {
 	let parse: (input: string) => [HMError[], IRNode];
 
-	const testSchemas = [
-		{ name: "test-schema", schemaGetter: getTestSchema },
-		{ name: "empty-schema", schemaGetter: getEmptySchema },
-		{ name: "document-schema", schemaGetter: getDocumentSchema }
-	];
-
 	describe("Schemas", () => {
+		const testSchemas = [
+			{ name: "test-schema", schemaGetter: getTestSchema },
+			{ name: "empty-schema", schemaGetter: getEmptySchema },
+			{ name: "document-schema", schemaGetter: getDocumentSchema }
+		];
+
 		for (const { name, schemaGetter } of testSchemas) {
 			describe(name, () => {
 				before(() => (parse = makeTestParser(schemaGetter())));
@@ -77,6 +80,46 @@ describe("IRHandler", () => {
 				const [errors] = parse(input);
 				assertError(errors, UnknownInlineTagError);
 			});
+		});
+
+		describe("CardinalityError", () => {
+			const tests = [
+				{ cardinality: Cardinality.One, accepts: [false, true, false] },
+				{ cardinality: Cardinality.OneOrMore, accepts: [false, true, true] },
+				{ cardinality: Cardinality.Optional, accepts: [true, true, false] },
+				{ cardinality: Cardinality.ZeroOrMore, accepts: [true, true, true] }
+			];
+
+			for (const { cardinality, accepts } of tests) {
+				describe(cardinality, () => {
+					beforeEach(() => {
+						parse = makeTestParser({
+							blocks: {
+								[ROOT]: {
+									props: [prop("content", [{ tag: "child", cardinality }])]
+								},
+								["child"]: {
+									head: { name: "head", content: [] },
+									props: []
+								}
+							},
+							inline: {}
+						});
+					});
+
+					accepts.forEach((accept, index) => {
+						it(`${index} elements are ${accept ? "accepted" : "not accepted"}`, () => {
+							const input = "#child test\n".repeat(index);
+							const [errors] = parse(input);
+							if (accept) {
+								assert.isEmpty(errors);
+							} else {
+								assertError(errors, CardinalityError);
+							}
+						});
+					});
+				});
+			}
 		});
 	});
 });
