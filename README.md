@@ -1,5 +1,5 @@
 # Hashml parser
-[![npm version](https://badge.fury.io/js/%40hashml.svg)](https://www.npmjs.com/package/@hashml/hashml)
+[![npm version](https://badge.fury.io/js/%40hashml%2Fhashml.svg)](https://www.npmjs.com/package/@hashml/hashml)
 [![Build Status](https://travis-ci.org/hashml/hashml.svg?branch=master)](https://travis-ci.org/hashml/hashml)
 [![Coverage Status](https://coveralls.io/repos/github/hashml/hashml/badge.svg?branch=master)](https://coveralls.io/github/hashml/hashml?branch=master)
 
