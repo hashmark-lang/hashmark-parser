@@ -1,12 +1,6 @@
 import { SugarSyntax } from "../parser/Sugar";
 import { Cardinality } from "./Cardinality";
 
-export const enum Reserved {
-	rootTag = "root",
-	defaultTag = "_default",
-	rawLine = "_raw_line"
-}
-
 export const ROOT = "root";
 export const INVALID_TAG = "*";
 
