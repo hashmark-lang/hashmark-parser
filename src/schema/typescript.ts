@@ -102,12 +102,17 @@ export function convertSchemaToTypescript(
 }
 
 function createIdentifierMap(names: string[], prefix: string): ReadonlyMap<string, ts.Identifier> {
-	return new Map(
-		names.map(name => {
-			const identifierName = capitalize(prefix) + capitalize(name);
-			return [name, ts.createIdentifier(identifierName)];
-		})
-	);
+	const identifierCounts: Map<string, number> = new Map();
+	function identifier(name: string): ts.Identifier {
+		let id = capitalize(prefix) + capitalize(name).replace(/\W+/g, "_");
+		const count = identifierCounts.get(id);
+		identifierCounts.set(id, (count || 0) + 1);
+		if (count) {
+			id += "_" + count;
+		}
+		return ts.createIdentifier(id);
+	}
+	return new Map(names.map(name => [name, identifier(name)]));
 }
 
 function createCardinalityType(type: ts.TypeNode, cardinality: Cardinality): ts.TypeNode {
