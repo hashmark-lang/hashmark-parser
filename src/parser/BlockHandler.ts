@@ -10,7 +10,7 @@ export interface BlockHandler {
 	 * @param tag name of the tag, or `undefined` if the tag is not explicitly named
 	 * @param pos position of the start of the block
 	 *
-	 * @returns `true` if the block body is raw, `false` otherwise
+	 * @returns `true` if the block body is parsed, `false` otherwise
 	 */
 	openBlock(tag: string | undefined, pos: InputPosition): boolean;
 
