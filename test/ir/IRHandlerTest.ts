@@ -22,13 +22,16 @@ function assertError(errors: HMError[], expected: Function) {
 describe("IRHandler", () => {
 	describe("Schemas", () => {
 		const testSchemas = [
-			{ name: "empty-schema", parse: makeTestParser(getEmptySchema()) },
-			{ name: "test-schema", parse: makeTestParser(getTestSchema()) },
-			{ name: "document-schema", parse: makeTestParser(getDocumentSchema()) }
+			{ name: "empty-schema", schema: getEmptySchema() },
+			{ name: "test-schema", schema: getTestSchema() },
+			{ name: "document-schema", schema: getDocumentSchema() }
 		];
 
-		for (const { name, parse } of testSchemas) {
+		for (const { name, schema } of testSchemas) {
 			describe(name, () => {
+				let parse: (input: string) => [HMError[], IRNode];
+				beforeEach(() => (parse = makeTestParser(schema)));
+
 				for (const [input, output] of filePairs(`ir/${name}`, ".json")) {
 					it(`works with ${input.name}`, () => {
 						const [, result] = parse(input.read());
