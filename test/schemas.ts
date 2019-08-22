@@ -93,7 +93,7 @@ export function getEmptySchema(): SchemaDefinition {
 }
 
 export function getDocumentSchema(): SchemaDefinition {
-	const inlineTags = ["link", "bold", "code"];
+	const inlineTags = ["link", "bold", "code", "strong", "inline"];
 	const blockContent = ["paragraph", "section", "code"].map(tag => zeroOrMore(tag));
 
 	return {
@@ -123,9 +123,15 @@ export function getDocumentSchema(): SchemaDefinition {
 				sugar: sugar("*", "*"),
 				props: [inlineProp("text", ["link"])]
 			},
+			["strong"]: {
+				props: [inlineProp("text", ["link"])]
+			},
 			["code"]: {
 				props: [rawInlineProp("content")],
 				sugar: sugar("`", "`")
+			},
+			["inline"]: {
+				props: [inlineProp("inlineContent", inlineTags)]
 			}
 		}
 	};

@@ -75,8 +75,8 @@ describe("IRHandler", () => {
 		});
 
 		describe("UnknownInlineError", () => {
-			it("is returned when an inline element is used", () => {
-				const input = resourceFile("input", "inline_start_of_line.hm").read();
+			it("is returned when an unknown inline element is used", () => {
+				const input = "#unknown[inline]";
 				const [errors] = documentParser(input);
 				assertError(errors, UnknownInlineTagError);
 			});

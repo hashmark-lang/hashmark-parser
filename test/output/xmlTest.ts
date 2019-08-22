@@ -4,9 +4,9 @@ import { IRBlockHandler } from "../../src/ir/IRBlockHandler";
 import { IRNode } from "../../src/ir/IRNode";
 import { toXML } from "../../src/output/xml";
 import { BlockParser } from "../../src/parser/BlockParser";
-import { Cardinality } from "../../src/schema/Cardinality";
 import { Schema } from "../../src/schema/Schema";
-import { ROOT, SchemaDefinition } from "../../src/schema/SchemaDefinition";
+import { SchemaDefinition } from "../../src/schema/SchemaDefinition";
+import { getDocumentSchema } from "../schemas";
 import { filePairs } from "../utils";
 
 describe("toXML()", () => {
@@ -33,76 +33,3 @@ describe("toXML()", () => {
 		});
 	}
 });
-
-function getDocumentSchema(): SchemaDefinition {
-	const inlineTags = ["link", "strong", "inline", "code"];
-	const blockContent = [
-		{ tag: "paragraph", cardinality: Cardinality.ZeroOrMore },
-		{ tag: "section", cardinality: Cardinality.ZeroOrMore },
-		{ tag: "code", cardinality: Cardinality.ZeroOrMore }
-	];
-
-	return {
-		blocks: {
-			[ROOT]: {
-				defaultTag: "paragraph",
-				props: [
-					{
-						name: "content",
-						content: blockContent
-					}
-				]
-			},
-			["paragraph"]: {
-				head: { name: "text", content: inlineTags },
-				props: []
-			},
-			["section"]: {
-				head: { name: "title", content: inlineTags },
-				defaultTag: "paragraph",
-				props: [
-					{
-						name: "content",
-						content: blockContent
-					}
-				]
-			},
-			["code"]: {
-				props: [{ name: "content", raw: true }]
-			}
-		},
-
-		inline: {
-			["link"]: {
-				sugar: {
-					start: "[",
-					separator: "](",
-					end: ")"
-				},
-				props: [{ name: "url", raw: true }, { name: "text", content: ["strong"] }]
-			},
-			["strong"]: {
-				sugar: {
-					start: "*",
-					end: "*"
-				},
-				props: [{ name: "text", content: ["link"] }]
-			},
-			["inline"]: {
-				props: [
-					{
-						name: "inlineContent",
-						content: inlineTags
-					}
-				]
-			},
-			["code"]: {
-				props: [{ name: "content", raw: true }],
-				sugar: {
-					start: "`",
-					end: "`"
-				}
-			}
-		}
-	};
-}
