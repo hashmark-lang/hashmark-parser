@@ -14,7 +14,7 @@ import { BlockSchema, Schema } from "../schema/Schema";
 import { ROOT } from "../schema/SchemaDefinition";
 import { last } from "../utils";
 import { IRInlineHandler } from "./IRInlineHandler";
-import { emptyBlockProps, IRNode } from "./IRNode";
+import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
 export class IRBlockHandler implements BlockHandler {
 	private readonly inlineHandler: IRInlineHandler;
@@ -35,7 +35,7 @@ export class IRBlockHandler implements BlockHandler {
 
 	reset(): void {
 		this.stack.length = 0;
-		this.root = this.pushBlock(ROOT, this.schema.getBlockSchema(ROOT)!);
+		this.root = this.pushBlock(ROOT, this.schema.rootSchema);
 		this.ignoreFlag = false;
 	}
 
@@ -72,7 +72,7 @@ export class IRBlockHandler implements BlockHandler {
 		}
 
 		const node = this.pushBlock(tag, schema);
-		parent.node.props[propName].push(node);
+		(parent.node.props[propName] as IRNodeList).push(node); // TODO remove cast
 		return !Boolean(schema.rawPropName);
 	}
 
@@ -121,6 +121,6 @@ export class IRBlockHandler implements BlockHandler {
 	rawLine(content: string, pos: InputPosition) {
 		if (this.ignoreFlag) return;
 		const parent = last(this.stack);
-		parent.node.props[parent.schema.rawPropName!].push(content);
+		(parent.node.props[parent.schema.rawPropName!] as IRNodeList).push(content); // TODO remove cast
 	}
 }

@@ -1,13 +1,18 @@
-import { Cardinality } from "../src/schema/Cardinality";
 import {
-	inlineProp,
+	blockTag,
+	inline,
+	inlineSugar,
+	lineTag,
+	parsedArg,
 	prop,
-	rawInlineProp,
-	rawTag,
+	rawBodyTag,
+	root,
+	stringArg,
 	sugar,
+	urlArg,
 	zeroOrMore
 } from "../src/schema/schema-generators";
-import { INVALID_TAG, ROOT, SchemaDefinition } from "../src/schema/SchemaDefinition";
+import { BodyPropDefinitions, INVALID_TAG, SchemaDefinition } from "../src/schema/SchemaDefinition";
 
 export function getTestSchema(): SchemaDefinition {
 	const inlineTags = [
@@ -22,117 +27,73 @@ export function getTestSchema(): SchemaDefinition {
 		"link"
 	];
 
-	const blockProps = [
-		{ name: "children", content: [{ tag: INVALID_TAG, cardinality: Cardinality.ZeroOrMore }] }
-	];
-
-	const blockContent = {
-		head: { name: "head", content: inlineTags },
-		props: blockProps,
-		defaultTag: "_default"
-	};
+	const blockProps: BodyPropDefinitions = prop("children", zeroOrMore(INVALID_TAG));
+	const blockContent = blockTag(parsedArg("head", inlineTags), blockProps, "_default");
 
 	return {
+		root: root(blockProps, "_default"),
 		blocks: {
-			[ROOT]: blockContent,
-			["rawHead"]: {
-				head: { name: "head", raw: true },
-				props: blockProps
-			},
-			["rawBody"]: {
-				props: [{ name: "content", raw: true }]
-			},
+			["rawHead"]: blockTag(stringArg("head"), blockProps),
+			["rawBody"]: rawBodyTag("content"),
 			["_default"]: blockContent,
 			[INVALID_TAG]: blockContent
 		},
 		inline: {
-			["code"]: {
-				sugar: { start: "`", end: "`" },
-				props: [{ name: "content", raw: true }]
-			},
-			["strong"]: {
-				sugar: { start: "*", end: "*" },
-				props: [{ name: "content", content: inlineTags }]
-			},
-			["emphasis"]: {
-				sugar: { start: "_", end: "_" },
-				props: [{ name: "content", content: inlineTags }]
-			},
-			["triplet"]: {
-				sugar: { start: "{", separator: "|", end: "}" },
-				props: [
-					{ name: "first", content: inlineTags },
-					{ name: "second", content: inlineTags },
-					{ name: "third", content: inlineTags }
-				]
-			},
-			["rawFirstArg"]: {
-				sugar: { start: "{", separator: "|", end: "}" },
-				props: [{ name: "first", raw: true }, { name: "second", content: inlineTags }]
-			},
-			["tag\\"]: {
-				props: [{ name: "arg", content: inlineTags }]
-			},
-			["inline"]: {
-				props: [{ name: "arg", content: inlineTags }]
-			},
-			["link"]: {
-				props: [{ name: "url", raw: true }, { name: "title", content: inlineTags }]
-			}
+			["code"]: inlineSugar(sugar("`", "`"), stringArg("content")),
+			["strong"]: inlineSugar(sugar("*", "*"), parsedArg("content", inlineTags)),
+			["emphasis"]: inlineSugar(sugar("_", "_"), parsedArg("content", inlineTags)),
+			["triplet"]: inlineSugar(
+				sugar("{", "|", "}"),
+				parsedArg("first", inlineTags),
+				parsedArg("second", inlineTags),
+				parsedArg("third", inlineTags)
+			),
+			["rawFirstArg"]: inlineSugar(
+				sugar("{", "|", "}"),
+				stringArg("first"),
+				parsedArg("second", inlineTags)
+			),
+			["tag\\"]: inline(parsedArg("arg", inlineTags)),
+			["inline"]: inline(parsedArg("arg", inlineTags)),
+			["link"]: inline(urlArg("url"), parsedArg("title", inlineTags))
 		}
 	};
 }
 
 export function getEmptySchema(): SchemaDefinition {
 	return {
-		blocks: {
-			[ROOT]: { props: [] }
-		},
+		root: root({}),
+		blocks: {},
 		inline: {}
 	};
 }
 
 export function getDocumentSchema(): SchemaDefinition {
 	const inlineTags = ["link", "bold", "code", "strong", "inline"];
-	const blockContent = ["paragraph", "section", "code"].map(tag => zeroOrMore(tag));
+	const blockContentProp = prop(
+		"content",
+		zeroOrMore("paragraph"),
+		zeroOrMore("section"),
+		zeroOrMore("code")
+	);
 
 	return {
+		root: root(blockContentProp, "paragraph"),
 		blocks: {
-			[ROOT]: {
-				defaultTag: "paragraph",
-				props: [prop("content", blockContent)]
-			},
-			["paragraph"]: {
-				head: inlineProp("text", inlineTags),
-				props: []
-			},
-			["section"]: {
-				head: inlineProp("title", inlineTags),
-				defaultTag: "paragraph",
-				props: [prop("content", blockContent)]
-			},
-			["code"]: rawTag("content")
+			["paragraph"]: lineTag("text", inlineTags),
+			["section"]: blockTag(parsedArg("title", inlineTags), blockContentProp, "paragraph"),
+			["code"]: rawBodyTag("content", stringArg("language"))
 		},
-
 		inline: {
-			["link"]: {
-				sugar: sugar("[", "](", ")"),
-				props: [rawInlineProp("url"), inlineProp("text", ["bold"])]
-			},
-			["bold"]: {
-				sugar: sugar("*", "*"),
-				props: [inlineProp("text", ["link"])]
-			},
-			["strong"]: {
-				props: [inlineProp("text", ["link"])]
-			},
-			["code"]: {
-				props: [rawInlineProp("content")],
-				sugar: sugar("`", "`")
-			},
-			["inline"]: {
-				props: [inlineProp("inlineContent", inlineTags)]
-			}
+			["link"]: inlineSugar(
+				sugar("[", "](", ")"),
+				urlArg("url"),
+				parsedArg("text", ["bold"])
+			),
+			["bold"]: inlineSugar(sugar("*", "*"), parsedArg("text", ["link"])),
+			["strong"]: inline(parsedArg("text", ["link"])),
+			["code"]: inlineSugar(sugar("`", "`"), stringArg("content")),
+			["inline"]: inline(parsedArg("inlineContent", inlineTags))
 		}
 	};
 }

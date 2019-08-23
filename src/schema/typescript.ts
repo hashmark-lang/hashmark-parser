@@ -1,3 +1,4 @@
+/*
 import * as ts from "typescript";
 import { capitalize } from "../utils";
 import { Cardinality } from "./Cardinality";
@@ -152,3 +153,4 @@ function createInterfaceMember(name: string, type: ts.TypeNode): ts.TypeElement 
 	const initializer = undefined;
 	return ts.createPropertySignature(modifiers, name, questionToken, type, initializer);
 }
+*/

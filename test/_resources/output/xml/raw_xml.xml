@@ -16,6 +16,9 @@
 			</text>
 		</paragraph>
 		<code>
+			<language>
+				xml
+			</language>
 			<content>
 				&lt;!-- This should be all be escaped in the XML output &lt;test&gt; &amp; &lt;example&gt; --&gt;
 				&lt;example id=&quot;example&quot;&gt;
