@@ -10,8 +10,8 @@ import { IRNode, IRNodeList } from "../ir/IRNode";
  * @returns Tab-indented XML representation of the IR tree.
  */
 export function toXML(root: IRNode, indentation: number = 0): string {
-	const children = Object.entries(root.props).map(([tag, nodeList]) =>
-		propToXML(tag, nodeList, indentation + 1)
+	const children = Object.entries(root.props).map(
+		([tag, nodeList]) => propToXML(tag, nodeList as IRNodeList, indentation + 1) // TODO remove cast
 	);
 	return xmlTag(root.tag, indentation, ...children);
 }

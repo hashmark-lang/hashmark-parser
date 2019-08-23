@@ -18,7 +18,6 @@ export abstract class HMError extends Error {
 export const enum ErrorCode {
 	// Definition errors:
 	DUPLICATE_PROP_NAME = 100,
-	DUPLICATE_PROP_CONTENT,
 	DUPLICATE_PROP_ASSIGNMENT,
 
 	// Validation errors:
@@ -49,21 +48,6 @@ export class DuplicatePropNameError extends SchemaDefinitionError {
 			ErrorCode.DUPLICATE_PROP_NAME,
 			`Each prop name must be unique within a tag schema, ` +
 				`but prop '${propName}' in the schema for tag '${tag}' was defined ${repetitions} times`
-		);
-	}
-}
-
-export class DuplicatePropTagsError extends SchemaDefinitionError {
-	constructor(
-		readonly tag: string,
-		readonly propName: string,
-		readonly contentTag: string,
-		readonly repetitions: number
-	) {
-		super(
-			ErrorCode.DUPLICATE_PROP_CONTENT,
-			`Each tag can be placed at most once in a prop content, ` +
-				`but tag '${contentTag}' was placed ${repetitions} times in prop '${propName}' in the schema for tag '${tag}'`
 		);
 	}
 }

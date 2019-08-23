@@ -3,13 +3,12 @@ import {
 	CardinalityError,
 	DisallowedDefaultTagError,
 	HMError,
-	ROOT,
 	UnknownBlockTagError,
 	UnknownInlineTagError
 } from "../../src";
 import { IRNode } from "../../src/ir/IRNode";
 import { Cardinality } from "../../src/schema/Cardinality";
-import { prop } from "../../src/schema/schema-generators";
+import { lineTag, prop, root } from "../../src/schema/schema-generators";
 import { getDocumentSchema, getEmptySchema, getTestSchema } from "../schemas";
 import { filePairs, makeTestParser, resourceFile } from "../utils";
 
@@ -98,14 +97,9 @@ describe("IRHandler", () => {
 					let parse: (input: string) => [HMError[], IRNode];
 					beforeEach(() => {
 						parse = makeTestParser({
+							root: root(prop("content", { ["child"]: cardinality })),
 							blocks: {
-								[ROOT]: {
-									props: [prop("content", [{ tag: "child", cardinality }])]
-								},
-								["child"]: {
-									head: { name: "head", content: [] },
-									props: []
-								}
+								["child"]: lineTag("head", [])
 							},
 							inline: {}
 						});

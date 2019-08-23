@@ -1,15 +1,17 @@
 import { SugarSyntax } from "../parser/Sugar";
 import { Cardinality } from "./Cardinality";
 import {
-	BlockPropContentDefinition,
-	BlockPropDefinition,
-	BlockSchemaDefinition,
-	InlinePropDefinition,
-	RawBlockPropDefinition,
-	RawInlinePropDefinition
+	ArgDefinition,
+	BodyPropDefinitions,
+	InlineDefinition,
+	ParsedBlockDefinition,
+	RawBlockDefinition,
+	RootDefinition
 } from "./SchemaDefinition";
 
-// Cardinality:
+/////////////////
+// CARDINALITY //
+/////////////////
 
 /**
  * Allow a tag to appear once or more within a prop.
@@ -17,7 +19,7 @@ import {
  * Usage example:
  *
  * ```ts
- * prop("content", [oneOrMore("bar")])
+ * prop("content", oneOrMore("bar"))
  * ```
  *
  * This defines a `content` prop that may contain one or more occurrences of `#bar`
@@ -26,8 +28,8 @@ import {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function oneOrMore(tag: string): BlockPropContentDefinition {
-	return { tag, cardinality: Cardinality.OneOrMore };
+export function oneOrMore(tag: string) {
+	return { [tag]: Cardinality.OneOrMore };
 }
 
 /**
@@ -36,7 +38,7 @@ export function oneOrMore(tag: string): BlockPropContentDefinition {
  * Usage example:
  *
  * ```ts
- * prop("content", [one("bar")])
+ * prop("content", one("bar"))
  * ```
  *
  * This defines a `content` prop that may contain only exactly one occurrence of `#bar`
@@ -45,8 +47,8 @@ export function oneOrMore(tag: string): BlockPropContentDefinition {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function one(tag: string): BlockPropContentDefinition {
-	return { tag, cardinality: Cardinality.One };
+export function one(tag: string) {
+	return { [tag]: Cardinality.One };
 }
 
 /**
@@ -55,7 +57,7 @@ export function one(tag: string): BlockPropContentDefinition {
  * Usage example:
  *
  * ```ts
- * prop("content", [zeroOrMore("bar")])
+ * prop("content", zeroOrMore("bar"))
  * ```
  *
  * This defines a `content` prop that may contain any number of `#bar`
@@ -64,8 +66,8 @@ export function one(tag: string): BlockPropContentDefinition {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function zeroOrMore(tag: string): BlockPropContentDefinition {
-	return { tag, cardinality: Cardinality.ZeroOrMore };
+export function zeroOrMore(tag: string) {
+	return { [tag]: Cardinality.ZeroOrMore };
 }
 
 /**
@@ -74,7 +76,7 @@ export function zeroOrMore(tag: string): BlockPropContentDefinition {
  * Usage example:
  *
  * ```ts
- * prop("content", [optional("bar")])
+ * prop("content", optional("bar"))
  * ```
  *
  * This defines a `content` prop that may contain zero or one occurrences of `#bar`
@@ -83,11 +85,127 @@ export function zeroOrMore(tag: string): BlockPropContentDefinition {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function optional(tag: string): BlockPropContentDefinition {
-	return { tag, cardinality: Cardinality.Optional };
+export function optional(tag: string) {
+	return { [tag]: Cardinality.Optional };
 }
 
-// Sugar:
+////////////
+// BLOCKS //
+////////////
+
+export function root(body: BodyPropDefinitions, defaultTag?: string | undefined): RootDefinition {
+	return {
+		rawBody: false,
+		defaultTag,
+		props: { body }
+	};
+}
+
+export function stringTag(propName: string): ParsedBlockDefinition {
+	return blockTag(stringArg(propName));
+}
+
+export function urlTag(propName: string): ParsedBlockDefinition {
+	return blockTag(urlArg(propName));
+}
+
+export function dateTag(propName: string): ParsedBlockDefinition {
+	return blockTag(dateArg(propName));
+}
+
+export function lineTag(propName: string, content: string[]): ParsedBlockDefinition {
+	return blockTag(parsedArg(propName, content));
+}
+
+export function blockTag(
+	head?: ArgDefinition,
+	body?: BodyPropDefinitions,
+	defaultTag?: string
+): ParsedBlockDefinition {
+	return {
+		rawBody: false,
+		defaultTag,
+		props: {
+			head,
+			body
+		}
+	};
+}
+
+export function rawBodyTag(rawPropName: string, head?: ArgDefinition): RawBlockDefinition {
+	return {
+		rawBody: true,
+		props: {
+			head,
+			body: rawPropName
+		}
+	};
+}
+
+/////////////////
+// BLOCK PROPS //
+/////////////////
+
+/**
+ * Define a prop and its content.
+ *
+ * Usage example:
+ *
+ * ```ts
+ * prop("content", zeroOrMore("foo"), optional("bar"))
+ * ```
+ *
+ * This defines a `content` prop that may contain any number of `#foo` and optionally a `#bar`.
+ *
+ * @param name Name of the prop
+ * @param content Array of allowed content. See Cardinality Functions.
+ * @category Prop
+ */
+export function prop(
+	name: string,
+	...content: Array<{ [tag: string]: Cardinality }>
+): BodyPropDefinitions {
+	return { [name]: Object.assign({}, ...content) };
+}
+
+/**
+ * Unite multiple props into a single [[BodyPropDefinitions]] object
+ * @param bodyProps spread array of [[BodyPropDefinitions]]
+ * @category Prop
+ */
+export function props(...bodyProps: BodyPropDefinitions[]): BodyPropDefinitions {
+	return Object.assign({}, ...bodyProps);
+}
+
+/////////////////
+// HEAD & ARGS //
+/////////////////
+
+export function stringArg(name: string): ArgDefinition {
+	return { raw: true, type: "string", name };
+}
+export function urlArg(name: string): ArgDefinition {
+	return { raw: true, type: "url", name };
+}
+export function dateArg(name: string): ArgDefinition {
+	return { raw: true, type: "date", name };
+}
+
+export function parsedArg(name: string, content: string[]): ArgDefinition {
+	return { raw: false, name, content };
+}
+
+/////////////
+// INLINES //
+/////////////
+
+export function inline(...args: ArgDefinition[]): InlineDefinition {
+	return { args };
+}
+
+export function inlineSugar(sugarSyntax: SugarSyntax, ...args: ArgDefinition[]): InlineDefinition {
+	return { sugar: sugarSyntax, args };
+}
 
 export function sugar(start: string, end: string): SugarSyntax;
 // tslint:disable-next-line:unified-signatures
@@ -98,92 +216,4 @@ export function sugar(a: string, b: string, c?: string): SugarSyntax {
 	} else {
 		return { start: a, end: b };
 	}
-}
-
-// Props:
-
-/**
- * Define a prop and its content.
- *
- * Usage example:
- *
- * ```ts
- * prop("content", [zeroOrMore("foo"), optional("bar")])
- * ```
- *
- * This defines a `content` prop that may contain any number of `#foo` and optionally a `#bar`.
- *
- * @param name Name of the prop
- * @param content Array of allowed content. See Cardinality Functions.
- * @category Prop
- */
-export function prop(name: string, content: BlockPropContentDefinition[]): BlockPropDefinition {
-	return { name, content: content.flat() };
-}
-
-/**
- * Define a raw prop.
- *
- *
- * Usage example:
- *
- * ```ts
- * rawProp("code")
- * ```
- *
- * This defines a raw prop called `code`.
- * The body of a raw prop is not parsed as Hashml, but instead as raw text.
- *
- * @param name Name of the prop
- * @category Prop
- */
-export function rawProp(name: string): [RawBlockPropDefinition] {
-	return [{ name, raw: true }];
-}
-
-/**
- * Define an inline prop.
- *
- * Usage example:
- *
- * ```ts
- * inlineProp("title", ["bold", "italic"])
- * ```
- *
- * This is useful for heads of block tags, and for arguments of inline tags.
- *
- * @param name Name of the prop
- * @param content Array of allowed tags
- * @category Prop
- */
-export function inlineProp(name: string, content: string[]): InlinePropDefinition {
-	return { name, content };
-}
-
-/**
- * Define a raw inline prop.
- *
- * Usage example:
- *
- * ```ts
- * rawInlineProp("url")
- * ```
- *
- * This is useful for raw args and raw heads.
- *
- * @param name Name of the prop
- * @category Prop
- */
-export function rawInlineProp(name: string): RawInlinePropDefinition {
-	return { name, raw: true };
-}
-
-// Tag generators
-
-export function flagTag(tag: string) {
-	return { tag, props: [] };
-}
-
-export function rawTag(bodyPropName: string): BlockSchemaDefinition {
-	return { props: [{ name: bodyPropName, raw: true }] };
 }

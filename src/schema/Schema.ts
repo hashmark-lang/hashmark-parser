@@ -1,15 +1,23 @@
 import { Sugar } from "../parser/Sugar";
-import { Cardinality, CardinalityConstraint, cardinalityConstraints } from "./Cardinality";
 import {
-	BlockSchemaDefinition,
-	InlinePropDefinition,
-	InlineSchemaDefinition,
+	Cardinality,
+	CardinalityConstraint,
+	cardinalityToConstraint,
+	sumCardinalities
+} from "./Cardinality";
+import { ItemType, PropType } from "./PropType";
+import {
+	ArgDefinition,
+	BlockDefinition,
+	InlineDefinition,
 	INVALID_TAG,
+	ROOT,
 	SchemaDefinition
 } from "./SchemaDefinition";
 import { schemaErrors } from "./schemaErrors";
 
 export class Schema {
+	readonly rootSchema: BlockSchema;
 	private readonly blockSchemas: Map<string, BlockSchema> = new Map();
 	private readonly inlineSchemas: Map<string, InlineSchema> = new Map();
 	readonly sugars: Sugar[] = [];
@@ -19,6 +27,8 @@ export class Schema {
 		if (errors.length > 0) {
 			throw new Error("Invalid schema. " + errors.map(e => e.toString()).join("\n"));
 		}
+
+		this.rootSchema = new BlockSchema(ROOT, schema.root);
 
 		for (const [tag, inlineSchema] of Object.entries(schema.inline)) {
 			this.inlineSchemas.set(tag, new InlineSchema(tag, inlineSchema));
@@ -45,38 +55,41 @@ export class BlockSchema {
 	private childTagToProp: Map<string, string> = new Map();
 
 	readonly defaultTag?: string;
-	readonly head?: InlineGroupSchema;
+	readonly head?: ArgSchema;
 
 	readonly propNames: string[];
+	private readonly propTypes: Map<string, PropType> = new Map();
+
 	readonly rawPropName?: string;
+	readonly rawPropType?: PropType;
 
-	constructor(readonly tag: string, schema: BlockSchemaDefinition) {
-		this.head = schema.head ? new InlineGroupSchema(tag, schema.head) : undefined;
-		this.defaultTag = schema.defaultTag;
-
-		const propsSet = new Set<string>(); // set of prop names
-
-		if (schema.head) {
-			propsSet.add(schema.head.name);
+	constructor(readonly tag: string, schema: BlockDefinition) {
+		if (schema.props.head) {
+			const head = schema.props.head;
+			this.head = new ArgSchema(tag, head);
+			this.propTypes.set(head.name, argType(head));
 		}
 
-		for (const prop of schema.props) {
-			propsSet.add(prop.name);
-			if (prop.raw) {
-				if (this.rawPropName) throw new Error("Should have only one raw prop!");
-				this.rawPropName = prop.name;
-			} else {
-				for (const rule of prop.content) {
-					this.childTagToCardinality.set(rule.tag, [
-						rule.cardinality,
-						cardinalityConstraints[rule.cardinality]
-					]);
-					this.childTagToProp.set(rule.tag, prop.name);
+		if (schema.rawBody) {
+			this.propTypes.set(schema.props.body, RAW_BODY_TYPE);
+			this.rawPropName = schema.props.body;
+		} else if (schema.props.body) {
+			this.defaultTag = schema.defaultTag;
+			for (const [propName, content] of Object.entries(schema.props.body)) {
+				const rules = Object.entries(content);
+				const cardinalities = rules.map(([, cardinality]) => cardinality);
+				const propType = nodeType(sumCardinalities(cardinalities));
+				this.propTypes.set(propName, propType);
+
+				for (const [tagName, cardinality] of Object.entries(content)) {
+					const constraint = cardinalityToConstraint(cardinality);
+					this.childTagToCardinality.set(tagName, [cardinality, constraint]);
+					this.childTagToProp.set(tagName, propName);
 				}
 			}
 		}
 
-		this.propNames = Array.from(propsSet);
+		this.propNames = Array.from(this.propTypes.keys());
 	}
 
 	getPropName(child: string): string | undefined {
@@ -96,26 +109,59 @@ export class BlockSchema {
 
 export class InlineSchema {
 	readonly propNames: string[];
-	readonly args: ReadonlyArray<InlineGroupSchema>;
+	readonly args: ReadonlyArray<ArgSchema>;
 
-	constructor(readonly tag: string, schema: InlineSchemaDefinition) {
-		this.args = schema.props.map(_ => new InlineGroupSchema(tag, _));
-		this.propNames = schema.props.map(_ => _.name);
+	constructor(readonly tag: string, schema: InlineDefinition) {
+		this.args = schema.args.map(arg => new ArgSchema(tag, arg));
+		this.propNames = schema.args.map(arg => arg.name);
 	}
 }
 
-export class InlineGroupSchema {
+export class ArgSchema {
+	/** Name of the argument */
 	readonly name: string;
+	/** How the arg should be represented in the IR */
+	readonly type: PropType;
+	/** If `true`, the schema tells us that the argument should be not parsed as Hashml. */
 	readonly raw: boolean;
+
+	/** Set of tags allowed in this argument */
 	private readonly validChildren: Set<string>;
 
-	constructor(readonly parentTag: string, schema: InlinePropDefinition) {
+	constructor(readonly parentTag: string, schema: ArgDefinition) {
 		this.name = schema.name;
-		this.raw = Boolean(schema.raw);
+		this.raw = schema.raw;
 		this.validChildren = new Set(schema.raw ? [] : schema.content);
+		this.type = argType(schema);
 	}
 
 	isValidChild(tag: string) {
 		return this.validChildren.has(tag);
 	}
+}
+
+const DATE_TYPE: PropType = [new Set([ItemType.Date]), Cardinality.One];
+const URL_TYPE: PropType = [new Set([ItemType.URL]), Cardinality.One];
+const STRING_TYPE: PropType = [new Set([ItemType.String]), Cardinality.One];
+const PARSED_ARG_TYPE: PropType = [
+	new Set([ItemType.IRNode, ItemType.String]),
+	Cardinality.ZeroOrMore
+];
+const RAW_BODY_TYPE: PropType = [new Set([ItemType.String]), Cardinality.ZeroOrMore];
+
+function argType(arg: ArgDefinition): PropType {
+	if (!arg.raw) return PARSED_ARG_TYPE;
+	switch (arg.type) {
+		case "date":
+			return DATE_TYPE;
+		case "url":
+			return URL_TYPE;
+		case "string":
+			return STRING_TYPE;
+	}
+}
+
+const NODE_ITEM_TYPE = new Set([ItemType.IRNode]);
+function nodeType(cardinality: Cardinality): PropType {
+	return [NODE_ITEM_TYPE, cardinality];
 }

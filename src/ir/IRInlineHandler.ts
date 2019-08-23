@@ -6,14 +6,14 @@ import {
 	DisallowedInHeadError,
 	UnknownInlineTagError
 } from "../schema/errors";
-import { InlineGroupSchema, InlineSchema, Schema } from "../schema/Schema";
+import { ArgSchema, InlineSchema, Schema } from "../schema/Schema";
 import { last } from "../utils";
 import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
 
 export class IRInlineHandler implements InlineHandler {
 	protected readonly inlineGroupStack: Array<{
 		nodeList: IRNodeList;
-		schema: InlineGroupSchema;
+		schema: ArgSchema;
 	} | null> = [];
 	protected readonly inlineElementStack: Array<{
 		node: IRNode;
@@ -26,7 +26,7 @@ export class IRInlineHandler implements InlineHandler {
 		return this.inlineGroupStack[0]!.nodeList;
 	}
 
-	reset(rootSchema: InlineGroupSchema) {
+	reset(rootSchema: ArgSchema) {
 		this.inlineGroupStack.length = 0;
 		this.inlineElementStack.length = 0;
 		this.inlineGroupStack.push({ nodeList: [], schema: rootSchema });
@@ -79,7 +79,10 @@ export class IRInlineHandler implements InlineHandler {
 		}
 
 		const schema = parent.schema.args[index];
-		this.inlineGroupStack.push({ nodeList: parent.node.props[schema.name], schema });
+		this.inlineGroupStack.push({
+			nodeList: parent.node.props[schema.name] as IRNodeList, // TODO remove cast
+			schema
+		});
 		return !schema.raw;
 	}
 
