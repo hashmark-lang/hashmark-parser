@@ -1,18 +1,10 @@
-/*
 import * as ts from "typescript";
 import { capitalize } from "../utils";
-import { Cardinality } from "./Cardinality";
-import {
-	BlockPropDefinition,
-	BlockSchemaDefinition,
-	InlinePropDefinition,
-	InlineSchemaDefinition,
-	RawBlockPropDefinition,
-	SchemaDefinition
-} from "./SchemaDefinition";
+import { ArgSchema, BlockSchema, BodyPropSchema, InlineSchema, Schema } from "./Schema";
 
 const STRING_TYPE = ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
-const UNDEFINED_TYPE = ts.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword);
+const NULL_TYPE = ts.createKeywordTypeNode(ts.SyntaxKind.NullKeyword);
+const EXPORT_MODIFIER = [ts.createModifier(ts.SyntaxKind.ExportKeyword)];
 
 interface TypescriptConverterOptions {
 	target: ts.ScriptTarget;
@@ -25,66 +17,100 @@ const defaultOptions: TypescriptConverterOptions = {
 };
 
 export function convertSchemaToTypescript(
-	schema: SchemaDefinition,
+	schema: Schema,
 	conversionOptions: Partial<TypescriptConverterOptions> = defaultOptions
-) {
+): string {
 	const options = { ...defaultOptions, ...conversionOptions };
-	const blockIdentifiers = createIdentifierMap(Object.keys(schema.blocks), "block");
-	const inlineIdentifiers = createIdentifierMap(Object.keys(schema.inline), "inline");
+	const blockIdentifiers = createIdentifierMap(
+		schema.blocks.concat(schema.rootSchema).map(_ => _.tag),
+		"block"
+	);
+	const inlineIdentifiers = createIdentifierMap(schema.inlines.map(_ => _.tag), "inline");
 
-	function createBlock(
-		name: string,
-		blockSchema: BlockSchemaDefinition
-	): ts.InterfaceDeclaration {
-		const props = blockSchema.props as Array<RawBlockPropDefinition | BlockPropDefinition>;
-		const typeName = blockIdentifiers.get(name)!;
-		const propsTypes = props.map(prop => createBlockProp(prop));
-		if (blockSchema.head) {
-			propsTypes.push(createInlineProp(blockSchema.head));
+	function createBlockInterface(block: BlockSchema): ts.InterfaceDeclaration {
+		const typeName = blockIdentifiers.get(block.tag)!;
+		const propsTypes = block.bodyProps.map(prop => createBodyProp(prop));
+		if (block.head) {
+			propsTypes.push(createArgProp(block.head));
 		}
-		return createInterface(typeName, [
-			createInterfaceMember("tag", ts.createLiteralTypeNode(ts.createStringLiteral(name))),
-			createInterfaceMember("props", ts.createTypeLiteralNode(propsTypes))
-		]);
+		return createTag(typeName, block.tag, propsTypes);
 	}
 
-	function createBlockProp(prop: BlockPropDefinition | RawBlockPropDefinition): ts.TypeElement {
+	function createBodyProp(prop: BodyPropSchema): ts.TypeElement {
 		if (prop.raw) {
-			return createInterfaceMember(prop.name, STRING_TYPE);
+			return createInterfaceMember(prop.name, ts.createArrayTypeNode(STRING_TYPE));
 		}
-		// TODO temporary! Add a combineCardinalities() function later.
-		const cardinality =
-			prop.content.length === 1 ? prop.content[0].cardinality : Cardinality.ZeroOrMore;
-		const refs = prop.content.map(rule =>
-			ts.createTypeReferenceNode(blockIdentifiers.get(rule.tag)!, undefined)
+		const refs = prop.children.map(child =>
+			ts.createTypeReferenceNode(blockIdentifiers.get(child)!, undefined)
 		);
-		return createInterfaceMember(
-			prop.name,
-			createCardinalityType(ts.createUnionTypeNode(refs), cardinality)
-		);
-	}
-
-	function createInline(
-		name: string,
-		inlineSchema: InlineSchemaDefinition
-	): ts.InterfaceDeclaration {
-		const typeName = inlineIdentifiers.get(name)!;
-		return createInterface(typeName, inlineSchema.props.map(prop => createInlineProp(prop)));
-	}
-
-	function createInlineProp(prop: InlinePropDefinition): ts.TypeElement {
-		if (prop.raw) {
-			return createInterfaceMember(prop.name, STRING_TYPE);
+		if (prop.isArrayType) {
+			return createInterfaceMember(
+				prop.name,
+				ts.createArrayTypeNode(ts.createUnionTypeNode(refs))
+			);
+		} else if (prop.cardinality.max === 0) {
+			return createInterfaceMember(prop.name, NULL_TYPE);
+		} else if (prop.cardinality.min === 0) {
+			return createInterfaceMember(prop.name, ts.createUnionTypeNode([...refs, NULL_TYPE]));
+		} else if (prop.cardinality.min === 1 && prop.cardinality.max === 1) {
+			return createInterfaceMember(prop.name, ts.createUnionTypeNode(refs));
+		} else {
+			throw new Error("Unrecognised cardinality");
 		}
-		const refs: ts.TypeNode[] = prop.content.map(tag =>
-			ts.createTypeReferenceNode(inlineIdentifiers.get(tag)!, undefined)
-		);
-		return createInterfaceMember(
-			prop.name,
-			ts.createArrayTypeNode(ts.createUnionTypeNode(refs.concat(STRING_TYPE)))
-		);
 	}
 
+	function createInline(inline: InlineSchema): ts.InterfaceDeclaration {
+		const typeName = inlineIdentifiers.get(inline.tag)!;
+		const propsTypes = inline.args.map(arg => createArgProp(arg));
+		return createTag(typeName, inline.tag, propsTypes);
+	}
+
+	function createArgProp(arg: ArgSchema): ts.TypeElement {
+		switch (arg.type) {
+			case "parsed":
+				const refs: ts.TypeNode[] = Array.from(arg.validChildren).map(tag =>
+					ts.createTypeReferenceNode(inlineIdentifiers.get(tag)!, undefined)
+				);
+				return createInterfaceMember(
+					arg.name,
+					ts.createArrayTypeNode(ts.createUnionTypeNode(refs.concat(STRING_TYPE)))
+				);
+			case "date":
+				return createInterfaceMember(
+					arg.name,
+					ts.createTypeReferenceNode("Date", undefined)
+				);
+			case "string":
+				return createInterfaceMember(arg.name, STRING_TYPE);
+			case "url":
+				return createInterfaceMember(
+					arg.name,
+					ts.createTypeReferenceNode("URL", undefined)
+				);
+		}
+	}
+
+	const blocks = [schema.rootSchema, ...schema.blocks].map(block => createBlockInterface(block));
+	const inlines = schema.inlines.map(inline => createInline(inline));
+	const blockTypes = blocks.map(i => ts.createTypeReferenceNode(i.name, undefined));
+	const inlineTypes = inlines.map(i => ts.createTypeReferenceNode(i.name, undefined));
+	const blockUnion = createUnionTypeAlias("BlockTag", blockTypes);
+	const inlineUnion = createUnionTypeAlias("InlineTag", inlineTypes);
+	const union = createUnionTypeAlias("Tag", [
+		ts.createTypeReferenceNode(blockUnion.name, undefined),
+		ts.createTypeReferenceNode(inlineUnion.name, undefined)
+	]);
+	ts.addSyntheticLeadingComment(
+		union,
+		ts.SyntaxKind.MultiLineCommentTrivia,
+		" This file was generated by Hashml https://github.com/hashml/hashml ",
+		true
+	);
+	const nodes = [union, blockUnion, inlineUnion, ...blocks, ...inlines];
+	return printTypescript(nodes, options);
+}
+
+function printTypescript(nodes: ts.Node[], options: TypescriptConverterOptions): string {
 	const declarationFile = ts.createSourceFile(
 		"out.d.ts",
 		"",
@@ -92,14 +118,9 @@ export function convertSchemaToTypescript(
 		false,
 		ts.ScriptKind.TS
 	);
+
 	const printer = ts.createPrinter({ newLine: options.newLine });
-	const blocks = Object.entries(schema.blocks).map(([name, def]) => createBlock(name, def));
-	const inlines = Object.entries(schema.inline).map(([name, def]) => createInline(name, def));
-	return printer.printList(
-		ts.ListFormat.MultiLine,
-		ts.createNodeArray(blocks.concat(inlines)),
-		declarationFile
-	);
+	return printer.printList(ts.ListFormat.MultiLine, ts.createNodeArray(nodes), declarationFile);
 }
 
 function createIdentifierMap(names: string[], prefix: string): ReadonlyMap<string, ts.Identifier> {
@@ -116,41 +137,47 @@ function createIdentifierMap(names: string[], prefix: string): ReadonlyMap<strin
 	return new Map(names.map(name => [name, identifier(name)]));
 }
 
-function createCardinalityType(type: ts.TypeNode, cardinality: Cardinality): ts.TypeNode {
-	switch (cardinality) {
-		case Cardinality.One:
-			return type;
-		case Cardinality.OneOrMore:
-			return ts.createTupleTypeNode([type, ts.createRestTypeNode(type)]);
-		case Cardinality.Optional:
-			return ts.createUnionTypeNode([type, UNDEFINED_TYPE]);
-		case Cardinality.ZeroOrMore:
-			return ts.createArrayTypeNode(type);
-	}
+function createTag(
+	typeName: ts.Identifier,
+	tagName: string,
+	props: ts.TypeElement[]
+): ts.InterfaceDeclaration {
+	return createInterface(typeName, [
+		createInterfaceMember("tag", ts.createLiteralTypeNode(ts.createStringLiteral(tagName))),
+		createInterfaceMember("props", ts.createTypeLiteralNode(props))
+	]);
 }
 
 function createInterface(
 	name: string | ts.Identifier,
 	members: ts.TypeElement[]
 ): ts.InterfaceDeclaration {
-	const decorators: ts.Decorator[] = [];
-	const modifiers: ts.Modifier[] = [ts.createModifier(ts.SyntaxKind.ExportKeyword)];
-	const typeParameters: ts.TypeParameterDeclaration[] = [];
-	const heritageClauses: ts.HeritageClause[] = [];
 	return ts.createInterfaceDeclaration(
-		decorators,
-		modifiers,
+		undefined, // decorators
+		EXPORT_MODIFIER,
 		name,
-		typeParameters,
-		heritageClauses,
+		undefined, // type parameters
+		undefined, // heritage clauses
 		members
 	);
 }
 
 function createInterfaceMember(name: string, type: ts.TypeNode): ts.TypeElement {
-	const modifiers = undefined;
-	const questionToken = undefined;
-	const initializer = undefined;
-	return ts.createPropertySignature(modifiers, name, questionToken, type, initializer);
+	return ts.createPropertySignature(
+		undefined, // modifiers
+		name,
+		undefined, // question token
+		type,
+		undefined // initializer
+	);
 }
-*/
+
+function createUnionTypeAlias(name: string, types: ts.TypeNode[]) {
+	return ts.createTypeAliasDeclaration(
+		undefined, // decorators
+		EXPORT_MODIFIER, // modifiers
+		name,
+		undefined, // type parameters
+		ts.createUnionTypeNode(types)
+	);
+}

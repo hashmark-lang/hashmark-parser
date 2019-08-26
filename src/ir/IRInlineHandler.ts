@@ -46,7 +46,7 @@ export class IRInlineHandler implements InlineHandler {
 
 		if (parent.schema.raw) throw new Error("");
 
-		if (!parent.schema.isValidChild(tag)) {
+		if (!parent.schema.validChildren.has(tag)) {
 			if (this.inlineElementStack.length > 0) {
 				this.log(new DisallowedInArgError(tag, parent.schema.name, pos));
 			} else {

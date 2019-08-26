@@ -35,6 +35,14 @@ export class Schema {
 		}
 	}
 
+	get blocks(): BlockSchema[] {
+		return Array.from(this.blockSchemas.values());
+	}
+
+	get inlines(): InlineSchema[] {
+		return Array.from(this.inlineSchemas.values());
+	}
+
 	getBlockSchema(tag: string): BlockSchema | undefined {
 		return this.blockSchemas.get(tag) || this.blockSchemas.get(INVALID_TAG);
 	}
@@ -91,6 +99,7 @@ export class BodyPropSchema {
 	readonly raw: boolean;
 	readonly cardinality: Cardinality;
 	readonly isArrayType: boolean;
+	readonly children: ReadonlyArray<string>;
 
 	constructor(
 		readonly name: string,
@@ -103,6 +112,7 @@ export class BodyPropSchema {
 			? { min: 0, max: Infinity }
 			: sumCardinalities(Object.values(content.rules));
 		this.isArrayType = this.cardinality.max > 1;
+		this.children = content.raw ? [] : Object.keys(content.rules);
 	}
 
 	childCardinality(childName: string): Cardinality | undefined {
@@ -129,18 +139,13 @@ export class ArgSchema {
 	readonly type: "parsed" | "string" | "url" | "date";
 	/** If `true`, the schema tells us that the argument should be not parsed as Hashml. */
 	readonly raw: boolean;
-
 	/** Set of tags allowed in this argument */
-	private readonly validChildren: Set<string>;
+	readonly validChildren: ReadonlySet<string>;
 
 	constructor(readonly parentTag: string, schema: ArgDefinition) {
 		this.name = schema.name;
 		this.raw = schema.raw;
 		this.validChildren = new Set(schema.raw ? [] : schema.content);
 		this.type = schema.raw ? schema.type : "parsed";
-	}
-
-	isValidChild(tag: string) {
-		return this.validChildren.has(tag);
 	}
 }
