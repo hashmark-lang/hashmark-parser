@@ -28,8 +28,8 @@ import {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function oneOrMore(tag: string) {
-	return { [tag]: Cardinality.OneOrMore };
+export function oneOrMore(tag: string): { [tag: string]: Cardinality } {
+	return { [tag]: { min: 1, max: Infinity } };
 }
 
 /**
@@ -47,8 +47,8 @@ export function oneOrMore(tag: string) {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function one(tag: string) {
-	return { [tag]: Cardinality.One };
+export function one(tag: string): { [tag: string]: Cardinality } {
+	return { [tag]: { min: 1, max: 1 } };
 }
 
 /**
@@ -66,8 +66,8 @@ export function one(tag: string) {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function zeroOrMore(tag: string) {
-	return { [tag]: Cardinality.ZeroOrMore };
+export function zeroOrMore(tag: string): { [tag: string]: Cardinality } {
+	return { [tag]: { min: 0, max: Infinity } };
 }
 
 /**
@@ -85,8 +85,8 @@ export function zeroOrMore(tag: string) {
  * @returns A cardinality rule for a prop in a block body
  * @category Cardinality
  */
-export function optional(tag: string) {
-	return { [tag]: Cardinality.Optional };
+export function optional(tag: string): { [tag: string]: Cardinality } {
+	return { [tag]: { min: 0, max: 1 } };
 }
 
 ////////////
