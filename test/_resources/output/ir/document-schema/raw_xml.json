@@ -10,9 +10,7 @@
                         {
                             "tag": "code",
                             "props": {
-                                "content": [
-                                    "<test id=\"test\">Hello world</test>"
-                                ]
+                                "content": "<test id=\"test\">Hello world</test>"
                             }
                         }
                     ]

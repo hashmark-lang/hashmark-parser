@@ -9,17 +9,13 @@
 						{
 							"tag": "rawFirstArg",
 							"props": {
-								"first": [
-									"a"
-								],
+								"first": "a",
 								"second": [
 									"b",
 									{
 										"tag": "rawFirstArg",
 										"props": {
-											"first": [
-												"c"
-											],
+											"first": "c",
 											"second": [
 												"d"
 											]
