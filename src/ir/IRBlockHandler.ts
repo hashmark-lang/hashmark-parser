@@ -14,7 +14,7 @@ import { BlockSchema, Schema } from "../schema/Schema";
 import { ROOT } from "../schema/SchemaDefinition";
 import { last } from "../utils";
 import { IRInlineHandler } from "./IRInlineHandler";
-import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
+import { IRNode, IRNodeList } from "./IRNode";
 
 export class IRBlockHandler implements BlockHandler {
 	private readonly inlineHandler: IRInlineHandler;
@@ -44,7 +44,14 @@ export class IRBlockHandler implements BlockHandler {
 	}
 
 	private pushBlock(tag: string, schema: BlockSchema): IRNode {
-		const node = { tag, props: emptyBlockProps(schema.propNames) };
+		const headProp = schema.head ? { [schema.head.name]: schema.head.raw ? null : [] } : {};
+		const bodyProps = Object.fromEntries(
+			schema.bodyPropNames.map(propName => [
+				propName,
+				schema.isPropArray(propName) ? [] : null
+			])
+		);
+		const node = { tag, props: { ...headProp, ...bodyProps } };
 		const childCount = new Map<string, number>();
 		this.stack.push({ node, schema, childCount });
 		return node;
@@ -72,7 +79,13 @@ export class IRBlockHandler implements BlockHandler {
 		}
 
 		const node = this.pushBlock(tag, schema);
-		(parent.node.props[propName] as IRNodeList).push(node); // TODO remove cast
+
+		if (parent.schema.isPropArray(propName)) {
+			(parent.node.props[propName] as IRNodeList).push(node); // TODO remove cast
+		} else {
+			parent.node.props[propName] = node;
+		}
+
 		return !Boolean(schema.rawPropName);
 	}
 

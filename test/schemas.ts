@@ -3,11 +3,13 @@ import {
 	inline,
 	inlineSugar,
 	lineTag,
+	optional,
 	parsedArg,
 	prop,
 	rawBodyTag,
 	root,
 	stringArg,
+	stringTag,
 	sugar,
 	urlArg,
 	zeroOrMore
@@ -81,7 +83,12 @@ export function getDocumentSchema(): SchemaDefinition {
 		root: root(blockContentProp, "paragraph"),
 		blocks: {
 			["paragraph"]: lineTag("text", inlineTags),
-			["section"]: blockTag(parsedArg("title", inlineTags), blockContentProp, "paragraph"),
+			["section"]: blockTag(
+				parsedArg("title", inlineTags),
+				{ ...blockContentProp, id: optional("id") },
+				"paragraph"
+			),
+			["id"]: stringTag("content"),
 			["code"]: rawBodyTag("content", stringArg("language"))
 		},
 		inline: {

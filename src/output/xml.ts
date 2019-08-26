@@ -1,4 +1,4 @@
-import { IRNode, IRNodeList } from "../ir/IRNode";
+import { IRNode, Prop } from "../ir/IRNode";
 
 /**
  * Convert an IR tree to an XML string.
@@ -11,18 +11,28 @@ import { IRNode, IRNodeList } from "../ir/IRNode";
  */
 export function toXML(root: IRNode, indentation: number = 0): string {
 	const children = Object.entries(root.props).map(
-		([tag, nodeList]) => propToXML(tag, nodeList as IRNodeList, indentation + 1) // TODO remove cast
+		([tag, propContent]) => propToXML(tag, propContent, indentation + 1) // TODO remove cast
 	);
 	return xmlTag(root.tag, indentation, ...children);
 }
 
-function propToXML(tag: string, content: IRNodeList, indentation: number): string {
-	const children = content.map(node =>
-		typeof node === "string"
-			? indent(escapeXML(node), indentation + 1)
-			: toXML(node, indentation + 1)
-	);
-	return xmlTag(tag, indentation, ...children);
+function propToXML(tag: string, content: Prop, indentation: number): string {
+	if (!content) {
+		return xmlTag(tag, indentation);
+	} else if (typeof content === "string") {
+		return xmlTag(tag, indentation, indent(escapeXML(content), indentation + 1));
+	} else if (content instanceof Date || content instanceof URL) {
+		return xmlTag(tag, indentation, content.toString());
+	} else if (content instanceof Array) {
+		const children = (content as Array<IRNode | string>).map(node =>
+			typeof node === "string"
+				? indent(escapeXML(node), indentation + 1)
+				: toXML(node, indentation + 1)
+		);
+		return xmlTag(tag, indentation, ...children);
+	} else {
+		return xmlTag(tag, indentation, toXML(content, indentation + 1));
+	}
 }
 
 function xmlTag(name: string, indentation: number, ...children: string[]): string {

@@ -57,29 +57,40 @@ export class BlockSchema {
 	readonly defaultTag?: string;
 	readonly head?: ArgSchema;
 
-	readonly propNames: string[];
-	private readonly propTypes: Map<string, PropType> = new Map();
+	readonly bodyPropNames: ReadonlyArray<string> = [];
+	private readonly arrayProps: Set<string> = new Set();
 
 	readonly rawPropName?: string;
 	readonly rawPropType?: PropType;
 
 	constructor(readonly tag: string, schema: BlockDefinition) {
+		const propNames = [];
 		if (schema.props.head) {
 			const head = schema.props.head;
 			this.head = new ArgSchema(tag, head);
-			this.propTypes.set(head.name, argType(head));
+			// this.propTypes.set(head.name, argType(head));
 		}
 
 		if (schema.rawBody) {
-			this.propTypes.set(schema.props.body, RAW_BODY_TYPE);
+			// this.propTypes.set(schema.props.body, RAW_BODY_TYPE);
 			this.rawPropName = schema.props.body;
+			this.arrayProps.add(this.rawPropName);
+			propNames.push(schema.props.body);
 		} else if (schema.props.body) {
 			this.defaultTag = schema.defaultTag;
 			for (const [propName, content] of Object.entries(schema.props.body)) {
 				const rules = Object.entries(content);
-				const cardinalities = rules.map(([, cardinality]) => cardinality);
-				const propType = nodeType(sumCardinalities(cardinalities));
-				this.propTypes.set(propName, propType);
+				const propCardinality = sumCardinalities(
+					rules.map(([, cardinality]) => cardinality)
+				);
+				propNames.push(propName);
+				if (
+					propCardinality === Cardinality.ZeroOrMore ||
+					propCardinality === Cardinality.OneOrMore
+				) {
+					this.arrayProps.add(propName);
+				}
+				// this.propTypes.set(propName, propType);
 
 				for (const [tagName, cardinality] of Object.entries(content)) {
 					const constraint = cardinalityToConstraint(cardinality);
@@ -89,11 +100,15 @@ export class BlockSchema {
 			}
 		}
 
-		this.propNames = Array.from(this.propTypes.keys());
+		this.bodyPropNames = propNames;
 	}
 
 	getPropName(child: string): string | undefined {
 		return this.childTagToProp.get(child) || this.childTagToProp.get(INVALID_TAG);
+	}
+
+	isPropArray(propName: string): boolean {
+		return this.arrayProps.has(propName);
 	}
 
 	getCardinality(childName: string): [Cardinality, CardinalityConstraint] | undefined {
@@ -147,7 +162,6 @@ const PARSED_ARG_TYPE: PropType = [
 	new Set([ItemType.IRNode, ItemType.String]),
 	Cardinality.ZeroOrMore
 ];
-const RAW_BODY_TYPE: PropType = [new Set([ItemType.String]), Cardinality.ZeroOrMore];
 
 function argType(arg: ArgDefinition): PropType {
 	if (!arg.raw) return PARSED_ARG_TYPE;
@@ -159,9 +173,4 @@ function argType(arg: ArgDefinition): PropType {
 		case "string":
 			return STRING_TYPE;
 	}
-}
-
-const NODE_ITEM_TYPE = new Set([ItemType.IRNode]);
-function nodeType(cardinality: Cardinality): PropType {
-	return [NODE_ITEM_TYPE, cardinality];
 }
