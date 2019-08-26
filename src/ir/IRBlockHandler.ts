@@ -46,10 +46,7 @@ export class IRBlockHandler implements BlockHandler {
 	private pushBlock(tag: string, schema: BlockSchema): IRNode {
 		const headProp = schema.head ? { [schema.head.name]: schema.head.raw ? null : [] } : {};
 		const bodyProps = Object.fromEntries(
-			schema.bodyPropNames.map(propName => [
-				propName,
-				schema.isPropArray(propName) ? [] : null
-			])
+			schema.bodyProps.map(prop => [prop.name, prop.isArrayType ? [] : null])
 		);
 		const node = { tag, props: { ...headProp, ...bodyProps } };
 		const childCount = new Map<string, number>();
@@ -66,13 +63,13 @@ export class IRBlockHandler implements BlockHandler {
 		const schema = this.schema.getBlockSchema(tag);
 		if (!schema) return this.blockError(new UnknownBlockTagError(tag, pos));
 
-		const propName = parent.schema.getPropName(tag);
-		if (!propName) {
+		const prop = parent.schema.getPropByChild(tag);
+		if (!prop) {
 			return this.blockError(new DisallowedInBlockError(parent.node.tag, tag, pos));
 		}
 
 		const count = (parent.childCount.get(tag) || 0) + 1;
-		const cardinality = parent.schema.getCardinality(tag)!;
+		const cardinality = prop.childCardinality(tag)!;
 		parent.childCount.set(tag, count);
 		if (count > cardinality.max) {
 			this.log(new CardinalityError(parent.node, [pos], tag, count, cardinality));
@@ -80,13 +77,13 @@ export class IRBlockHandler implements BlockHandler {
 
 		const node = this.pushBlock(tag, schema);
 
-		if (parent.schema.isPropArray(propName)) {
-			(parent.node.props[propName] as IRNodeList).push(node); // TODO remove cast
+		if (prop.isArrayType) {
+			(parent.node.props[prop.name] as IRNodeList).push(node); // TODO remove cast
 		} else {
-			parent.node.props[propName] = node;
+			parent.node.props[prop.name] = node;
 		}
 
-		return !Boolean(schema.rawPropName);
+		return !Boolean(schema.rawProp);
 	}
 
 	closeBlock(): void {
@@ -96,8 +93,7 @@ export class IRBlockHandler implements BlockHandler {
 		}
 		const top = this.stack.pop();
 		if (top) {
-			const cardinalities = top.schema.getAllCardinalities().entries();
-			for (const [child, cardinality] of cardinalities) {
+			for (const [child, cardinality] of top.schema.childCardinalities) {
 				const count = top.childCount.get(child) || 0;
 				if (count < cardinality.min) {
 					this.log(new CardinalityError(top.node, [], child, count, cardinality));
@@ -134,6 +130,6 @@ export class IRBlockHandler implements BlockHandler {
 	rawLine(content: string, pos: InputPosition) {
 		if (this.ignoreFlag) return;
 		const parent = last(this.stack);
-		(parent.node.props[parent.schema.rawPropName!] as IRNodeList).push(content); // TODO remove cast
+		(parent.node.props[parent.schema.rawProp!.name] as IRNodeList).push(content); // TODO remove cast
 	}
 }

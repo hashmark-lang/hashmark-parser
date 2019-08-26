@@ -45,64 +45,70 @@ export class Schema {
 }
 
 export class BlockSchema {
-	private childTagToCardinality: Map<string, Cardinality> = new Map();
-	private childTagToProp: Map<string, string> = new Map();
-
-	readonly defaultTag?: string;
 	readonly head?: ArgSchema;
+	readonly defaultTag?: string;
 
-	readonly bodyPropNames: ReadonlyArray<string> = [];
-	private readonly arrayProps: Set<string> = new Set();
+	readonly bodyProps: ReadonlyArray<BodyPropSchema>;
+	readonly rawProp?: BodyPropSchema;
+	readonly childCardinalities: ReadonlyArray<[string, Cardinality]>;
 
-	readonly rawPropName?: string;
+	private readonly childTagToProp: Map<string, BodyPropSchema> = new Map();
 
 	constructor(readonly tag: string, schema: BlockDefinition) {
-		const propNames = [];
+		const bodyProps: BodyPropSchema[] = [];
+		const childCardinalities: Array<[string, Cardinality]> = [];
+
 		if (schema.props.head) {
 			const head = schema.props.head;
 			this.head = new ArgSchema(tag, head);
 		}
 
 		if (schema.rawBody) {
-			this.rawPropName = schema.props.body;
-			this.arrayProps.add(this.rawPropName);
-			propNames.push(schema.props.body);
+			this.rawProp = new BodyPropSchema(schema.props.body, { raw: true });
+			bodyProps.push(this.rawProp);
 		} else if (schema.props.body) {
 			this.defaultTag = schema.defaultTag;
-			for (const [propName, content] of Object.entries(schema.props.body)) {
-				const cardinalities = Object.values(content);
-				const propCardinality = sumCardinalities(cardinalities);
-				propNames.push(propName);
-				if (propCardinality.max > 1) {
-					this.arrayProps.add(propName);
-				}
-
-				for (const [tagName, cardinality] of Object.entries(content)) {
-					this.childTagToCardinality.set(tagName, cardinality);
-					this.childTagToProp.set(tagName, propName);
+			for (const [propName, rules] of Object.entries(schema.props.body)) {
+				const prop = new BodyPropSchema(propName, { raw: false, rules });
+				bodyProps.push(prop);
+				for (const [child, cardinality] of Object.entries(rules)) {
+					this.childTagToProp.set(child, prop);
+					childCardinalities.push([child, cardinality]);
 				}
 			}
 		}
 
-		this.bodyPropNames = propNames;
+		this.bodyProps = bodyProps;
+		this.childCardinalities = childCardinalities;
 	}
 
-	getPropName(child: string): string | undefined {
+	getPropByChild(child: string): BodyPropSchema | undefined {
 		return this.childTagToProp.get(child) || this.childTagToProp.get(INVALID_TAG);
 	}
+}
 
-	isPropArray(propName: string): boolean {
-		return this.arrayProps.has(propName);
+export class BodyPropSchema {
+	readonly raw: boolean;
+	readonly cardinality: Cardinality;
+	readonly isArrayType: boolean;
+
+	constructor(
+		readonly name: string,
+		private readonly content:
+			| { raw: true }
+			| { raw: false; rules: { [tag: string]: Cardinality } }
+	) {
+		this.raw = content.raw;
+		this.cardinality = content.raw
+			? { min: 0, max: Infinity }
+			: sumCardinalities(Object.values(content.rules));
+		this.isArrayType = this.cardinality.max > 1;
 	}
 
-	getCardinality(childName: string): Cardinality | undefined {
-		return (
-			this.childTagToCardinality.get(childName) || this.childTagToCardinality.get(INVALID_TAG)
-		);
-	}
-
-	getAllCardinalities(): ReadonlyMap<string, Cardinality> {
-		return this.childTagToCardinality;
+	childCardinality(childName: string): Cardinality | undefined {
+		if (!this.content.raw) {
+			return this.content.rules[childName] || this.content.rules[INVALID_TAG];
+		}
 	}
 }
 
