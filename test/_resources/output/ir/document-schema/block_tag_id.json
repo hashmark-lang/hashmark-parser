@@ -4,16 +4,23 @@
         "content": [{
             "tag": "section",
             "props": {
-                "title": [],
+                "title": [
+                    "Introduction"
+                ],
                 "content": [{
                     "tag": "paragraph",
                     "props": {
                         "text": [
-                            "some text"
+                            "Hello World"
                         ]
                     }
                 }],
-                "id": null
+                "id": {
+                    "tag": "id",
+                    "props": {
+                        "content": ["intro"]
+                    }
+                }
             }
         }]
     }

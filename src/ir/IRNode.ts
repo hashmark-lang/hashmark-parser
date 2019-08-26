@@ -13,13 +13,12 @@ export type Prop =
 	| URL // Prop containing unparsed, type "url" content (head or arg)
 	| Date // Prop containing unparsed, type "date" content (head or arg)
 	| Array<IRNode | string> // Prop containing parsed content (head or arg)
-	| Quantified<IRNode> // Prop containing other nodes (body)
-	| undefined; // Prop containing nothing (body)
+	| Quantified<IRNode>; // Prop containing other nodes (body)
 
 type Quantified<T> =
 	| T // Cardinality.One
 	| [T, ...T[]] // Cardinality.OneOrMore
-	| (T | undefined) // Cardinality.Optional
+	| (T | null) // Cardinality.Optional
 	| T[]; // Cardinality.ZeroOrMore
 
 export function emptyBlockProps(propNames: ReadonlyArray<string>): { [key: string]: [] } {
