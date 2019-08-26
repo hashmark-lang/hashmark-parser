@@ -72,9 +72,9 @@ export class IRBlockHandler implements BlockHandler {
 		}
 
 		const count = (parent.childCount.get(tag) || 0) + 1;
-		const [cardinality, { max }] = parent.schema.getCardinality(tag)!;
+		const cardinality = parent.schema.getCardinality(tag)!;
 		parent.childCount.set(tag, count);
-		if (count > max) {
+		if (count > cardinality.max) {
 			this.log(new CardinalityError(parent.node, [pos], tag, count, cardinality));
 		}
 
@@ -96,10 +96,10 @@ export class IRBlockHandler implements BlockHandler {
 		}
 		const top = this.stack.pop();
 		if (top) {
-			const constraints = top.schema.getAllCardinalityConstraints().entries();
-			for (const [child, [cardinality, { min }]] of constraints) {
+			const cardinalities = top.schema.getAllCardinalities().entries();
+			for (const [child, cardinality] of cardinalities) {
 				const count = top.childCount.get(child) || 0;
-				if (count < min) {
+				if (count < cardinality.min) {
 					this.log(new CardinalityError(top.node, [], child, count, cardinality));
 				}
 			}

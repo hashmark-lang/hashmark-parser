@@ -7,7 +7,6 @@ import {
 	UnknownInlineTagError
 } from "../../src";
 import { IRNode } from "../../src/ir/IRNode";
-import { Cardinality } from "../../src/schema/Cardinality";
 import { lineTag, prop, root } from "../../src/schema/schema-generators";
 import { getDocumentSchema, getEmptySchema, getTestSchema } from "../schemas";
 import { filePairs, makeTestParser, resourceFile } from "../utils";
@@ -86,14 +85,14 @@ describe("IRHandler", () => {
 
 		describe("CardinalityError", () => {
 			const tests = [
-				{ cardinality: Cardinality.One, accepts: [false, true, false] },
-				{ cardinality: Cardinality.OneOrMore, accepts: [false, true, true] },
-				{ cardinality: Cardinality.Optional, accepts: [true, true, false] },
-				{ cardinality: Cardinality.ZeroOrMore, accepts: [true, true, true] }
+				{ cardinality: { min: 1, max: 1 }, accepts: [false, true, false] },
+				{ cardinality: { min: 1, max: Infinity }, accepts: [false, true, true] },
+				{ cardinality: { min: 0, max: 1 }, accepts: [true, true, false] },
+				{ cardinality: { min: 0, max: Infinity }, accepts: [true, true, true] }
 			];
 
 			for (const { cardinality, accepts } of tests) {
-				describe(cardinality, () => {
+				describe(`{ min: ${cardinality.min}, max: ${cardinality.max} }`, () => {
 					let parse: (input: string) => [HMError[], IRNode];
 					beforeEach(() => {
 						parse = makeTestParser({

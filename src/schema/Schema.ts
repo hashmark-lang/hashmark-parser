@@ -1,10 +1,5 @@
 import { Sugar } from "../parser/Sugar";
-import {
-	Cardinality,
-	CardinalityConstraint,
-	cardinalityToConstraint,
-	sumCardinalities
-} from "./Cardinality";
+import { Cardinality, sumCardinalities } from "./Cardinality";
 import {
 	ArgDefinition,
 	BlockDefinition,
@@ -50,7 +45,7 @@ export class Schema {
 }
 
 export class BlockSchema {
-	private childTagToCardinality: Map<string, [Cardinality, CardinalityConstraint]> = new Map();
+	private childTagToCardinality: Map<string, Cardinality> = new Map();
 	private childTagToProp: Map<string, string> = new Map();
 
 	readonly defaultTag?: string;
@@ -75,21 +70,15 @@ export class BlockSchema {
 		} else if (schema.props.body) {
 			this.defaultTag = schema.defaultTag;
 			for (const [propName, content] of Object.entries(schema.props.body)) {
-				const rules = Object.entries(content);
-				const propCardinality = sumCardinalities(
-					rules.map(([, cardinality]) => cardinality)
-				);
+				const cardinalities = Object.values(content);
+				const propCardinality = sumCardinalities(cardinalities);
 				propNames.push(propName);
-				if (
-					propCardinality === Cardinality.ZeroOrMore ||
-					propCardinality === Cardinality.OneOrMore
-				) {
+				if (propCardinality.max > 1) {
 					this.arrayProps.add(propName);
 				}
 
 				for (const [tagName, cardinality] of Object.entries(content)) {
-					const constraint = cardinalityToConstraint(cardinality);
-					this.childTagToCardinality.set(tagName, [cardinality, constraint]);
+					this.childTagToCardinality.set(tagName, cardinality);
 					this.childTagToProp.set(tagName, propName);
 				}
 			}
@@ -106,13 +95,13 @@ export class BlockSchema {
 		return this.arrayProps.has(propName);
 	}
 
-	getCardinality(childName: string): [Cardinality, CardinalityConstraint] | undefined {
+	getCardinality(childName: string): Cardinality | undefined {
 		return (
 			this.childTagToCardinality.get(childName) || this.childTagToCardinality.get(INVALID_TAG)
 		);
 	}
 
-	getAllCardinalityConstraints(): ReadonlyMap<string, [Cardinality, CardinalityConstraint]> {
+	getAllCardinalities(): ReadonlyMap<string, Cardinality> {
 		return this.childTagToCardinality;
 	}
 }

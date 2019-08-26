@@ -1,7 +1,7 @@
 import { IRNode } from "../ir/IRNode";
 import { InputPosition } from "../parser/InputPosition";
 import { ordinal } from "../utils";
-import { Cardinality, cardinalityToString } from "./Cardinality";
+import { Cardinality } from "./Cardinality";
 
 export type ErrorLogger = (error: HMError) => void;
 
@@ -122,13 +122,12 @@ export class CardinalityError extends ValidationError {
 		positions: InputPosition[],
 		tag: string,
 		count: number,
-		cardinality: Cardinality
+		{ min, max }: Cardinality
 	) {
 		super(
 			ErrorCode.CARDINALITY,
-			`Saw ${count} occurrences of '#${tag}' in '#${
-				parent.tag
-			}', but the schema requires ${cardinalityToString(cardinality)} in '#${parent.tag}'`,
+			`Saw ${count} occurrences of '#${tag}' in '#${parent.tag}', but the schema requires ${min} to ${max} ` +
+				`(inclusive) occurrences in '#${parent.tag}'`,
 			...positions
 		);
 	}
