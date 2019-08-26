@@ -5,9 +5,7 @@
 			{
 				"tag": "rawHead",
 				"props": {
-					"head": [
-						"#notInterpreted[lorem #notInterpreted[ipsumo] dolor *sit*] *amet*"
-					],
+					"head": "#notInterpreted[lorem #notInterpreted[ipsumo] dolor *sit*] *amet*",
 					"children": []
 				}
 			}
