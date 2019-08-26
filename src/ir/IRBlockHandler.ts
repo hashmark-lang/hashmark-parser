@@ -122,7 +122,7 @@ export class IRBlockHandler implements BlockHandler {
 		}
 
 		if (headSchema.raw) {
-			parent.node.props[headSchema.name] = [content];
+			parent.node.props[headSchema.name] = content;
 			return;
 		}
 
