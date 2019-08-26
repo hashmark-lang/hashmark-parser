@@ -116,12 +116,11 @@ export class InlineParser {
 	}
 
 	private close(index: number = this.stack.length - 1, pos: InputPosition) {
-		if (index === this.stack.length) return;
+		this.handler.closeArgument(pos);
 		while (this.stack.length > index) {
 			this.handler.closeInlineTag(pos);
 			this.stack.pop();
 		}
-		this.handler.closeArgument(pos);
 		this.isRaw = false;
 	}
 

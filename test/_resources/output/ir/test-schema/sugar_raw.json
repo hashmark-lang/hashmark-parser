@@ -9,9 +9,7 @@
 						{
 							"tag": "code",
 							"props": {
-								"content": [
-									"#notInterpreted[lorem] ipsum *dolor* sit"
-								]
+								"content": "#notInterpreted[lorem] ipsum *dolor* sit"
 							}
 						}
 					],

@@ -87,7 +87,10 @@ export class IRInlineHandler implements InlineHandler {
 	}
 
 	closeArgument() {
-		this.inlineGroupStack.pop();
+		const parent = last(this.inlineElementStack);
+		const current = this.inlineGroupStack.pop();
+		if (!parent || !current) return;
+		if (current.schema.raw) parent.node.props[current.schema.name] = current.nodeList.join("");
 	}
 
 	pushText(content: string): void {

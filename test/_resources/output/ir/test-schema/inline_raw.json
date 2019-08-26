@@ -9,9 +9,7 @@
 						{
 							"tag": "rawFirstArg",
 							"props": {
-								"first": [
-									"#notATag[this is raw"
-								],
+								"first": "#notATag[this is raw",
 								"second": [
 									{
 										"tag": "inline",
