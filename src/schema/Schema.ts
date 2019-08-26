@@ -5,7 +5,6 @@ import {
 	cardinalityToConstraint,
 	sumCardinalities
 } from "./Cardinality";
-import { ItemType, PropType } from "./PropType";
 import {
 	ArgDefinition,
 	BlockDefinition,
@@ -61,18 +60,15 @@ export class BlockSchema {
 	private readonly arrayProps: Set<string> = new Set();
 
 	readonly rawPropName?: string;
-	readonly rawPropType?: PropType;
 
 	constructor(readonly tag: string, schema: BlockDefinition) {
 		const propNames = [];
 		if (schema.props.head) {
 			const head = schema.props.head;
 			this.head = new ArgSchema(tag, head);
-			// this.propTypes.set(head.name, argType(head));
 		}
 
 		if (schema.rawBody) {
-			// this.propTypes.set(schema.props.body, RAW_BODY_TYPE);
 			this.rawPropName = schema.props.body;
 			this.arrayProps.add(this.rawPropName);
 			propNames.push(schema.props.body);
@@ -90,7 +86,6 @@ export class BlockSchema {
 				) {
 					this.arrayProps.add(propName);
 				}
-				// this.propTypes.set(propName, propType);
 
 				for (const [tagName, cardinality] of Object.entries(content)) {
 					const constraint = cardinalityToConstraint(cardinality);
@@ -136,7 +131,7 @@ export class ArgSchema {
 	/** Name of the argument */
 	readonly name: string;
 	/** How the arg should be represented in the IR */
-	readonly type: PropType;
+	readonly type: "parsed" | "string" | "url" | "date";
 	/** If `true`, the schema tells us that the argument should be not parsed as Hashml. */
 	readonly raw: boolean;
 
@@ -147,30 +142,10 @@ export class ArgSchema {
 		this.name = schema.name;
 		this.raw = schema.raw;
 		this.validChildren = new Set(schema.raw ? [] : schema.content);
-		this.type = argType(schema);
+		this.type = schema.raw ? schema.type : "parsed";
 	}
 
 	isValidChild(tag: string) {
 		return this.validChildren.has(tag);
-	}
-}
-
-const DATE_TYPE: PropType = [new Set([ItemType.Date]), Cardinality.One];
-const URL_TYPE: PropType = [new Set([ItemType.URL]), Cardinality.One];
-const STRING_TYPE: PropType = [new Set([ItemType.String]), Cardinality.One];
-const PARSED_ARG_TYPE: PropType = [
-	new Set([ItemType.IRNode, ItemType.String]),
-	Cardinality.ZeroOrMore
-];
-
-function argType(arg: ArgDefinition): PropType {
-	if (!arg.raw) return PARSED_ARG_TYPE;
-	switch (arg.type) {
-		case "date":
-			return DATE_TYPE;
-		case "url":
-			return URL_TYPE;
-		case "string":
-			return STRING_TYPE;
 	}
 }
