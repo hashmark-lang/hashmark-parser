@@ -15,5 +15,8 @@
 		"object-literal-sort-keys": false,
 		"no-default-export": true,
 		"no-restricted-globals": true
+	},
+	"linterOptions": {
+		"exclude": ["test/_resources"]
 	}
 }
