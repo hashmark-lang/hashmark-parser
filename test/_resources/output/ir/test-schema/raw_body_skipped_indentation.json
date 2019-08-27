@@ -1,27 +1,21 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "rawBody",
-				"props": {
-					"content": [
-						"Lorem",
-						"\tIpsum",
-						"  Dolor",
-						"Sit"
-					]
-				}
-			},
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"Amet"
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "rawBody",
+            "content": [
+                "Lorem",
+                "\tIpsum",
+                "  Dolor",
+                "Sit"
+            ]
+        },
+        {
+            "$tag": "_default",
+            "head": [
+                "Amet"
+            ],
+            "children": []
+        }
+    ]
 }

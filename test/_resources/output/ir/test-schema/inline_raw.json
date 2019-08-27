@@ -1,31 +1,23 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						{
-							"tag": "rawFirstArg",
-							"props": {
-								"first": "#notATag[this is raw",
-								"second": [
-									{
-										"tag": "inline",
-										"props": {
-											"arg": [
-												"this is not raw"
-											]
-										}
-									}
-								]
-							}
-						}
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                {
+                    "$tag": "rawFirstArg",
+                    "first": "#notATag[this is raw",
+                    "second": [
+                        {
+                            "$tag": "inline",
+                            "arg": [
+                                "this is not raw"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "children": []
+        }
+    ]
 }

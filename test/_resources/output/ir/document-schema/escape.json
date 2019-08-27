@@ -1,38 +1,29 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [{
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        "Lorem # Ipsum"
-                    ]
-                }
-            },
-            {
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        "# Lorem Ipsum"
-                    ]
-                }
-            },
-            {
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        "Lorem Ispum #"
-                    ]
-                }
-            },
-            {
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        "\\ # [ ]"
-                    ]
-                }
-            }
-        ]
-    }
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                "Lorem # Ipsum"
+            ]
+        },
+        {
+            "$tag": "paragraph",
+            "text": [
+                "# Lorem Ipsum"
+            ]
+        },
+        {
+            "$tag": "paragraph",
+            "text": [
+                "Lorem Ispum #"
+            ]
+        },
+        {
+            "$tag": "paragraph",
+            "text": [
+                "\\ # [ ]"
+            ]
+        }
+    ]
 }

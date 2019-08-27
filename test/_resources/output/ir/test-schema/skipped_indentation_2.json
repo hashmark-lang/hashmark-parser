@@ -1,101 +1,77 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "block",
-				"props": {
-					"head": [
-						"title"
-					],
-					"children": [
-						{
-							"tag": "head",
-							"props": {
-								"head": [],
-								"children": [
-									{
-										"tag": "_default",
-										"props": {
-											"head": [
-												"inline"
-											],
-											"children": []
-										}
-									}
-								]
-							}
-						}
-					]
-				}
-			},
-			{
-				"tag": "inline",
-				"props": {
-					"head": [
-						"inline"
-					],
-					"children": [
-						{
-							"tag": "arg",
-							"props": {
-								"head": [],
-								"children": [
-									{
-										"tag": "content",
-										"props": {
-											"head": [],
-											"children": [
-												{
-													"tag": "_default",
-													"props": {
-														"head": [
-															"bold"
-														],
-														"children": []
-													}
-												}
-											]
-										}
-									}
-								]
-							}
-						},
-						{
-							"tag": "arg",
-							"props": {
-								"head": [],
-								"children": [
-									{
-										"tag": "raw",
-										"props": {
-											"head": [],
-											"children": []
-										}
-									}
-								]
-							}
-						}
-					]
-				}
-			},
-			{
-				"tag": "inline",
-				"props": {
-					"head": [
-						"bold"
-					],
-					"children": [
-						{
-							"tag": "arg",
-							"props": {
-								"head": [],
-								"children": []
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "block",
+            "head": [
+                "title"
+            ],
+            "children": [
+                {
+                    "$tag": "head",
+                    "head": [],
+                    "children": [
+                        {
+                            "$tag": "_default",
+                            "head": [
+                                "inline"
+                            ],
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$tag": "inline",
+            "head": [
+                "inline"
+            ],
+            "children": [
+                {
+                    "$tag": "arg",
+                    "head": [],
+                    "children": [
+                        {
+                            "$tag": "content",
+                            "head": [],
+                            "children": [
+                                {
+                                    "$tag": "_default",
+                                    "head": [
+                                        "bold"
+                                    ],
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "$tag": "arg",
+                    "head": [],
+                    "children": [
+                        {
+                            "$tag": "raw",
+                            "head": [],
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$tag": "inline",
+            "head": [
+                "bold"
+            ],
+            "children": [
+                {
+                    "$tag": "arg",
+                    "head": [],
+                    "children": []
+                }
+            ]
+        }
+    ]
 }

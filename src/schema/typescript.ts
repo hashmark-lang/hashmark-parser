@@ -144,8 +144,8 @@ function createTag(
 	props: ts.TypeElement[]
 ): ts.InterfaceDeclaration {
 	return createInterface(typeName, [
-		createInterfaceMember("tag", ts.createLiteralTypeNode(ts.createStringLiteral(tagName))),
-		createInterfaceMember("props", ts.createTypeLiteralNode(props))
+		createInterfaceMember("$tag", ts.createLiteralTypeNode(ts.createStringLiteral(tagName))),
+		...props
 	]);
 }
 

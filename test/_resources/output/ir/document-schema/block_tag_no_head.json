@@ -1,20 +1,18 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [{
-            "tag": "section",
-            "props": {
-                "title": [],
-                "content": [{
-                    "tag": "paragraph",
-                    "props": {
-                        "text": [
-                            "some text"
-                        ]
-                    }
-                }],
-                "id": null
-            }
-        }]
-    }
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "section",
+            "title": [],
+            "content": [
+                {
+                    "$tag": "paragraph",
+                    "text": [
+                        "some text"
+                    ]
+                }
+            ],
+            "id": null
+        }
+    ]
 }

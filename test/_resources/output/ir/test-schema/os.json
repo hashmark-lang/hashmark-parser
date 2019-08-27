@@ -1,82 +1,64 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "document",
-				"props": {
-					"head": [
-						"Operating Systems"
-					],
-					"children": [
-						{
-							"tag": "author",
-							"props": {
-								"head": [
-									"Matthieu Bovel"
-								],
-								"children": []
-							}
-						},
-						{
-							"tag": "published",
-							"props": {
-								"head": [
-									"now"
-								],
-								"children": []
-							}
-						},
-						{
-							"tag": "section",
-							"props": {
-								"head": [
-									"Introduction"
-								],
-								"children": [
-									{
-										"tag": "def",
-										"props": {
-											"head": [
-												"Operating System"
-											],
-											"children": [
-												{
-													"tag": "abbr",
-													"props": {
-														"head": [
-															"OS"
-														],
-														"children": []
-													}
-												},
-												{
-													"tag": "_default",
-													"props": {
-														"head": [
-															"An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications."
-														],
-														"children": []
-													}
-												}
-											]
-										}
-									},
-									{
-										"tag": "def",
-										"props": {
-											"head": [
-												"Privileged mode"
-											],
-											"children": []
-										}
-									}
-								]
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "document",
+            "head": [
+                "Operating Systems"
+            ],
+            "children": [
+                {
+                    "$tag": "author",
+                    "head": [
+                        "Matthieu Bovel"
+                    ],
+                    "children": []
+                },
+                {
+                    "$tag": "published",
+                    "head": [
+                        "now"
+                    ],
+                    "children": []
+                },
+                {
+                    "$tag": "section",
+                    "head": [
+                        "Introduction"
+                    ],
+                    "children": [
+                        {
+                            "$tag": "def",
+                            "head": [
+                                "Operating System"
+                            ],
+                            "children": [
+                                {
+                                    "$tag": "abbr",
+                                    "head": [
+                                        "OS"
+                                    ],
+                                    "children": []
+                                },
+                                {
+                                    "$tag": "_default",
+                                    "head": [
+                                        "An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications."
+                                    ],
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "$tag": "def",
+                            "head": [
+                                "Privileged mode"
+                            ],
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

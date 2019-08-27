@@ -1,4 +1,4 @@
-import { IRNode, Prop } from "../ir/IRNode";
+import { IRNode, isValidPropName, Prop } from "../ir/IRNode";
 
 /**
  * Convert an IR tree to an XML string.
@@ -10,10 +10,12 @@ import { IRNode, Prop } from "../ir/IRNode";
  * @returns Tab-indented XML representation of the IR tree.
  */
 export function toXML(root: IRNode, indentation: number = 0): string {
-	const children = Object.entries(root.props).map(
-		([tag, propContent]) => propToXML(tag, propContent, indentation + 1) // TODO remove cast
-	);
-	return xmlTag(root.tag, indentation, ...children);
+	const children = Object.entries(root)
+		.filter(([key]) => isValidPropName(key))
+		.map(
+			([propName, propContent]) => propToXML(propName, propContent, indentation + 1) // TODO remove cast
+		);
+	return xmlTag(root.$tag, indentation, ...children);
 }
 
 function propToXML(tag: string, content: Prop, indentation: number): string {

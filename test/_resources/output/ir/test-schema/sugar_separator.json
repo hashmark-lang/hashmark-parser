@@ -1,33 +1,25 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						{
-							"tag": "rawFirstArg",
-							"props": {
-								"first": "a",
-								"second": [
-									"b",
-									{
-										"tag": "rawFirstArg",
-										"props": {
-											"first": "c",
-											"second": [
-												"d"
-											]
-										}
-									}
-								]
-							}
-						}
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                {
+                    "$tag": "rawFirstArg",
+                    "first": "a",
+                    "second": [
+                        "b",
+                        {
+                            "$tag": "rawFirstArg",
+                            "first": "c",
+                            "second": [
+                                "d"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "children": []
+        }
+    ]
 }

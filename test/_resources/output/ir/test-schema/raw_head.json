@@ -1,14 +1,10 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "rawHead",
-				"props": {
-					"head": "#notInterpreted[lorem #notInterpreted[ipsumo] dolor *sit*] *amet*",
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "rawHead",
+            "head": "#notInterpreted[lorem #notInterpreted[ipsumo] dolor *sit*] *amet*",
+            "children": []
+        }
+    ]
 }

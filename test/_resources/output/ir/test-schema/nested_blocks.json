@@ -1,36 +1,28 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "document",
-				"props": {
-					"head": [
-						"Document"
-					],
-					"children": [
-						{
-							"tag": "definition",
-							"props": {
-								"head": [
-									"Def"
-								],
-								"children": [
-									{
-										"tag": "_default",
-										"props": {
-											"head": [
-												"Lorem"
-											],
-											"children": []
-										}
-									}
-								]
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "document",
+            "head": [
+                "Document"
+            ],
+            "children": [
+                {
+                    "$tag": "definition",
+                    "head": [
+                        "Def"
+                    ],
+                    "children": [
+                        {
+                            "$tag": "_default",
+                            "head": [
+                                "Lorem"
+                            ],
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

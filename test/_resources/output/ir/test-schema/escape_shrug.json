@@ -1,16 +1,12 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"¯\\_(ツ)_/¯"
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                "¯\\_(ツ)_/¯"
+            ],
+            "children": []
+        }
+    ]
 }

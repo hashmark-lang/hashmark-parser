@@ -1,31 +1,23 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [
-            {
-                "tag": "section",
-                "props": {
-                    "title": [
-                        "Introduction"
-                    ],
-                    "content": [
-                        {
-                            "tag": "paragraph",
-                            "props": {
-                                "text": [
-                                    "Hello World"
-                                ]
-                            }
-                        }
-                    ],
-                    "id": {
-                        "tag": "id",
-                        "props": {
-                            "content": "intro"
-                        }
-                    }
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "section",
+            "title": [
+                "Introduction"
+            ],
+            "content": [
+                {
+                    "$tag": "paragraph",
+                    "text": [
+                        "Hello World"
+                    ]
                 }
+            ],
+            "id": {
+                "$tag": "id",
+                "content": "intro"
             }
-        ]
-    }
+        }
+    ]
 }

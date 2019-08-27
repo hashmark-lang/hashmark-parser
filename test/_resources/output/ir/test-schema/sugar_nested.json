@@ -1,48 +1,36 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						{
-							"tag": "strong",
-							"props": {
-								"content": [
-									{
-										"tag": "strong",
-										"props": {
-											"content": [
-												"lorem"
-											]
-										}
-									},
-									" ipsum"
-								]
-							}
-						},
-						" dolor ",
-						{
-							"tag": "emphasis",
-							"props": {
-								"content": [
-									"sit ",
-									{
-										"tag": "emphasis",
-										"props": {
-											"content": [
-												"amet"
-											]
-										}
-									}
-								]
-							}
-						}
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                {
+                    "$tag": "strong",
+                    "content": [
+                        {
+                            "$tag": "strong",
+                            "content": [
+                                "lorem"
+                            ]
+                        },
+                        " ipsum"
+                    ]
+                },
+                " dolor ",
+                {
+                    "$tag": "emphasis",
+                    "content": [
+                        "sit ",
+                        {
+                            "$tag": "emphasis",
+                            "content": [
+                                "amet"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "children": []
+        }
+    ]
 }

@@ -1,6 +1,4 @@
 {
-	"tag": "root",
-	"props": {
-		"children": []
-	}
+	"$tag": "root",
+	"children": []
 }

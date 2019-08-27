@@ -1,21 +1,15 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						{
-							"tag": "code",
-							"props": {
-								"content": "#notInterpreted[lorem] ipsum *dolor* sit"
-							}
-						}
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                {
+                    "$tag": "code",
+                    "content": "#notInterpreted[lorem] ipsum *dolor* sit"
+                }
+            ],
+            "children": []
+        }
+    ]
 }

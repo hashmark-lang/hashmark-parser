@@ -1,24 +1,18 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"] ][ test ",
-						{
-							"tag": "inline",
-							"props": {
-								"arg": [
-									"inline"
-								]
-							}
-						}
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                "] ][ test ",
+                {
+                    "$tag": "inline",
+                    "arg": [
+                        "inline"
+                    ]
+                }
+            ],
+            "children": []
+        }
+    ]
 }

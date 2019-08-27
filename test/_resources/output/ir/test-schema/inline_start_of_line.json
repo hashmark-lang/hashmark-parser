@@ -1,43 +1,33 @@
 {
-    "tag": "root",
-    "props": {
-        "children": [
-            {
-                "tag": "section",
-                "props": {
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "section",
+            "head": [
+                "My section"
+            ],
+            "children": [
+                {
+                    "$tag": "_default",
                     "head": [
-                        "My section"
-                    ],
-                    "children": [
                         {
-                            "tag": "_default",
-                            "props": {
-                                "head": [
-                                    {
-                                        "tag": "inline",
-                                        "props": {
-                                            "arg": [
-                                                "content"
-                                            ]
-                                        }
-                                    },
-                                    " Text"
-                                ],
-                                "children": []
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "tag": "_default",
-                "props": {
-                    "head": [
-                        "Text"
+                            "$tag": "inline",
+                            "arg": [
+                                "content"
+                            ]
+                        },
+                        " Text"
                     ],
                     "children": []
                 }
-            }
-        ]
-    }
+            ]
+        },
+        {
+            "$tag": "_default",
+            "head": [
+                "Text"
+            ],
+            "children": []
+        }
+    ]
 }
