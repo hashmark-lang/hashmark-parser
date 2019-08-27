@@ -1,0 +1,15 @@
+{
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                {
+                    "$tag": "link",
+                    "url": "",
+                    "text": []
+                }
+            ]
+        }
+    ]
+}
