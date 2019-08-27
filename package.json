@@ -19,6 +19,9 @@
 	"engines": {
 		"node": ">=12.0.0"
 	},
+	"dependencies": {
+		"typescript": "^3.5.2"
+	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^0.1.3",
 		"@types/benchmark": "^1.0.31",
@@ -37,8 +40,7 @@
 		"source-map-support": "^0.5.12",
 		"ts-node": "^8.3.0",
 		"tslint": "^5.18.0",
-		"typedoc": "^0.15.0",
-		"typescript": "^3.5.2"
+		"typedoc": "^0.15.0"
 	},
 	"scripts": {
 		"format": "prettier --write {src,test,benchmark}/**/*.ts *.json",
