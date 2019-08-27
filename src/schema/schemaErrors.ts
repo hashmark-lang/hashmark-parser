@@ -1,21 +1,25 @@
+import { isValidPropName } from "../ir/IRNode";
 import { countOccurrences, unique } from "../utils";
 import {
 	DuplicatePropAssignmentError,
 	DuplicatePropNameError,
+	IllegalPropNameError,
 	SchemaDefinitionError
 } from "./errors";
-import { SchemaDefinition } from "./SchemaDefinition";
+import { ROOT, SchemaDefinition } from "./SchemaDefinition";
 
 /**
  * Check a schema definition for errors. The rules of a schema definition are:
  *
  * 1. All prop names within an element must be different
  * 2. The pairwise intersection of block prop contents must be empty.
+ * 3. Prop names may not start with "$"
  *
  * There is an error for each of these rules:
  *
  * 1. [[DuplicatePropNameError]]
  * 2. [[DuplicatePropAssignmentError]]
+ * 3. [[IllegalPropNameError]]
  *
  * @param schema Schema definition object.
  * @returns Array of schema definition errors, or an empty array if no errors were found.
@@ -23,13 +27,16 @@ import { SchemaDefinition } from "./SchemaDefinition";
 export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] {
 	const errors: SchemaDefinitionError[] = [];
 
-	for (const [tag, tagSchema] of Object.entries(schema.blocks)) {
+	for (const [tag, tagSchema] of Object.entries(schema.blocks).concat([[ROOT, schema.root]])) {
 		if (tagSchema.rawBody) {
 			const props = tagSchema.props;
 			const headPropNames = props.head ? [props.head.name] : [];
 			const bodyPropNames = [props.body];
 			const propNames = headPropNames.concat(bodyPropNames);
-			errors.push(...duplicatePropNameErrors(tag, propNames));
+			errors.push(
+				...duplicatePropNameErrors(tag, propNames), // Rule 1
+				...illegalPropNameErrors(tag, propNames) // Rule 3
+			);
 		} else {
 			const body = tagSchema.props.body;
 			const head = tagSchema.props.head;
@@ -44,14 +51,18 @@ export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] 
 				: [];
 			errors.push(
 				...duplicatePropNameErrors(tag, propNames), // Rule 1
-				...duplicatePropAssignmentErrors(tag, bodyPropContentTags) // Rule 2
+				...duplicatePropAssignmentErrors(tag, bodyPropContentTags), // Rule 2
+				...illegalPropNameErrors(tag, propNames)
 			);
 		}
 	}
 
 	for (const [tag, tagSchema] of Object.entries(schema.inline)) {
 		const propNames = tagSchema.args.map(arg => arg.name);
-		errors.push(...duplicatePropNameErrors(tag, propNames)); // Rule 1
+		errors.push(
+			...duplicatePropNameErrors(tag, propNames), // Rule 1
+			...illegalPropNameErrors(tag, propNames) // Rule 3
+		);
 	}
 
 	return errors;
@@ -82,6 +93,12 @@ function duplicatePropAssignmentErrors(
 		}
 	}
 	return errors;
+}
+
+function illegalPropNameErrors(tag: string, propNames: string[]): IllegalPropNameError[] {
+	return propNames
+		.filter(name => !isValidPropName(name))
+		.map(name => new IllegalPropNameError(tag, name));
 }
 
 function hasDuplicates<T>(seq: T[]): boolean {
