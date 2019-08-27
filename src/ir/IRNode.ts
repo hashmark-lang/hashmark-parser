@@ -20,10 +20,6 @@ type Quantified<T> =
 	| (T | null) // Cardinality.Optional
 	| T[]; // Cardinality.ZeroOrMore
 
-export function emptyBlockProps(propNames: ReadonlyArray<string>): { [key: string]: [] } {
-	return Object.fromEntries(propNames.map(x => [x, []]));
-}
-
 export function isValidPropName(name: string): boolean {
 	return !name.startsWith("$");
 }

@@ -8,7 +8,7 @@ import {
 } from "../schema/errors";
 import { ArgSchema, InlineSchema, Schema } from "../schema/Schema";
 import { last } from "../utils";
-import { emptyBlockProps, IRNode, IRNodeList } from "./IRNode";
+import { IRNode, IRNodeList } from "./IRNode";
 
 export class IRInlineHandler implements InlineHandler {
 	protected readonly inlineGroupStack: Array<{
@@ -56,7 +56,8 @@ export class IRInlineHandler implements InlineHandler {
 		}
 
 		const propNames = schema ? schema.propNames : [];
-		const node = { $tag: tag, ...emptyBlockProps(propNames) };
+		const props = Object.fromEntries(propNames.map(name => [name, []]));
+		const node = { $tag: tag, ...props };
 		parent.nodeList.push(node);
 		this.inlineElementStack.push({ node, schema });
 	}
