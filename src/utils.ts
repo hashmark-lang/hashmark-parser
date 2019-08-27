@@ -37,6 +37,43 @@ export function unique<T>(seq: Iterable<T>): T[] {
 }
 
 /**
+ * Returns whether an array has duplicate items
+ *
+ * @param arr Array of items, potentially with duplicates.
+ * @category Array
+ */
+export function hasDuplicates<T>(arr: T[]): boolean {
+	return unique(arr).length !== arr.length;
+}
+
+/**
+ * Returns the duplicates in a sequence of items, and their count
+ *
+ * @typeparam T Type of the items in the sequence
+ * @param seq Sequence of items, potentially with duplicates.
+ * @category Array
+ */
+export function findDuplicates<T>(seq: Iterable<T>): Array<[T, number]> {
+	return [...countOccurrences(seq).entries()].filter(([item, count]) => count > 1);
+}
+
+/**
+ * Returns a map of items to their occurrence count.
+ *
+ * @typeparam T Type of the items in the sequence
+ * @param seq Sequence items, potentially with duplicates.
+ * @category Array
+ */
+export function countOccurrences<T>(seq: Iterable<T>): Map<T, number> {
+	const map = new Map<T, number>();
+	for (const item of seq) {
+		const count = map.get(item) || 0;
+		map.set(item, count + 1);
+	}
+	return map;
+}
+
+/**
  * Returns the last item in a sequence.
  *
  * @remarks
@@ -50,22 +87,6 @@ export function unique<T>(seq: Iterable<T>): T[] {
  */
 export function last<T>(seq: ArrayLike<T>): T {
 	return seq[seq.length - 1];
-}
-
-/**
- * Returns a map of items to their occurrence count.
- *
- * @typeparam T Type of the items in the array
- * @param arr Array of repeated items
- * @category Array
- */
-export function countOccurrences<T>(arr: T[]): Map<T, number> {
-	const map = new Map<T, number>();
-	for (const item of arr) {
-		const count = map.get(item) || 0;
-		map.set(item, count + 1);
-	}
-	return map;
 }
 
 /**

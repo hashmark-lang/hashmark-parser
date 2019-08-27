@@ -1,5 +1,5 @@
 import { isValidPropName } from "../ir/IRNode";
-import { countOccurrences, unique } from "../utils";
+import { findDuplicates, hasDuplicates } from "../utils";
 import {
 	DuplicatePropAssignmentError,
 	DuplicatePropNameError,
@@ -99,12 +99,4 @@ function illegalPropNameErrors(tag: string, propNames: string[]): IllegalPropNam
 	return propNames
 		.filter(name => !isValidPropName(name))
 		.map(name => new IllegalPropNameError(tag, name));
-}
-
-function hasDuplicates<T>(seq: T[]): boolean {
-	return unique(seq).length !== seq.length;
-}
-
-function findDuplicates<T>(seq: T[]): Array<[T, number]> {
-	return [...countOccurrences(seq).entries()].filter(([item, count]) => count > 1);
 }
