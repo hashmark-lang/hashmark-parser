@@ -1,18 +1,25 @@
 import { assert } from "chai";
-import { DuplicatePropAssignmentError, DuplicatePropNameError } from "../../src";
+import {
+	DuplicatePropAssignmentError,
+	DuplicatePropNameError,
+	IllegalPropNameError
+} from "../../src";
 import {
 	blockTag,
 	dateArg,
 	inline,
+	lineTag,
 	oneOrMore,
 	prop,
 	props,
+	rawBodyTag,
 	root,
 	stringArg,
+	stringTag,
 	urlArg,
 	zeroOrMore
 } from "../../src/schema/schema-generators";
-import { SchemaDefinition } from "../../src/schema/SchemaDefinition";
+import { ROOT, SchemaDefinition } from "../../src/schema/SchemaDefinition";
 import { schemaErrors } from "../../src/schema/schemaErrors";
 import { getDocumentSchema, getEmptySchema } from "../schemas";
 
@@ -101,6 +108,83 @@ describe("schemaErrors()", () => {
 				assert.strictEqual(error.tag, "test");
 				assert.deepStrictEqual(error.propNames, ["foo", "baz", "qux"]);
 				assert.strictEqual(error.contentTag, "bar");
+			});
+		});
+
+		describe("IllegalPropNameError", () => {
+			it("is returned when a parsed block tag has an illegal prop name", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: blockTag(undefined, prop("$foo", zeroOrMore("bar"))),
+						["bar"]: stringTag("prop")
+					},
+					inline: {}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as IllegalPropNameError;
+				assert.instanceOf(error, IllegalPropNameError);
+				assert.strictEqual(error.tag, "test");
+				assert.deepStrictEqual(error.propName, "$foo");
+			});
+
+			it("is returned when a raw block has an illegal raw body name", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: rawBodyTag("$foo")
+					},
+					inline: {}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as IllegalPropNameError;
+				assert.instanceOf(error, IllegalPropNameError);
+				assert.strictEqual(error.tag, "test");
+				assert.deepStrictEqual(error.propName, "$foo");
+			});
+
+			it("is returned when an inline tag has an illegal arg name", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["block"]: lineTag("prop", ["test"])
+					},
+					inline: {
+						["test"]: inline(stringArg("$foo"))
+					}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as IllegalPropNameError;
+				assert.instanceOf(error, IllegalPropNameError);
+				assert.strictEqual(error.tag, "test");
+				assert.deepStrictEqual(error.propName, "$foo");
+			});
+
+			it("is returned when the root has an illegal prop name", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("$body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: stringTag("test")
+					},
+					inline: {}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as IllegalPropNameError;
+				assert.instanceOf(error, IllegalPropNameError);
+				assert.strictEqual(error.tag, ROOT);
+				assert.deepStrictEqual(error.propName, "$body");
 			});
 		});
 	});

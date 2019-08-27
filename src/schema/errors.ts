@@ -19,6 +19,7 @@ export const enum ErrorCode {
 	// Definition errors:
 	DUPLICATE_PROP_NAME = 100,
 	DUPLICATE_PROP_ASSIGNMENT,
+	ILLEGAL_PROP_NAME,
 
 	// Validation errors:
 	UNKNOWN_BLOCK_TAG = 200,
@@ -58,6 +59,15 @@ export class DuplicatePropAssignmentError extends SchemaDefinitionError {
 			ErrorCode.DUPLICATE_PROP_ASSIGNMENT,
 			`A tag can be assigned to at most one prop, but in the schema for '${tag}', ` +
 				`${contentTag} was assigned to ${propNames.join(", ")}`
+		);
+	}
+}
+
+export class IllegalPropNameError extends SchemaDefinitionError {
+	constructor(readonly tag: string, readonly propName: string) {
+		super(
+			ErrorCode.ILLEGAL_PROP_NAME,
+			`A prop name cannot start with '$', but in the schema for '${tag}', the prop '${propName}' starts with $`
 		);
 	}
 }
