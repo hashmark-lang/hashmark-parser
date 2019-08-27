@@ -4,6 +4,7 @@ import { ArgSchema, BlockSchema, BodyPropSchema, InlineSchema, Schema } from "./
 
 const STRING_TYPE = ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
 const NULL_TYPE = ts.createKeywordTypeNode(ts.SyntaxKind.NullKeyword);
+const NEVER_TYPE = ts.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword);
 const EXPORT_MODIFIER = [ts.createModifier(ts.SyntaxKind.ExportKeyword)];
 
 interface TypescriptConverterOptions {
@@ -173,11 +174,12 @@ function createInterfaceMember(name: string, type: ts.TypeNode): ts.TypeElement 
 }
 
 function createUnionTypeAlias(name: string, types: ts.TypeNode[]) {
+	const type = types.length > 0 ? ts.createUnionTypeNode(types) : NEVER_TYPE;
 	return ts.createTypeAliasDeclaration(
 		undefined, // decorators
 		EXPORT_MODIFIER, // modifiers
 		name,
 		undefined, // type parameters
-		ts.createUnionTypeNode(types)
+		type
 	);
 }
