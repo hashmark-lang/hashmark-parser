@@ -1,42 +1,32 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [
-            {
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        "Here's an example XML tag: ",
-                        {
-                            "tag": "code",
-                            "props": {
-                                "content": "<test id=\"test\">Hello world</test>"
-                            }
-                        }
-                    ]
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                "Here's an example XML tag: ",
+                {
+                    "$tag": "code",
+                    "content": "<test id=\"test\">Hello world</test>"
                 }
-            },
-            {
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        "Here's a more complete code sample:"
-                    ]
-                }
-            },
-            {
-                "tag": "code",
-                "props": {
-                    "language": "xml",
-                    "content": [
-                        "<!-- This should be all be escaped in the XML output <test> & <example> -->",
-                        "<example id=\"example\">",
-                        "\t<test/>",
-                        "\t<test id='hello'>world & planet</test>",
-                        "</example>"
-                    ]
-                }
-            }
-        ]
-    }
+            ]
+        },
+        {
+            "$tag": "paragraph",
+            "text": [
+                "Here's a more complete code sample:"
+            ]
+        },
+        {
+            "$tag": "code",
+            "language": "xml",
+            "content": [
+                "<!-- This should be all be escaped in the XML output <test> & <example> -->",
+                "<example id=\"example\">",
+                "\t<test/>",
+                "\t<test id='hello'>world & planet</test>",
+                "</example>"
+            ]
+        }
+    ]
 }

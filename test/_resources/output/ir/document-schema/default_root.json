@@ -1,13 +1,11 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [{
-            "tag": "paragraph",
-            "props": {
-                "text": [
-                    "Hello World"
-                ]
-            }
-        }]
-    }
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                "Hello World"
+            ]
+        }
+    ]
 }

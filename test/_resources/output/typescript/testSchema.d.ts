@@ -3,87 +3,61 @@ export type Tag = BlockTag | InlineTag;
 export type BlockTag = BlockRoot | BlockRawHead | BlockRawBody | Block_default | Block_;
 export type InlineTag = InlineCode | InlineStrong | InlineEmphasis | InlineTriplet | InlineRawFirstArg | InlineTag_ | InlineInline | InlineLink;
 export interface BlockRoot {
-    tag: "root";
-    props: {
-        children: (Block_)[];
-    };
+    $tag: "root";
+    children: (Block_)[];
 }
 export interface BlockRawHead {
-    tag: "rawHead";
-    props: {
-        children: (Block_)[];
-        head: string;
-    };
+    $tag: "rawHead";
+    children: (Block_)[];
+    head: string;
 }
 export interface BlockRawBody {
-    tag: "rawBody";
-    props: {
-        content: string[];
-    };
+    $tag: "rawBody";
+    content: string[];
 }
 export interface Block_default {
-    tag: "_default";
-    props: {
-        children: (Block_)[];
-        head: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "_default";
+    children: (Block_)[];
+    head: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface Block_ {
-    tag: "*";
-    props: {
-        children: (Block_)[];
-        head: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "*";
+    children: (Block_)[];
+    head: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineCode {
-    tag: "code";
-    props: {
-        content: string;
-    };
+    $tag: "code";
+    content: string;
 }
 export interface InlineStrong {
-    tag: "strong";
-    props: {
-        content: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "strong";
+    content: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineEmphasis {
-    tag: "emphasis";
-    props: {
-        content: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "emphasis";
+    content: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineTriplet {
-    tag: "triplet";
-    props: {
-        first: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-        second: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-        third: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "triplet";
+    first: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
+    second: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
+    third: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineRawFirstArg {
-    tag: "rawFirstArg";
-    props: {
-        first: string;
-        second: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "rawFirstArg";
+    first: string;
+    second: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineTag_ {
-    tag: "tag\\";
-    props: {
-        arg: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "tag\\";
+    arg: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineInline {
-    tag: "inline";
-    props: {
-        arg: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "inline";
+    arg: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }
 export interface InlineLink {
-    tag: "link";
-    props: {
-        url: URL;
-        title: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
-    };
+    $tag: "link";
+    url: URL;
+    title: (InlineTriplet | InlineStrong | InlineEmphasis | InlineInline | InlineCode | InlineRawFirstArg | InlineTag_ | InlineLink | string)[];
 }

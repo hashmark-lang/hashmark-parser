@@ -1,31 +1,23 @@
 {
-    "tag": "root",
-    "props": {
-        "children": [
-            {
-                "tag": "_default",
-                "props": {
-                    "head": [
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                {
+                    "$tag": "inline",
+                    "arg": [
                         {
-                            "tag": "inline",
-                            "props": {
-                                "arg": [
-                                    {
-                                        "tag": "inline",
-                                        "props": {
-                                            "arg": [
-                                                "lorem"
-                                            ]
-                                        }
-                                    },
-                                    " ipsum"
-                                ]
-                            }
-                        }
-                    ],
-                    "children": []
+                            "$tag": "inline",
+                            "arg": [
+                                "lorem"
+                            ]
+                        },
+                        " ipsum"
+                    ]
                 }
-            }
-        ]
-    }
+            ],
+            "children": []
+        }
+    ]
 }

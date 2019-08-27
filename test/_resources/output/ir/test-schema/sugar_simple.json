@@ -1,23 +1,17 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						{
-							"tag": "strong",
-							"props": {
-								"content": [
-									"hello"
-								]
-							}
-						}
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                {
+                    "$tag": "strong",
+                    "content": [
+                        "hello"
+                    ]
+                }
+            ],
+            "children": []
+        }
+    ]
 }

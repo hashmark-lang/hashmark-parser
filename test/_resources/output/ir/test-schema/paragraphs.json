@@ -1,43 +1,33 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"Hello"
-					],
-					"children": []
-				}
-			},
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"World"
-					],
-					"children": []
-				}
-			},
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"Hello"
-					],
-					"children": []
-				}
-			},
-			{
-				"tag": "_default",
-				"props": {
-					"head": [
-						"World"
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "_default",
+            "head": [
+                "Hello"
+            ],
+            "children": []
+        },
+        {
+            "$tag": "_default",
+            "head": [
+                "World"
+            ],
+            "children": []
+        },
+        {
+            "$tag": "_default",
+            "head": [
+                "Hello"
+            ],
+            "children": []
+        },
+        {
+            "$tag": "_default",
+            "head": [
+                "World"
+            ],
+            "children": []
+        }
+    ]
 }

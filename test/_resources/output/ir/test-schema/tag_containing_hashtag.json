@@ -1,16 +1,12 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "tag#tag",
-				"props": {
-					"head": [
-						"is not an error"
-					],
-					"children": []
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "tag#tag",
+            "head": [
+                "is not an error"
+            ],
+            "children": []
+        }
+    ]
 }

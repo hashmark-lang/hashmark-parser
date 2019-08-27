@@ -56,7 +56,7 @@ export class IRInlineHandler implements InlineHandler {
 		}
 
 		const propNames = schema ? schema.propNames : [];
-		const node = { tag, props: emptyBlockProps(propNames) };
+		const node = { $tag: tag, ...emptyBlockProps(propNames) };
 		parent.nodeList.push(node);
 		this.inlineElementStack.push({ node, schema });
 	}
@@ -80,7 +80,7 @@ export class IRInlineHandler implements InlineHandler {
 
 		const schema = parent.schema.args[index];
 		this.inlineGroupStack.push({
-			nodeList: parent.node.props[schema.name] as IRNodeList, // TODO remove cast
+			nodeList: parent.node[schema.name] as IRNodeList, // TODO remove cast
 			schema
 		});
 		return !schema.raw;
@@ -90,7 +90,7 @@ export class IRInlineHandler implements InlineHandler {
 		const parent = last(this.inlineElementStack);
 		const current = this.inlineGroupStack.pop();
 		if (!parent || !current) return;
-		if (current.schema.raw) parent.node.props[current.schema.name] = current.nodeList.join("");
+		if (current.schema.raw) parent.node[current.schema.name] = current.nodeList.join("");
 	}
 
 	pushText(content: string): void {

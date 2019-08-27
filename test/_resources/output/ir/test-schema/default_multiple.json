@@ -1,42 +1,32 @@
 {
-	"tag": "root",
-	"props": {
-		"children": [
-			{
-				"tag": "list",
-				"props": {
-					"head": [],
-					"children": [
-						{
-							"tag": "_default",
-							"props": {
-								"head": [
-									"Banana"
-								],
-								"children": []
-							}
-						},
-						{
-							"tag": "_default",
-							"props": {
-								"head": [
-									"Pear"
-								],
-								"children": []
-							}
-						},
-						{
-							"tag": "_default",
-							"props": {
-								"head": [
-									"Apple"
-								],
-								"children": []
-							}
-						}
-					]
-				}
-			}
-		]
-	}
+    "$tag": "root",
+    "children": [
+        {
+            "$tag": "list",
+            "head": [],
+            "children": [
+                {
+                    "$tag": "_default",
+                    "head": [
+                        "Banana"
+                    ],
+                    "children": []
+                },
+                {
+                    "$tag": "_default",
+                    "head": [
+                        "Pear"
+                    ],
+                    "children": []
+                },
+                {
+                    "$tag": "_default",
+                    "head": [
+                        "Apple"
+                    ],
+                    "children": []
+                }
+            ]
+        }
+    ]
 }

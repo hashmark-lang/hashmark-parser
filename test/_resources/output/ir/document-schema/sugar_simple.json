@@ -1,18 +1,16 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [{
-            "tag": "paragraph",
-            "props": {
-                "text": [{
-                    "tag": "bold",
-                    "props": {
-                        "text": [
-                            "hello"
-                        ]
-                    }
-                }]
-            }
-        }]
-    }
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                {
+                    "$tag": "bold",
+                    "text": [
+                        "hello"
+                    ]
+                }
+            ]
+        }
+    ]
 }

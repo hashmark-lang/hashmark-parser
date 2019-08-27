@@ -48,7 +48,7 @@ export class IRBlockHandler implements BlockHandler {
 		const bodyProps = Object.fromEntries(
 			schema.bodyProps.map(prop => [prop.name, prop.isArrayType ? [] : null])
 		);
-		const node = { tag, props: { ...headProp, ...bodyProps } };
+		const node = { $tag: tag, ...headProp, ...bodyProps };
 		const childCount = new Map<string, number>();
 		this.stack.push({ node, schema, childCount });
 		return node;
@@ -58,14 +58,14 @@ export class IRBlockHandler implements BlockHandler {
 		const parent = last(this.stack);
 
 		const tag = tagString || parent.schema.defaultTag;
-		if (!tag) return this.blockError(new DisallowedDefaultTagError(parent.node.tag, pos));
+		if (!tag) return this.blockError(new DisallowedDefaultTagError(parent.node.$tag, pos));
 
 		const schema = this.schema.getBlockSchema(tag);
 		if (!schema) return this.blockError(new UnknownBlockTagError(tag, pos));
 
 		const prop = parent.schema.getPropByChild(tag);
 		if (!prop) {
-			return this.blockError(new DisallowedInBlockError(parent.node.tag, tag, pos));
+			return this.blockError(new DisallowedInBlockError(parent.node.$tag, tag, pos));
 		}
 
 		const count = (parent.childCount.get(tag) || 0) + 1;
@@ -78,9 +78,9 @@ export class IRBlockHandler implements BlockHandler {
 		const node = this.pushBlock(tag, schema);
 
 		if (prop.isArrayType) {
-			(parent.node.props[prop.name] as IRNodeList).push(node); // TODO remove cast
+			(parent.node[prop.name] as IRNodeList).push(node); // TODO remove cast
 		} else {
-			parent.node.props[prop.name] = node;
+			parent.node[prop.name] = node;
 		}
 
 		return !Boolean(schema.rawProp);
@@ -113,23 +113,23 @@ export class IRBlockHandler implements BlockHandler {
 		const headSchema = parent.schema.head;
 
 		if (!headSchema) {
-			this.log(new DisallowedHeadError(parent.node.tag, pos));
+			this.log(new DisallowedHeadError(parent.node.$tag, pos));
 			return;
 		}
 
 		if (headSchema.raw) {
-			parent.node.props[headSchema.name] = content;
+			parent.node[headSchema.name] = content;
 			return;
 		}
 
 		this.inlineHandler.reset(headSchema);
 		this.inlineParser.parse(content, pos);
-		parent.node.props[headSchema.name] = this.inlineHandler.getResult();
+		parent.node[headSchema.name] = this.inlineHandler.getResult();
 	}
 
 	rawLine(content: string, pos: InputPosition) {
 		if (this.ignoreFlag) return;
 		const parent = last(this.stack);
-		(parent.node.props[parent.schema.rawProp!.name] as IRNodeList).push(content); // TODO remove cast
+		(parent.node[parent.schema.rawProp!.name] as IRNodeList).push(content); // TODO remove cast
 	}
 }

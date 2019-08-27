@@ -1,13 +1,11 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [{
-            "tag": "paragraph",
-            "props": {
-                "text": [
-                    "¯\\_(ツ)_/¯"
-                ]
-            }
-        }]
-    }
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                "¯\\_(ツ)_/¯"
+            ]
+        }
+    ]
 }

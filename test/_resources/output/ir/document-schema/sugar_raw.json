@@ -1,20 +1,14 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [
-            {
-                "tag": "paragraph",
-                "props": {
-                    "text": [
-                        {
-                            "tag": "code",
-                            "props": {
-                                "content": "#notInterpreted[lorem] ipsum *dolor* sit"
-                            }
-                        }
-                    ]
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                {
+                    "$tag": "code",
+                    "content": "#notInterpreted[lorem] ipsum *dolor* sit"
                 }
-            }
-        ]
-    }
+            ]
+        }
+    ]
 }

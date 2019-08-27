@@ -1,8 +1,7 @@
 export interface IRNode {
-	tag: string;
-	props: {
-		[name: string]: Prop;
-	};
+	$tag: string;
+	/** The prop name must not start with $ */
+	[propName: string]: Prop;
 }
 
 // TODO remove later
@@ -23,4 +22,8 @@ type Quantified<T> =
 
 export function emptyBlockProps(propNames: ReadonlyArray<string>): { [key: string]: [] } {
 	return Object.fromEntries(propNames.map(x => [x, []]));
+}
+
+export function isValidPropName(name: string): boolean {
+	return !name.startsWith("$");
 }

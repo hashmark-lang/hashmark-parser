@@ -1,23 +1,17 @@
 {
-    "tag": "root",
-    "props": {
-        "content": [
-            {
-                "tag": "paragraph",
-                "props": {
+    "$tag": "root",
+    "content": [
+        {
+            "$tag": "paragraph",
+            "text": [
+                {
+                    "$tag": "link",
+                    "url": "www.example.com",
                     "text": [
-                        {
-                            "tag": "link",
-                            "props": {
-                                "url": "www.example.com",
-                                "text": [
-                                    "Example"
-                                ]
-                            }
-                        }
+                        "Example"
                     ]
                 }
-            }
-        ]
-    }
+            ]
+        }
+    ]
 }
