@@ -4,6 +4,7 @@ import { InputPosition } from "../parser/InputPosition";
 import {
 	DisallowedInArgError,
 	DisallowedInHeadError,
+	TooFewArgsError,
 	UnknownInlineTagError
 } from "../schema/errors";
 import { ArgSchema, InlineSchema, Schema } from "../schema/Schema";
@@ -18,6 +19,7 @@ export class IRInlineHandler implements InlineHandler {
 	protected readonly inlineElementStack: Array<{
 		node: IRNode;
 		schema: InlineSchema;
+		args: number;
 	} | null> = [];
 
 	constructor(private schema: Schema, private readonly log: ErrorLogger) {}
@@ -59,11 +61,14 @@ export class IRInlineHandler implements InlineHandler {
 		const props = Object.fromEntries(propNames.map(name => [name, []]));
 		const node = { $tag: tag, ...props };
 		parent.nodeList.push(node);
-		this.inlineElementStack.push({ node, schema });
+		this.inlineElementStack.push({ node, schema, args: 0 });
 	}
 
 	closeInlineTag(pos: InputPosition): void {
-		this.inlineElementStack.pop();
+		const top = this.inlineElementStack.pop();
+		if (top && top.args < top.schema.args.length) {
+			this.log(new TooFewArgsError(top.node.$tag, top.args, top.schema.args.length, pos));
+		}
 	}
 
 	openArgument(index: number, pos: InputPosition): boolean {
@@ -78,6 +83,7 @@ export class IRInlineHandler implements InlineHandler {
 			this.inlineGroupStack.push(null);
 			return false;
 		}
+		parent.args += 1;
 
 		const schema = parent.schema.args[index];
 		this.inlineGroupStack.push({
