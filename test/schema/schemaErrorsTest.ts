@@ -2,7 +2,9 @@ import { assert } from "chai";
 import {
 	DuplicatePropAssignmentError,
 	DuplicatePropNameError,
-	IllegalPropNameError
+	IllegalPropNameError,
+	UndefinedBlockTagError,
+	UndefinedInlineTagError
 } from "../../src";
 import {
 	blockTag,
@@ -10,6 +12,7 @@ import {
 	inline,
 	lineTag,
 	oneOrMore,
+	parsedArg,
 	prop,
 	props,
 	rawBodyTag,
@@ -65,8 +68,10 @@ describe("schemaErrors()", () => {
 
 			it("is returned when two inline props have the same name", () => {
 				const schema: SchemaDefinition = {
-					root: root(prop("body", zeroOrMore("foo"))),
-					blocks: {},
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: lineTag("head", ["foo"])
+					},
 					inline: {
 						["foo"]: inline(stringArg("bar"), urlArg("bar"), dateArg("bar"))
 					}
@@ -95,7 +100,8 @@ describe("schemaErrors()", () => {
 								prop("baz", oneOrMore("bar")),
 								prop("qux", oneOrMore("bar"))
 							)
-						)
+						),
+						["bar"]: stringTag("head")
 					},
 					inline: {}
 				};
@@ -151,7 +157,7 @@ describe("schemaErrors()", () => {
 
 			it("is returned when an inline tag has an illegal arg name", () => {
 				const schema: SchemaDefinition = {
-					root: root(prop("body", zeroOrMore("test"))),
+					root: root(prop("body", zeroOrMore("block"))),
 					blocks: {
 						["block"]: lineTag("prop", ["test"])
 					},
@@ -185,6 +191,80 @@ describe("schemaErrors()", () => {
 				assert.instanceOf(error, IllegalPropNameError);
 				assert.strictEqual(error.tag, ROOT);
 				assert.deepStrictEqual(error.propName, "$body");
+			});
+		});
+
+		describe("UndefinedInlineTagError", () => {
+			it("is returned when an unknown inline tag is referenced in the head prop", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: lineTag("head", ["unknown"]),
+						["unknown"]: stringTag("head")
+					},
+					inline: {}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as UndefinedInlineTagError;
+				assert.instanceOf(error, UndefinedInlineTagError);
+				assert.strictEqual("test", error.schemaTag);
+				assert.strictEqual("head", error.propName);
+				assert.strictEqual("unknown", error.referencedTag);
+			});
+
+			it("is returned when an unknown tag is referenced in an arg", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: lineTag("head", ["inline"]),
+						["unknown"]: lineTag("head", ["inline"])
+					},
+					inline: {
+						["inline"]: inline(parsedArg("arg", ["unknown"]))
+					}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as UndefinedInlineTagError;
+				assert.instanceOf(error, UndefinedInlineTagError);
+				assert.strictEqual("inline", error.schemaTag);
+				assert.strictEqual("arg", error.propName);
+				assert.strictEqual("unknown", error.referencedTag);
+			});
+		});
+
+		describe("UndefinedBlockTagError", () => {
+			it("is returned when an unknown tag is referenced in a body prop", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: {
+							rawBody: false,
+							props: {
+								body: {
+									["prop"]: oneOrMore("unknown")
+								}
+							}
+						}
+					},
+					inline: {
+						["unknown"]: inline()
+					}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as UndefinedBlockTagError;
+				assert.instanceOf(error, UndefinedBlockTagError);
+				assert.strictEqual("test", error.schemaTag);
+				assert.strictEqual("prop", error.propName);
+				assert.strictEqual("unknown", error.referencedTag);
 			});
 		});
 	});

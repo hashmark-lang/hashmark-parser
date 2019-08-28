@@ -20,6 +20,8 @@ export const enum ErrorCode {
 	DUPLICATE_PROP_NAME = 100,
 	DUPLICATE_PROP_ASSIGNMENT,
 	ILLEGAL_PROP_NAME,
+	UNDEFINED_BLOCK_TAG,
+	UNDEFINED_INLINE_TAG,
 
 	// Validation errors:
 	UNKNOWN_BLOCK_TAG = 200,
@@ -68,6 +70,32 @@ export class IllegalPropNameError extends SchemaDefinitionError {
 		super(
 			ErrorCode.ILLEGAL_PROP_NAME,
 			`A prop name cannot start with '$', but in the schema for '${tag}', the prop '${propName}' starts with $`
+		);
+	}
+}
+
+export class UndefinedBlockTagError extends SchemaDefinitionError {
+	constructor(
+		readonly schemaTag: string,
+		readonly propName: string,
+		readonly referencedTag: string
+	) {
+		super(
+			ErrorCode.UNDEFINED_BLOCK_TAG,
+			`The schema for tag '${schemaTag}' references a block tag named '${referencedTag}' in the prop '${propName}', but that tag is not defined in the schema's blocks`
+		);
+	}
+}
+
+export class UndefinedInlineTagError extends SchemaDefinitionError {
+	constructor(
+		readonly schemaTag: string,
+		readonly propName: string,
+		readonly referencedTag: string
+	) {
+		super(
+			ErrorCode.UNDEFINED_INLINE_TAG,
+			`The schema for tag '${schemaTag}' references a tag named '${referencedTag}' in the prop '${propName}', but that tag is not defined in the schema's inlines`
 		);
 	}
 }
