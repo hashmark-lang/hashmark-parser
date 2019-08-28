@@ -3,6 +3,7 @@ import {
 	CardinalityError,
 	DisallowedDefaultTagError,
 	HMError,
+	TooFewArgsError,
 	UnknownBlockTagError,
 	UnknownInlineTagError
 } from "../../src";
@@ -80,6 +81,20 @@ describe("IRHandler", () => {
 				const input = "#unknown[inline]";
 				const [errors] = documentParser(input);
 				assertError(errors, UnknownInlineTagError);
+			});
+		});
+
+		describe("TooFewArgsError", () => {
+			it("is returned when 1 arg is given instead of two", () => {
+				const input = "#link[http://google.com]";
+				const [errors] = documentParser(input);
+				assertError(errors, TooFewArgsError);
+			});
+
+			it("is not returned when the right number of args is given", () => {
+				const input = "#link[http://google.com][Google]";
+				const [errors] = documentParser(input);
+				assert.isEmpty(errors);
 			});
 		});
 

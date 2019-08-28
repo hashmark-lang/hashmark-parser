@@ -30,7 +30,8 @@ export const enum ErrorCode {
 	CARDINALITY,
 	DISALLOWED_ARG,
 	DISALLOWED_HEAD,
-	DISALLOWED_DEFAULT_TAG
+	DISALLOWED_DEFAULT_TAG,
+	TOO_FEW_ARGS
 }
 
 //////////////////////////////
@@ -166,6 +167,21 @@ export class DisallowedDefaultTagError extends ValidationError {
 		super(
 			ErrorCode.DISALLOWED_DEFAULT_TAG,
 			`Default tags are not allowed in block '#${parentTag}'`,
+			pos
+		);
+	}
+}
+
+export class TooFewArgsError extends ValidationError {
+	constructor(
+		readonly tag: string,
+		readonly argCount: number,
+		readonly expectedLength: number,
+		readonly pos: InputPosition
+	) {
+		super(
+			ErrorCode.TOO_FEW_ARGS,
+			`Too few args were given for '#${tag}'. Expected exactly ${expectedLength} args, but only found ${argCount}`,
 			pos
 		);
 	}
