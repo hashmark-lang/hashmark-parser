@@ -19,7 +19,7 @@ export class Schema {
 	constructor(schema: SchemaDefinition) {
 		const errors = schemaErrors(schema);
 		if (errors.length > 0) {
-			throw new Error("Invalid schema. " + errors.map(e => e.toString()).join("\n"));
+			throw new Error("Invalid schema\n" + errors.map(e => e.toString()).join("\n"));
 		}
 
 		this.rootSchema = new BlockSchema(ROOT, schema.root);
