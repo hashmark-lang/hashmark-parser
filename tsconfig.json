@@ -2,15 +2,14 @@
 	"compilerOptions": {
 		"target": "es2020",
 		"module": "commonjs",
-		"noImplicitAny": true,
+		"strict": true,
 		"noUnusedLocals": true,
 		"removeComments": true,
 		"resolveJsonModule": true,
 		"sourceMap": true,
 		"declaration": true,
 		"jsx": "react",
-		"noEmit": true,
-		"strict": true
+		"noEmit": true
 	},
 	"include": ["src", "benchmark", "test"]
 }
