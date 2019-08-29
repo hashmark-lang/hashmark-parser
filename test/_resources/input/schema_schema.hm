@@ -1,0 +1,132 @@
+#root
+	#body
+		#prop root
+			#one root
+		#prop blocks
+			#zeroOrMore block
+		#prop inline
+			#zeroOrMore inline
+
+#block root
+	#body
+		#prop defaultTag
+			#optional default
+		#prop body
+			#one body
+
+#block block
+	#head
+		#hashml name
+	#body
+		#prop defaultTag
+			#optional default
+		#prop head
+			#optional head
+		#prop body
+			#optional body
+
+#block default
+	#head
+		#hashml name
+
+#block head
+	#body
+		#prop type
+			#optional hashml
+			#optional string
+			#optional date
+			#optional url
+
+#block body
+	#body
+		#prop props
+			#zeroOrMore prop
+
+#block prop
+	#default item
+	#head
+		#hashml name
+	#body
+		#prop content
+			#zeroOrMore optional
+			#zeroOrMore one
+			#zeroOrMore oneOrMore
+			#zeroOrMore zeroOrMore
+
+#block optional
+	#head
+		#hashml target
+
+#block one
+	#head
+		#hashml target
+
+#block oneOrMore
+	#head
+		#hashml target
+
+#block zeroOrMore
+	#head
+		#hashml target
+
+#block inline
+	#head
+		#hashml name
+	#body
+		#prop args
+			#one args
+		#prop sugar
+			#optional sugar
+
+#block args
+	#body
+		#prop args
+			#zeroOrMore hashml
+			#zeroOrMore string
+			#zeroOrMore date
+			#zeroOrMore url
+
+#block hashml
+	#default item
+	#head
+		#hashml propName
+	#body
+		#prop content
+			#zeroOrMore item
+
+#block item
+	#head
+		#hashml target
+
+#block string
+	#head
+		#hashml propName
+
+#block date
+	#head
+		#hashml propName
+
+#block url
+	#head
+		#hashml propName
+
+#block sugar
+	#body
+		#prop start
+			#one start
+		#prop separator
+			#optional separator
+		#prop end
+			#one end
+
+#block start
+	#head
+		#string token
+
+#block separator
+	#head
+		#string token
+
+#block end
+	#head
+		#string token
