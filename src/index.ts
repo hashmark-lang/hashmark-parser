@@ -2,6 +2,7 @@ export * from "./ir/IRNode";
 
 export * from "./schema/errors";
 export * from "./schema/Schema";
+export * from "./schema/schemaSchema";
 export * from "./schema/schema-generators";
 export * from "./schema/SchemaDefinition";
 export * from "./schema/typescript";
