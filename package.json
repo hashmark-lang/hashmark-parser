@@ -42,7 +42,13 @@
 		"tslint": "^5.18.0",
 		"typedoc": "^0.15.0"
 	},
+	"config": {
+		"schema_interface": "src/schema/schemaSchemaInterface.d.ts"
+	},
 	"scripts": {
+		"schema:compile": "ts-node compileSchemaSchema.ts $npm_package_config_schema_interface",
+		"schema:format": "prettier --write $npm_package_config_schema_interface && tslint --project tsconfig.json --config tslint.json --force --quiet --fix $npm_package_config_schema_interface",
+		"schema": "npm run schema:compile && npm run schema:format && npm run schema:format",
 		"format": "prettier --write {src,test,benchmark}/**/*.ts *.json",
 		"format:check": "prettier --check {src,test,benchmark}/**/*.ts *.json",
 		"tslint": "tslint --project tsconfig.json",
