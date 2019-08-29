@@ -16,7 +16,7 @@
 
 #block block
 	#head
-		#hashml name
+		#string name
 	#body
 		#prop defaultTag
 			#optional default
@@ -27,7 +27,7 @@
 
 #block default
 	#head
-		#hashml name
+		#string name
 
 #block head
 	#body
@@ -45,7 +45,7 @@
 #block prop
 	#default item
 	#head
-		#hashml name
+		#string name
 	#body
 		#prop content
 			#zeroOrMore optional
@@ -55,23 +55,23 @@
 
 #block optional
 	#head
-		#hashml target
+		#string target
 
 #block one
 	#head
-		#hashml target
+		#string target
 
 #block oneOrMore
 	#head
-		#hashml target
+		#string target
 
 #block zeroOrMore
 	#head
-		#hashml target
+		#string target
 
 #block inline
 	#head
-		#hashml name
+		#string name
 	#body
 		#prop args
 			#one args
@@ -89,26 +89,26 @@
 #block hashml
 	#default item
 	#head
-		#hashml propName
+		#string propName
 	#body
 		#prop content
 			#zeroOrMore item
 
 #block item
 	#head
-		#hashml target
+		#string target
 
 #block string
 	#head
-		#hashml propName
+		#string propName
 
 #block date
 	#head
-		#hashml propName
+		#string propName
 
 #block url
 	#head
-		#hashml propName
+		#string propName
 
 #block sugar
 	#body

@@ -1,12 +1,4 @@
-import {
-	lineTag,
-	one,
-	optional,
-	parsedArg,
-	prop,
-	stringTag,
-	zeroOrMore
-} from "./schema-generators";
+import { one, optional, prop, stringArg, stringTag, zeroOrMore } from "./schema-generators";
 import { SchemaDefinition } from "./SchemaDefinition";
 
 const ROOT = "root";
@@ -62,7 +54,7 @@ export const schemaSchema: SchemaDefinition = {
 		[BLOCK]: {
 			rawBody: false,
 			props: {
-				head: parsedArg("name", []),
+				head: stringArg("name"),
 				body: {
 					defaultTag: optional(DEFAULT),
 					head: optional(HEAD),
@@ -70,7 +62,7 @@ export const schemaSchema: SchemaDefinition = {
 				}
 			}
 		},
-		[DEFAULT]: lineTag("name", []),
+		[DEFAULT]: stringTag("name"),
 		[HEAD]: {
 			rawBody: false,
 			props: {
@@ -95,7 +87,7 @@ export const schemaSchema: SchemaDefinition = {
 			rawBody: false,
 			defaultTag: ITEM,
 			props: {
-				head: parsedArg("name", []),
+				head: stringArg("name"),
 				body: prop(
 					"content",
 					zeroOrMore(OPTIONAL),
@@ -105,15 +97,15 @@ export const schemaSchema: SchemaDefinition = {
 				)
 			}
 		},
-		[OPTIONAL]: lineTag("target", []),
-		[ONE]: lineTag("target", []),
-		[ONE_OR_MORE]: lineTag("target", []),
-		[ZERO_OR_MORE]: lineTag("target", []),
+		[OPTIONAL]: stringTag("target"),
+		[ONE]: stringTag("target"),
+		[ONE_OR_MORE]: stringTag("target"),
+		[ZERO_OR_MORE]: stringTag("target"),
 
 		[INLINE]: {
 			rawBody: false,
 			props: {
-				head: parsedArg("name", []),
+				head: stringArg("name"),
 				body: {
 					args: one(ARGS),
 					sugar: optional(SUGAR)
@@ -137,14 +129,14 @@ export const schemaSchema: SchemaDefinition = {
 			rawBody: false,
 			defaultTag: ITEM,
 			props: {
-				head: parsedArg("propName", []),
+				head: stringArg("propName"),
 				body: prop("content", zeroOrMore(ITEM))
 			}
 		},
-		[ITEM]: lineTag("target", []),
-		[STRING_ARG]: lineTag("propName", []),
-		[DATE_ARG]: lineTag("propName", []),
-		[URL_ARG]: lineTag("propName", []),
+		[ITEM]: stringTag("target"),
+		[STRING_ARG]: stringTag("propName"),
+		[DATE_ARG]: stringTag("propName"),
+		[URL_ARG]: stringTag("propName"),
 
 		[SUGAR]: {
 			rawBody: false,

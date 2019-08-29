@@ -39,11 +39,11 @@ export interface BlockBlock {
 	defaultTag: BlockDefault | null;
 	head: BlockHead | null;
 	body: BlockBody | null;
-	name: string[];
+	name: string;
 }
 export interface BlockDefault {
 	$tag: "default";
-	name: string[];
+	name: string;
 }
 export interface BlockHead {
 	$tag: "head";
@@ -56,29 +56,29 @@ export interface BlockBody {
 export interface BlockProp {
 	$tag: "prop";
 	content: Array<BlockOptional | BlockOne | BlockOneOrMore | BlockZeroOrMore>;
-	name: string[];
+	name: string;
 }
 export interface BlockOptional {
 	$tag: "optional";
-	target: string[];
+	target: string;
 }
 export interface BlockOne {
 	$tag: "one";
-	target: string[];
+	target: string;
 }
 export interface BlockOneOrMore {
 	$tag: "oneOrMore";
-	target: string[];
+	target: string;
 }
 export interface BlockZeroOrMore {
 	$tag: "zeroOrMore";
-	target: string[];
+	target: string;
 }
 export interface BlockInline {
 	$tag: "inline";
 	args: BlockArgs;
 	sugar: BlockSugar | null;
-	name: string[];
+	name: string;
 }
 export interface BlockArgs {
 	$tag: "args";
@@ -87,23 +87,23 @@ export interface BlockArgs {
 export interface BlockHashml {
 	$tag: "hashml";
 	content: BlockItem[];
-	propName: string[];
+	propName: string;
 }
 export interface BlockItem {
 	$tag: "item";
-	target: string[];
+	target: string;
 }
 export interface BlockString {
 	$tag: "string";
-	propName: string[];
+	propName: string;
 }
 export interface BlockDate {
 	$tag: "date";
-	propName: string[];
+	propName: string;
 }
 export interface BlockUrl {
 	$tag: "url";
-	propName: string[];
+	propName: string;
 }
 export interface BlockSugar {
 	$tag: "sugar";
