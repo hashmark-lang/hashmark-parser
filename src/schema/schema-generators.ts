@@ -94,11 +94,12 @@ export function optional(tag: string): { [tag: string]: Cardinality } {
 ////////////
 
 export function root(body: BodyPropDefinitions, defaultTag?: string | undefined): RootDefinition {
-	return {
+	const res: RootDefinition = {
 		rawBody: false,
-		defaultTag,
 		props: { body }
 	};
+	if (defaultTag) res.defaultTag = defaultTag;
+	return res;
 }
 
 export function stringTag(propName: string): ParsedBlockDefinition {
@@ -122,24 +123,25 @@ export function blockTag(
 	body?: BodyPropDefinitions,
 	defaultTag?: string
 ): ParsedBlockDefinition {
-	return {
+	const res: ParsedBlockDefinition = {
 		rawBody: false,
-		defaultTag,
-		props: {
-			head,
-			body
-		}
+		props: {}
 	};
+	if (head) res.props.head = head;
+	if (body) res.props.body = body;
+	if (defaultTag) res.defaultTag = defaultTag;
+	return res;
 }
 
 export function rawBodyTag(rawPropName: string, head?: ArgDefinition): RawBlockDefinition {
-	return {
+	const res: RawBlockDefinition = {
 		rawBody: true,
 		props: {
-			head,
 			body: rawPropName
 		}
 	};
+	if (head) res.props.head = head;
+	return res;
 }
 
 /////////////////
