@@ -13,9 +13,7 @@ import * as SchemaSchema from "./schemaSchemaInterface";
 export function readSchema(root: SchemaSchema.Root): SchemaDefinition {
 	return {
 		root: convertRoot(root.root),
-		blocks: Object.fromEntries(
-			root.blocks.map(block => [block.name.join(""), convertBlock(block)])
-		),
+		blocks: Object.fromEntries(root.blocks.map(block => [block.name, convertBlock(block)])),
 		inline: Object.fromEntries(root.inline.map(inline => [inline.name, convertInline(inline)]))
 	};
 }
@@ -27,7 +25,7 @@ function convertRoot(root: SchemaSchema.BlockRoot): RootDefinition {
 			body: convertBody(root.body)
 		}
 	};
-	if (root.defaultTag) res.defaultTag = root.defaultTag.name.join("");
+	if (root.defaultTag) res.defaultTag = root.defaultTag.name;
 	return res;
 }
 
@@ -38,7 +36,7 @@ function convertBlock(block: SchemaSchema.BlockBlock): BlockDefinition {
 	};
 	if (block.head) res.props.head = convertHead(block.head);
 	if (block.body) res.props.body = convertBody(block.body);
-	if (block.defaultTag) res.defaultTag = block.defaultTag.name.join("");
+	if (block.defaultTag) res.defaultTag = block.defaultTag.name;
 	return res;
 }
 
@@ -48,7 +46,7 @@ function convertHead(head: SchemaSchema.BlockHead): ArgDefinition {
 	if (head.type.length > 1) throw new Error("Head should have at most one type");
 
 	const type = head.type[0];
-	const name = type.propName.join("");
+	const name = type.propName;
 
 	if (type.$tag === "hashml") {
 		return {
@@ -72,14 +70,14 @@ function convertBody(body: SchemaSchema.BlockBody): BodyPropDefinitions {
 }
 
 function convertItems(items: SchemaSchema.BlockItem[]): string[] {
-	return items.map(item => item.target.join(""));
+	return items.map(item => item.target);
 }
 
 function convertPropContent(
 	propContent: SchemaSchema.BlockProp["content"]
 ): { [tag: string]: Cardinality } {
 	return Object.fromEntries(
-		propContent.map(content => [content.target.join(""), convertCardinality(content)])
+		propContent.map(content => [content.target, convertCardinality(content)])
 	);
 }
 
@@ -112,7 +110,7 @@ function convertInline(inline: SchemaSchema.BlockInline): InlineDefinition {
 
 function convertArgs(args: SchemaSchema.BlockArgs): ArgDefinition[] {
 	return args.args.map(arg => {
-		const name = arg.propName.join("");
+		const name = arg.propName;
 		if (arg.$tag === "hashml") {
 			return { raw: false, name, content: convertItems(arg.content) };
 		} else {
