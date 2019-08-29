@@ -266,6 +266,34 @@ describe("schemaErrors()", () => {
 				assert.strictEqual("prop", error.propName);
 				assert.strictEqual("unknown", error.referencedTag);
 			});
+
+			it("is returned when an unknown 'root' tag is referenced in a body prop", () => {
+				const schema: SchemaDefinition = {
+					root: root(prop("body", zeroOrMore("test"))),
+					blocks: {
+						["test"]: {
+							rawBody: false,
+							props: {
+								body: {
+									["prop"]: oneOrMore("root")
+								}
+							}
+						}
+					},
+					inline: {
+						["root"]: inline()
+					}
+				};
+
+				const errors = schemaErrors(schema);
+				assert.lengthOf(errors, 1);
+
+				const error = errors[0] as UndefinedBlockTagError;
+				assert.instanceOf(error, UndefinedBlockTagError);
+				assert.strictEqual("test", error.schemaTag);
+				assert.strictEqual("prop", error.propName);
+				assert.strictEqual("root", error.referencedTag);
+			});
 		});
 	});
 });
