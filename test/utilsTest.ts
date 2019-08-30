@@ -1,8 +1,8 @@
 import { assert } from "chai";
-import { countOccurrences, ordinal } from "../src/utils";
+import { capitalize, countOccurrences, ordinal } from "../src/utils";
 
 describe("utils", () => {
-	describe("ordinal", () => {
+	describe("ordinal()", () => {
 		it("returns 1st for 1", () => {
 			assert.strictEqual(ordinal(1), "1st");
 		});
@@ -39,6 +39,18 @@ describe("utils", () => {
 			assert.strictEqual(count.get(2), 2);
 			assert.strictEqual(count.get(3), 3);
 			assert.isUndefined(count.get(0));
+		});
+	});
+
+	describe("capitalize()", () => {
+		it('returns "" for ""', () => {
+			const result = capitalize("");
+			assert.strictEqual(result, "");
+		});
+
+		it('returns "Capitalized" for "capitalized"', () => {
+			const result = capitalize("capitalized");
+			assert.strictEqual(result, "Capitalized");
 		});
 	});
 });
