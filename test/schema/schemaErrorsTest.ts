@@ -3,6 +3,7 @@ import {
 	DuplicatePropAssignmentError,
 	DuplicatePropNameError,
 	IllegalPropNameError,
+	IllegalTagNameError,
 	UndefinedBlockTagError,
 	UndefinedInlineTagError
 } from "../../src";
@@ -294,6 +295,38 @@ describe("schemaErrors()", () => {
 				assert.strictEqual("prop", error.propName);
 				assert.strictEqual("root", error.referencedTag);
 			});
+		});
+
+		describe("IllegalTagNameError", () => {
+			const testChars = ["#", "[", " "];
+			for (const char of testChars) {
+				const tag = "te" + char + "st";
+				it(`is returned for tag name '${tag}'`, () => {
+					const schema: SchemaDefinition = {
+						root: root(prop("body", zeroOrMore(tag))),
+						blocks: {
+							[tag]: {
+								rawBody: false,
+								props: {
+									body: {
+										// It is not an error in a prop:
+										["pr" + char + "op"]: {}
+									}
+								}
+							}
+						},
+						inline: {}
+					};
+
+					const errors = schemaErrors(schema);
+					assert.lengthOf(errors, 1);
+
+					const error = errors[0] as IllegalTagNameError;
+					assert.instanceOf(error, IllegalTagNameError);
+					assert.strictEqual(tag, error.tag);
+					assert.strictEqual(char, error.illegalChar);
+				});
+			}
 		});
 	});
 });

@@ -22,6 +22,7 @@ export const enum ErrorCode {
 	ILLEGAL_PROP_NAME,
 	UNDEFINED_BLOCK_TAG,
 	UNDEFINED_INLINE_TAG,
+	ILLEGAL_TAG_NAME,
 
 	// Validation errors:
 	UNKNOWN_BLOCK_TAG = 200,
@@ -97,6 +98,15 @@ export class UndefinedInlineTagError extends SchemaDefinitionError {
 		super(
 			ErrorCode.UNDEFINED_INLINE_TAG,
 			`The schema for tag '${schemaTag}' references a tag named '${referencedTag}' in the prop '${propName}', but that tag is not defined in the schema's inlines`
+		);
+	}
+}
+
+export class IllegalTagNameError extends SchemaDefinitionError {
+	constructor(readonly tag: string, readonly illegalChar: string) {
+		super(
+			ErrorCode.ILLEGAL_TAG_NAME,
+			`Tag name '${tag}' is not legal, as it contains '${illegalChar}'. Tag names may not contain '#', '[' or ' '.`
 		);
 	}
 }

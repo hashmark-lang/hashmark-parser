@@ -4,6 +4,7 @@ import {
 	DuplicatePropAssignmentError,
 	DuplicatePropNameError,
 	IllegalPropNameError,
+	IllegalTagNameError,
 	SchemaDefinitionError,
 	UndefinedBlockTagError,
 	UndefinedInlineTagError
@@ -18,6 +19,7 @@ import { ParsedArgDefinition, ROOT, SchemaDefinition } from "./SchemaDefinition"
  * 3. Prop names may not start with "$"
  * 4. Body props must reference block tags that exist in the schema
  * 5. Head props and args must reference inline tags that exist in the schema
+ * 6. Tag names must be "legal": no spaces, no hashtags, no opening brackets
  *
  * There is an error for each of these rules:
  *
@@ -26,6 +28,7 @@ import { ParsedArgDefinition, ROOT, SchemaDefinition } from "./SchemaDefinition"
  * 3. [[IllegalPropNameError]]
  * 4. [[UndefinedBlockTagError]]
  * 5. [[UndefinedInlineTagError]]
+ * 6. [[IllegalTagNameError]]
  *
  * @param schema Schema definition object.
  * @returns Array of schema definition errors, or an empty array if no errors were found.
@@ -71,6 +74,7 @@ export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] 
 				...undefinedBlockTagErrors(blockTagNames, tag, bodyContent) // Rule 4
 			);
 		}
+		errors.push(...illegalTagNameErrors(tag)); // Rule 6
 	}
 
 	for (const [tag, tagSchema] of Object.entries(schema.inline)) {
@@ -82,7 +86,8 @@ export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] 
 		errors.push(
 			...duplicatePropNameErrors(tag, propNames), // Rule 1
 			...illegalPropNameErrors(tag, propNames), // Rule 3
-			...undefinedInlineTagErrors(inlineTagNames, tag, argContent) // Rule 5
+			...undefinedInlineTagErrors(inlineTagNames, tag, argContent), // Rule 5
+			...illegalTagNameErrors(tag) // Rule 6
 		);
 	}
 
@@ -144,4 +149,11 @@ function undefinedBlockTagErrors(
 			.filter(ref => !blockTags.has(ref))
 			.map(ref => new UndefinedBlockTagError(tag, name, ref))
 	);
+}
+
+function illegalTagNameErrors(tag: string): IllegalTagNameError[] {
+	const illegalChars = ["#", "[", " "];
+	return illegalChars
+		.filter(char => tag.includes(char))
+		.map(char => new IllegalTagNameError(tag, char));
 }
