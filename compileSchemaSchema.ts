@@ -10,7 +10,7 @@ if (!path) {
 }
 
 try {
-	const output = convertSchemaToTypescript(new Schema(schemaSchema));
+	const output = convertSchemaToTypescript(new Schema(schemaSchema), schemaSchema, "..");
 	writeFileSync(path, output);
 } catch (e) {
 	console.error(e);
