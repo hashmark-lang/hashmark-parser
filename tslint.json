@@ -17,6 +17,6 @@
 		"no-restricted-globals": true
 	},
 	"linterOptions": {
-		"exclude": ["test/_resources"]
+		"exclude": ["test/_resources/**/*.ts"]
 	}
 }
