@@ -3,13 +3,14 @@ import {
 	CardinalityError,
 	DisallowedDefaultTagError,
 	HMError,
+	SchemaDefinition,
 	TooFewArgsError,
 	UnknownBlockTagError,
 	UnknownInlineTagError
 } from "../../src";
 import { IRNode } from "../../src/ir/IRNode";
 import { lineTag, prop, root } from "../../src/schema/schema-generators";
-import { getDocumentSchema, getEmptySchema, getTestSchema } from "../schemas";
+import { getDinosSchema, getDocumentSchema, getEmptySchema, getTestSchema } from "../schemas";
 import { filePairs, makeTestParser, resourceFile } from "../utils";
 
 // tslint:disable-next-line:ban-types
@@ -20,16 +21,17 @@ function assertError(errors: HMError[], expected: Function) {
 
 describe("IRHandler", () => {
 	describe("Schemas", () => {
-		const testSchemas = [
-			{ name: "empty-schema", schema: getEmptySchema() },
-			{ name: "test-schema", schema: getTestSchema() },
-			{ name: "document-schema", schema: getDocumentSchema() }
+		const testSchemas: Array<{ name: string; getSchema: () => SchemaDefinition }> = [
+			{ name: "empty-schema", getSchema: getEmptySchema },
+			{ name: "test-schema", getSchema: getTestSchema },
+			{ name: "document-schema", getSchema: getDocumentSchema },
+			{ name: "dino-schema", getSchema: getDinosSchema }
 		];
 
-		for (const { name, schema } of testSchemas) {
+		for (const { name, getSchema } of testSchemas) {
 			describe(name, () => {
 				let parse: (input: string) => [HMError[], IRNode];
-				beforeEach(() => (parse = makeTestParser(schema)));
+				beforeEach(() => (parse = makeTestParser(getSchema())));
 
 				for (const [input, output] of filePairs(`ir/${name}`, ".json")) {
 					it(`works with ${input.name}`, () => {

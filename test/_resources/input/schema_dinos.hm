@@ -1,0 +1,31 @@
+#root
+	#body
+		#prop dinosaurs
+			#oneOrMore dinosaur
+
+#block dinosaur
+	#default paragraph
+
+	#head
+		#string name
+
+	#body
+		#prop meta
+			#optional emoji
+		
+		#prop description
+			#zeroOrMore paragraph
+
+#block emoji
+	#head
+		#string value
+
+#block paragraph
+	#head
+		#hashml text
+			link
+
+#inline link
+	#args
+		#hashml title
+		#url url
