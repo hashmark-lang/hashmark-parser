@@ -1,3 +1,4 @@
+import { readSchema } from "../src/schema/readSchema";
 import {
 	blockTag,
 	inline,
@@ -15,6 +16,8 @@ import {
 	zeroOrMore
 } from "../src/schema/schema-generators";
 import { BodyPropDefinitions, INVALID_TAG, SchemaDefinition } from "../src/schema/SchemaDefinition";
+import { parseTyped } from "../src/schema/schemaSchemaInterface";
+import { resourceFile } from "./utils";
 
 export function getTestSchema(): SchemaDefinition {
 	const inlineTags = [
@@ -103,4 +106,13 @@ export function getDocumentSchema(): SchemaDefinition {
 			["inline"]: inline(parsedArg("inlineContent", inlineTags))
 		}
 	};
+}
+
+export function getDinosSchema() {
+	const file = resourceFile("input", "schema_dinos.hm");
+	const schema = parseTyped(file.read());
+	if (schema instanceof Array) {
+		throw new Error("Errors were found");
+	}
+	return readSchema(schema);
 }

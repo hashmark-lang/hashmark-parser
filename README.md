@@ -83,8 +83,8 @@ The parser produces the following JSON:
         },
         {
             "$tag": "dinosaur",
-			"name": "Sauropod",
-			...
+            "name": "Sauropod",
+            ...
         }
     ]
 }
@@ -124,7 +124,6 @@ HashML documents are parsed with a schema. The schema for the dinosaur descripti
 	#args
 		#string title
 		#url url
-
 ```
 
 

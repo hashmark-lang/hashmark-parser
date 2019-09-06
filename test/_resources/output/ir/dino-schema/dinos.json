@@ -1,0 +1,65 @@
+{
+    "$tag": "root",
+    "dinosaurs": [
+        {
+            "$tag": "dinosaur",
+            "name": "Tyrannosaurus rex",
+            "meta": {
+                "$tag": "emoji",
+                "value": "🦖"
+            },
+            "description": [
+                {
+                    "$tag": "paragraph",
+                    "text": [
+                        "A ",
+                        {
+                            "$tag": "link",
+                            "title": [
+                                "Tyrannosaurus rex"
+                            ],
+                            "url": "https://en.wikipedia.org/wiki/Tyrannosaurus"
+                        },
+                        ", a massive, meat-eating dinosaur with huge jaws, tiny arms, and a long tail."
+                    ]
+                },
+                {
+                    "$tag": "paragraph",
+                    "text": [
+                        "It lived in the Late Cretaceous epoch."
+                    ]
+                }
+            ]
+        },
+        {
+            "$tag": "dinosaur",
+            "name": "Sauropod",
+            "meta": {
+                "$tag": "emoji",
+                "value": "🦕"
+            },
+            "description": [
+                {
+                    "$tag": "paragraph",
+                    "text": [
+                        "A ",
+                        {
+                            "$tag": "link",
+                            "title": [
+                                "sauropod"
+                            ],
+                            "url": "https://en.wikipedia.org/wiki/Sauropoda"
+                        },
+                        ", a massive, plant-eating dinosaur with a long neck and nail."
+                    ]
+                },
+                {
+                    "$tag": "paragraph",
+                    "text": [
+                        "It lived in the Late Triassic to the Late Cretaceous epoch."
+                    ]
+                }
+            ]
+        }
+    ]
+}
