@@ -1,5 +1,10 @@
-# Hashml Schemas
-Hashml places a lot of importance on schemas. A schema describes the supported tags, and places constraints on where they can appear. Hashml schemas are written in Hashml. The supported tags are described by the schema schema, which is available in [`src/schema-schema.hm`](../src/schema-schema.hm).
+---
+id: schemas
+title: HashML Schemas
+sidebar_label: HashML Schemas
+---
+
+HashML places a lot of importance on schemas. A schema describes the supported tags, and places constraints on where they can appear. HashML schemas are written in HashML. The supported tags are described by the schema schema, which is available in [`src/schema-schema.hm`](../src/schema-schema.hm).
 
 ## Example
 A schema looks like this:
@@ -47,8 +52,8 @@ Schemas use `#zeroOrMore` as the [default tag](./what-is-hashml.md#default-tags)
 Schemas can also define the [syntactic sugar for inline tags](./what-is-hashml.md#inline-tags). The above defines backticks (\`) as the sugar for `#code`. You could also write your own schema in which `&hello&` means `#uppercase[hello]`, for instance.
 
 ## Schema validation
-Hashml documents can be validated by the schema. This means that you can check whether a document respects the tag descriptions in the schema, and whether the restrictions imposed by the `#content` field of blocks is respected.
+HashML documents can be validated by the schema. This means that you can check whether a document respects the tag descriptions in the schema, and whether the restrictions imposed by the `#content` field of blocks is respected.
 
-Since schemas are themselves Hashml documents, there is a schema schema that can validate schemas. The schema schema also validates itself, as it is also a valid schema. This is very useful when writing schemas, and can help you catch all sorts of errors.
+Since schemas are themselves HashML documents, there is a schema schema that can validate schemas. The schema schema also validates itself, as it is also a valid schema. This is very useful when writing schemas, and can help you catch all sorts of errors.
 
 Schema validation gives a list of errors, and can tell you exactly why a document isn't compliant with the schema.

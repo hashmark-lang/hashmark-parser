@@ -1,28 +1,32 @@
-# What is Hashml? 
-Hashml is a markup language. It's more structured than Markdown, but less verbose than XML. Here's what this README would look like in Hashml:
+---
+id: what-is-hashml
+title: What is HashML? 
+sidebar_label: What is HashML?
+---
+
+HashML is a markup language. It's more structured than Markdown, but less verbose than XML. Here's what this document would look like in HashML:
 
 ```
-#document Hashml parser
-	#section Installation
-		#code bash
-			npm install @hashml/parser
+#document What is HashML?
+	HashML is a markup language. It's more structured than Markdown, ...
 
-	#section What is Hasmark?
-		Hashml is a markup language. It's more structured than Markdown, ...
+	#code hashml
+		#document What is HashML?
+			...
 ```
 
 The language is based on two main constructs: a `#` denotes a tag. Content indented under it is the body of that tag.
 
-Hashml also has a few more advanced syntactic features. These are largely driven by schemas, which [we talk about in more detail in the schemas documentation](./schemas.md). For now, just know that a schema defines which tags exist, where they can appear (i.e. can a `#section` appear inside of `#code`?). It also gives instructions for how to parse some of the more advanced features.
+HashML also has a few more advanced syntactic features. These are largely driven by schemas, which [we talk about in more detail in the schemas documentation](./schemas.md). For now, just know that a schema defines which tags exist, where they can appear (i.e. can a `#section` appear inside of `#code`?). It also gives instructions for how to parse some of the more advanced features.
 
 ## Inline tags
-Hashml also has support for inline tags:
+HashML also has support for inline tags:
 
 ```
 Here's a #url[https://www.example.com][link to my website]
 ```
 
-To avoid being too verbose, Hashml supports syntactic sugar for common inline tags, much like Markdown. If the schema defines bacticks (\`) as syntactic sugar for `#code`, the following two lines are equivalent:
+To avoid being too verbose, HashML supports syntactic sugar for common inline tags, much like Markdown. If the schema defines bacticks (\`) as syntactic sugar for `#code`, the following two lines are equivalent:
 
 ```
 Here's some #code[inline code]
@@ -40,7 +44,7 @@ Shopping list:
 	#item Carrots
 ```
 
-To help with this situation, Hashml supports default tags. For instance, if the schema for `#list` defines `#item` as its default tag, then the above can equivalently be written as:
+To help with this situation, HashML supports default tags. For instance, if the schema for `#list` defines `#item` as its default tag, then the above can equivalently be written as:
 
 ```
 Shopping list:
@@ -63,11 +67,11 @@ Shopping list:
 ```
 
 ## Raw tags
-Sometimes, we'd like to write things that shouldn't be parsed by the Hashml parser. This is the case for code, for instance: the indentation and hashtags shouldn't be understood by the parser as Hashml code:
+Sometimes, we'd like to write things that shouldn't be parsed by the HashML parser. This is the case for code, for instance: the indentation and hashtags shouldn't be understood by the parser as HashML code:
 
 ```
 #code python
-	# This is a Python comment, not Hashml markup!
+	# This is a Python comment, not HashML markup!
 	def test():
 		print("hello world)
 ```

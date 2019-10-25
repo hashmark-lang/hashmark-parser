@@ -127,14 +127,14 @@ HashML documents are parsed with a schema. The schema for the dinosaur descripti
 ```
 
 
-You can read more about the HashML schemas [in the docs](docs/README.md).
+You can read more about the HashML schemas in the docs.
 
 ## Usage
 ### Compiling a schema to TypeScript
 Use the CLI!
 
 ### Parsing HashML files
-To parse a Hashml document from a Typescript program:
+To parse a HashML document from a Typescript program:
 
 ```typescript
 import { parse, ParsedSchema } from "@hashml/hashml";
@@ -163,7 +163,7 @@ const errors = schema.validateBlock(doc);
 To export the document to JSON or XML:
 
 ```typescript
-import { toXML, toJSON} from "@hashml/hashml";
+import { toXML, toJSON } from "@hashml/hashml";
 const xml: string = toXML(doc);
 const json: string = toJSON(doc);
 ```

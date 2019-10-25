@@ -1,5 +1,9 @@
 dist
 
+# Website build
+website/build
+docs/api
+
 # Logs
 logs
 *.log
@@ -62,5 +66,3 @@ typings/
 # next.js build output
 .next
 
-# Typedoc output
-typedoc
