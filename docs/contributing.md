@@ -18,6 +18,8 @@ To clone and install the project, run:
 $ git clone https://github.com/hashml/hashml
 $ cd hashml
 $ npm install
+$ cd website
+$ npm install
 ```
 
 ## NPM commands

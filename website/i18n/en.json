@@ -393,7 +393,415 @@
         "title": "HashML Schemas",
         "sidebar_label": "HashML Schemas"
       },
+      "tag-types": {
+        "title": "HashML tag types",
+        "sidebar_label": "Tag types"
+      },
+      "using-hashml": {
+        "title": "Using HashML",
+        "sidebar_label": "Using HashML"
+      },
       "what-is-hashml": {
+        "title": "What is HashML?",
+        "sidebar_label": "What is HashML?"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_ir_irblockhandler_.irblockhandler": {
+        "title": "IRBlockHandler",
+        "sidebar_label": "IRBlockHandler"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_ir_irinlinehandler_.irinlinehandler": {
+        "title": "IRInlineHandler",
+        "sidebar_label": "IRInlineHandler"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_parser_blockparser_.blockparser": {
+        "title": "BlockParser",
+        "sidebar_label": "BlockParser"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_parser_inlineparser_.inlineparser": {
+        "title": "InlineParser",
+        "sidebar_label": "InlineParser"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.cardinalityerror": {
+        "title": "CardinalityError",
+        "sidebar_label": "CardinalityError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.disallowedargerror": {
+        "title": "DisallowedArgError",
+        "sidebar_label": "DisallowedArgError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.disalloweddefaulttagerror": {
+        "title": "DisallowedDefaultTagError",
+        "sidebar_label": "DisallowedDefaultTagError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.disallowedheaderror": {
+        "title": "DisallowedHeadError",
+        "sidebar_label": "DisallowedHeadError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.disallowedinargerror": {
+        "title": "DisallowedInArgError",
+        "sidebar_label": "DisallowedInArgError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.disallowedinblockerror": {
+        "title": "DisallowedInBlockError",
+        "sidebar_label": "DisallowedInBlockError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.disallowedinheaderror": {
+        "title": "DisallowedInHeadError",
+        "sidebar_label": "DisallowedInHeadError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.duplicatepropassignmenterror": {
+        "title": "DuplicatePropAssignmentError",
+        "sidebar_label": "DuplicatePropAssignmentError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.duplicatepropnameerror": {
+        "title": "DuplicatePropNameError",
+        "sidebar_label": "DuplicatePropNameError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.hmerror": {
+        "title": "HMError",
+        "sidebar_label": "HMError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.illegalpropnameerror": {
+        "title": "IllegalPropNameError",
+        "sidebar_label": "IllegalPropNameError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.illegaltagnameerror": {
+        "title": "IllegalTagNameError",
+        "sidebar_label": "IllegalTagNameError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.schemadefinitionerror": {
+        "title": "SchemaDefinitionError",
+        "sidebar_label": "SchemaDefinitionError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.toofewargserror": {
+        "title": "TooFewArgsError",
+        "sidebar_label": "TooFewArgsError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.undefinedblocktagerror": {
+        "title": "UndefinedBlockTagError",
+        "sidebar_label": "UndefinedBlockTagError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.undefinedinlinetagerror": {
+        "title": "UndefinedInlineTagError",
+        "sidebar_label": "UndefinedInlineTagError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.unknownblocktagerror": {
+        "title": "UnknownBlockTagError",
+        "sidebar_label": "UnknownBlockTagError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.unknowninlinetagerror": {
+        "title": "UnknownInlineTagError",
+        "sidebar_label": "UnknownInlineTagError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_errors_.validationerror": {
+        "title": "ValidationError",
+        "sidebar_label": "ValidationError"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_schema_.argschema": {
+        "title": "ArgSchema",
+        "sidebar_label": "ArgSchema"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_schema_.blockschema": {
+        "title": "BlockSchema",
+        "sidebar_label": "BlockSchema"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_schema_.bodypropschema": {
+        "title": "BodyPropSchema",
+        "sidebar_label": "BodyPropSchema"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_schema_.inlineschema": {
+        "title": "InlineSchema",
+        "sidebar_label": "InlineSchema"
+      },
+      "version-0.3.0/api/classes/version-0.3.0-_schema_schema_.schema": {
+        "title": "Schema",
+        "sidebar_label": "Schema"
+      },
+      "version-0.3.0/api/enums/version-0.3.0-_schema_errors_.errorcode": {
+        "title": "ErrorCode",
+        "sidebar_label": "ErrorCode"
+      },
+      "version-0.3.0/api/version-0.3.0-globals": {
+        "title": "@hashml/hashml",
+        "sidebar_label": "Globals"
+      },
+      "version-0.3.0/api/version-0.3.0-index": {
+        "title": "@hashml/hashml",
+        "sidebar_label": "README"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_ir_irnode_.irnode": {
+        "title": "IRNode",
+        "sidebar_label": "IRNode"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_parser_blockhandler_.blockhandler": {
+        "title": "BlockHandler",
+        "sidebar_label": "BlockHandler"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_parser_inlinehandler_.inlinehandler": {
+        "title": "InlineHandler",
+        "sidebar_label": "InlineHandler"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_parser_inlineparser_.inlinesyntax": {
+        "title": "InlineSyntax",
+        "sidebar_label": "InlineSyntax"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_parser_inputposition_.inputposition": {
+        "title": "InputPosition",
+        "sidebar_label": "InputPosition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_parser_sugar_.sugar": {
+        "title": "Sugar",
+        "sidebar_label": "Sugar"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_parser_sugar_.sugarsyntax": {
+        "title": "SugarSyntax",
+        "sidebar_label": "SugarSyntax"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_cardinality_.cardinality": {
+        "title": "Cardinality",
+        "sidebar_label": "Cardinality"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.bodypropdefinitions": {
+        "title": "BodyPropDefinitions",
+        "sidebar_label": "BodyPropDefinitions"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.inlinedefinition": {
+        "title": "InlineDefinition",
+        "sidebar_label": "InlineDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.parsedargdefinition": {
+        "title": "ParsedArgDefinition",
+        "sidebar_label": "ParsedArgDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.parsedblockdefinition": {
+        "title": "ParsedBlockDefinition",
+        "sidebar_label": "ParsedBlockDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.rawargdefinition": {
+        "title": "RawArgDefinition",
+        "sidebar_label": "RawArgDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.rawblockdefinition": {
+        "title": "RawBlockDefinition",
+        "sidebar_label": "RawBlockDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.rootdefinition": {
+        "title": "RootDefinition",
+        "sidebar_label": "RootDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemadefinition_.schemadefinition": {
+        "title": "SchemaDefinition",
+        "sidebar_label": "SchemaDefinition"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.argsblock": {
+        "title": "ArgsBlock",
+        "sidebar_label": "ArgsBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.blockblock": {
+        "title": "BlockBlock",
+        "sidebar_label": "BlockBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.bodyblock": {
+        "title": "BodyBlock",
+        "sidebar_label": "BodyBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.dateblock": {
+        "title": "DateBlock",
+        "sidebar_label": "DateBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.defaultblock": {
+        "title": "DefaultBlock",
+        "sidebar_label": "DefaultBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.endblock": {
+        "title": "EndBlock",
+        "sidebar_label": "EndBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.hashmlblock": {
+        "title": "HashmlBlock",
+        "sidebar_label": "HashmlBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.headblock": {
+        "title": "HeadBlock",
+        "sidebar_label": "HeadBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.inlineblock": {
+        "title": "InlineBlock",
+        "sidebar_label": "InlineBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.itemblock": {
+        "title": "ItemBlock",
+        "sidebar_label": "ItemBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.oneblock": {
+        "title": "OneBlock",
+        "sidebar_label": "OneBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.oneormoreblock": {
+        "title": "OneOrMoreBlock",
+        "sidebar_label": "OneOrMoreBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.optionalblock": {
+        "title": "OptionalBlock",
+        "sidebar_label": "OptionalBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.propblock": {
+        "title": "PropBlock",
+        "sidebar_label": "PropBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.root": {
+        "title": "Root",
+        "sidebar_label": "Root"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.rootblock": {
+        "title": "RootBlock",
+        "sidebar_label": "RootBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.separatorblock": {
+        "title": "SeparatorBlock",
+        "sidebar_label": "SeparatorBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.startblock": {
+        "title": "StartBlock",
+        "sidebar_label": "StartBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.stringblock": {
+        "title": "StringBlock",
+        "sidebar_label": "StringBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.sugarblock": {
+        "title": "SugarBlock",
+        "sidebar_label": "SugarBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.urlblock": {
+        "title": "UrlBlock",
+        "sidebar_label": "UrlBlock"
+      },
+      "version-0.3.0/api/interfaces/version-0.3.0-_schema_schemaschemainterface_.zeroormoreblock": {
+        "title": "ZeroOrMoreBlock",
+        "sidebar_label": "ZeroOrMoreBlock"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_index_": {
+        "title": "index",
+        "sidebar_label": "index"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_ir_irblockhandler_": {
+        "title": "ir/IRBlockHandler",
+        "sidebar_label": "ir/IRBlockHandler"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_ir_irinlinehandler_": {
+        "title": "ir/IRInlineHandler",
+        "sidebar_label": "ir/IRInlineHandler"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_ir_irnode_": {
+        "title": "ir/IRNode",
+        "sidebar_label": "ir/IRNode"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_output_xml_": {
+        "title": "output/xml",
+        "sidebar_label": "output/xml"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_blockhandler_": {
+        "title": "parser/BlockHandler",
+        "sidebar_label": "parser/BlockHandler"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_blockparser_": {
+        "title": "parser/BlockParser",
+        "sidebar_label": "parser/BlockParser"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_inlinehandler_": {
+        "title": "parser/InlineHandler",
+        "sidebar_label": "parser/InlineHandler"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_inlineparser_": {
+        "title": "parser/InlineParser",
+        "sidebar_label": "parser/InlineParser"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_inputposition_": {
+        "title": "parser/InputPosition",
+        "sidebar_label": "parser/InputPosition"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_parse_": {
+        "title": "parser/parse",
+        "sidebar_label": "parser/parse"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_parser_sugar_": {
+        "title": "parser/Sugar",
+        "sidebar_label": "parser/Sugar"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_cardinality_": {
+        "title": "schema/Cardinality",
+        "sidebar_label": "schema/Cardinality"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_errors_": {
+        "title": "schema/errors",
+        "sidebar_label": "schema/errors"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_readschema_": {
+        "title": "schema/readSchema",
+        "sidebar_label": "schema/readSchema"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_schema_": {
+        "title": "schema/Schema",
+        "sidebar_label": "schema/Schema"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_schema_generators_": {
+        "title": "schema/schema-generators",
+        "sidebar_label": "schema/schema-generators"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_schemadefinition_": {
+        "title": "schema/SchemaDefinition",
+        "sidebar_label": "schema/SchemaDefinition"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_schemaerrors_": {
+        "title": "schema/schemaErrors",
+        "sidebar_label": "schema/schemaErrors"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_schemaschema_": {
+        "title": "schema/schemaSchema",
+        "sidebar_label": "schema/schemaSchema"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_schema_schemaschemainterface_": {
+        "title": "schema/schemaSchemaInterface",
+        "sidebar_label": "schema/schemaSchemaInterface"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_typescript_convertschematotypescript_": {
+        "title": "typescript/convertSchemaToTypescript",
+        "sidebar_label": "typescript/convertSchemaToTypescript"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_typescript_printers_": {
+        "title": "typescript/printers",
+        "sidebar_label": "typescript/printers"
+      },
+      "version-0.3.0/api/modules/version-0.3.0-_utils_": {
+        "title": "utils",
+        "sidebar_label": "utils"
+      },
+      "version-0.3.0/version-0.3.0-contributing": {
+        "title": "Contributing",
+        "sidebar_label": "Getting started"
+      },
+      "version-0.3.0/version-0.3.0-markup-language-vs-applications": {
+        "title": "Markup language vs application",
+        "sidebar_label": "Markup language vs applications"
+      },
+      "version-0.3.0/version-0.3.0-schema-schemas": {
+        "title": "HashML Schema Schema",
+        "sidebar_label": "Schema schema"
+      },
+      "version-0.3.0/version-0.3.0-schemas": {
+        "title": "HashML Schemas",
+        "sidebar_label": "HashML Schemas"
+      },
+      "version-0.3.0/version-0.3.0-tag-types": {
+        "title": "HashML tag types",
+        "sidebar_label": "Tag types"
+      },
+      "version-0.3.0/version-0.3.0-using-hashml": {
+        "title": "Using HashML",
+        "sidebar_label": "Using HashML"
+      },
+      "version-0.3.0/version-0.3.0-what-is-hashml": {
         "title": "What is HashML?",
         "sidebar_label": "What is HashML?"
       }
