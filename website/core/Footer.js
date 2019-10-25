@@ -37,13 +37,14 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl('what-is-hashml.html', this.props.language)}>
-              Getting Started
-            </a>
-            <a href={this.docUrl('schemas.html', this.props.language)}>
-              Schemas
-            </a>
-            <a href={this.pageUrl('api', this.props.language)}>
+            {
+              Object.entries(this.props.config.docSections).map(([section, docs]) => 
+                <a key={section} href={this.docUrl(docs[0], this.props.language)}>
+                  {section}
+                </a>
+              )
+            }
+            <a href={this.pageUrl('api')}>
               API Reference
             </a>
           </div>
