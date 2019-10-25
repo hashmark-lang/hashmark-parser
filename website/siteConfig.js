@@ -7,6 +7,8 @@
 
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
+const docSections = require("./sidebars.json").docs;
+const firstDoc = Object.values(docSections)[0][0];
 
 // List of projects/orgs using your project for the users page.
 const users = [
@@ -20,9 +22,6 @@ const users = [
   },
 ];
 
-// root docs page
-const firstDoc = 'what-is-hashml';
-
 const siteConfig = {
   title: 'HashML',
   tagline: 'A lightweight XML-like markup language',
@@ -33,6 +32,7 @@ const siteConfig = {
   projectName: 'hashml',
   organizationName: 'hashml',
 
+  docSections,
   firstDoc,
 
   // For no header links in the top nav bar -> headerLinks: [],
