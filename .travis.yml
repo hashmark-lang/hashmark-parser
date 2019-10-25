@@ -14,7 +14,7 @@ script:
 - npm run format:check
 - npm run tslint
 - npm run coveralls
-- npm run docs && touch typedoc/.nojekyll
+- npm run docs && touch website/build/hashml/.nojekyll
 deploy:
 - provider: npm
   skip_cleanup: true
@@ -26,7 +26,7 @@ deploy:
     repo: hashml/hashml
 - provider: pages
   skip_cleanup: true
-  local_dir: typedoc
+  local_dir: website/build/hashml
   github_token: "$GITHUB_TOKEN"
   on:
     branch: master
