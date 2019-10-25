@@ -1,10 +1,12 @@
 {
   "docs": {
     "Getting started": [
-      "what-is-hashml"
+      "what-is-hashml",
+      "using-hashml"
     ],
     "Core concepts": [
       "markup-language-vs-applications",
+      "tag-types",
       "schemas",
       "schema-schemas"
     ],
