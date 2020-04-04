@@ -10,18 +10,6 @@
 const docSections = require("./sidebars.json").docs;
 const firstDoc = Object.values(docSections)[0][0];
 
-// List of projects/orgs using your project for the users page.
-const users = [
-  {
-    caption: 'User1',
-    // You will need to prepend the image path with your baseUrl
-    // if it is not '/', like: '/test-site/img/image.jpg'.
-    image: '/img/undraw_open_source.svg',
-    infoLink: 'https://www.facebook.com',
-    pinned: true,
-  },
-];
-
 const siteConfig = {
   title: 'HashML',
   tagline: 'A lightweight XML-like markup language',
@@ -41,9 +29,6 @@ const siteConfig = {
     {doc: 'api/index', label: 'API'},
     {href: 'https://github.com/hashml/hashml', label: 'GitHub'},
   ],
-
-  // If you have users set above, you add it here:
-  users,
 
   /* path to images for header/footer */
   headerIcon: 'img/favicon.ico',
