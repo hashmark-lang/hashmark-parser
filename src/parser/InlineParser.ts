@@ -25,7 +25,7 @@ export class InlineParser {
 		this.sugarsByStart = new Map(sugars.map((_) => [_.syntax.start, _]));
 		this.regex = regexpUnion(
 			/\\./,
-			/#[^ \[]+\[?/,
+			/#[^ []+\[?/,
 			stringToRegexp(this.inlineTagSyntax.separator),
 			stringToRegexp(this.inlineTagSyntax.end),
 			...unique(customTokens)
@@ -57,7 +57,7 @@ export class InlineParser {
 	 * @param line line number in the source file (1-based)
 	 * @param column column number in the source file of the token start (1-based)
 	 */
-	private handleToken(token: string, pos: InputPosition) {
+	private handleToken(token: string, pos: InputPosition): void {
 		switch (token[0]) {
 			case "\\": {
 				this.handler.pushText(token[1]);
@@ -100,7 +100,12 @@ export class InlineParser {
 		}
 	}
 
-	private open(tag: string, syntax: InlineSyntax, pos: InputPosition, closed: boolean = false) {
+	private open(
+		tag: string,
+		syntax: InlineSyntax,
+		pos: InputPosition,
+		closed: boolean = false
+	): void {
 		this.handler.openInlineTag(tag, pos);
 		if (!closed) {
 			this.stack.push({ syntax, length: 0 });
@@ -108,14 +113,14 @@ export class InlineParser {
 		}
 	}
 
-	private openArg(pos: InputPosition) {
+	private openArg(pos: InputPosition): void {
 		const parent = last(this.stack);
 		const returnValue = this.handler.openArgument(parent.length, pos);
 		this.isRaw = !returnValue;
 		++parent.length;
 	}
 
-	private close(index: number = this.stack.length - 1, pos: InputPosition) {
+	private close(index: number = this.stack.length - 1, pos: InputPosition): void {
 		this.handler.closeArgument(pos);
 		while (this.stack.length > index) {
 			this.handler.closeInlineTag(pos);
@@ -124,7 +129,7 @@ export class InlineParser {
 		this.isRaw = false;
 	}
 
-	private isRawEnd(token: string) {
+	private isRawEnd(token: string): boolean {
 		const syntax = last(this.stack).syntax;
 		return token === syntax.end || token === syntax.separator;
 	}

@@ -210,7 +210,6 @@ export function inlineSugar(sugarSyntax: SugarSyntax, ...args: ArgDefinition[]):
 }
 
 export function sugar(start: string, end: string): SugarSyntax;
-// tslint:disable-next-line:unified-signatures
 export function sugar(start: string, separator: string, end: string): SugarSyntax;
 export function sugar(a: string, b: string, c?: string): SugarSyntax {
 	if (c) {

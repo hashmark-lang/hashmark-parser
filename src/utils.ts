@@ -96,7 +96,7 @@ export function last<T>(seq: ArrayLike<T>): T {
  * @param i Number to convert to an ordinal.
  */
 export function ordinal(i: number): string {
-	function suffix(j: number) {
+	function suffix(j: number): string {
 		const tens = j % 100;
 		if (10 <= tens && tens <= 20) return "th";
 		const units = tens % 10;

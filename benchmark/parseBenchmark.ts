@@ -1,4 +1,4 @@
-/* tslint:disable:no-console */
+/* eslint-disable no-console */
 import * as Benchmark from "benchmark";
 import { makeParser } from "../src/parser/parse";
 import { getTestSchema } from "../test/schemas";
@@ -17,7 +17,7 @@ new Benchmark.Suite("compare")
 	})
 	.add("String.matchAll", () => {
 		for (const _ of input.matchAll(
-			/(?:((?:\r\n|\n|\r|^)(\t*)[\t ]*(?:#([^ \[\r\n]+)(?: |$))?)|(#([^ \[]+)(\[)?)|(]\[)|(\[)|(\\(.)))/g
+			/(?:((?:\r\n|\n|\r|^)(\t*)[\t ]*(?:#([^ [\r\n]+)(?: |$))?)|(#([^ []+)(\[)?)|(]\[)|(\[)|(\\(.)))/g
 		));
 	})
 	.add("Iterate through chars", () => {

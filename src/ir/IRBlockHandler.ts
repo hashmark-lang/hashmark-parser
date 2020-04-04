@@ -83,7 +83,7 @@ export class IRBlockHandler implements BlockHandler {
 			parent.node[prop.name] = node;
 		}
 
-		return !Boolean(schema.rawProp);
+		return !schema.rawProp;
 	}
 
 	closeBlock(): void {
@@ -108,7 +108,7 @@ export class IRBlockHandler implements BlockHandler {
 		return false;
 	}
 
-	head(content: string, pos: InputPosition) {
+	head(content: string, pos: InputPosition): void {
 		const parent = last(this.stack);
 		const headSchema = parent.schema.head;
 
@@ -127,7 +127,7 @@ export class IRBlockHandler implements BlockHandler {
 		parent.node[headSchema.name] = this.inlineHandler.getResult();
 	}
 
-	rawLine(content: string, pos: InputPosition) {
+	rawLine(content: string, pos: InputPosition): void {
 		if (this.ignoreFlag) return;
 		const parent = last(this.stack);
 		(parent.node[parent.schema.rawProp!.name] as IRNodeList).push(content); // TODO remove cast

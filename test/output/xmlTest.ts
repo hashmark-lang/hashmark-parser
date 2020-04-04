@@ -11,9 +11,11 @@ import { filePairs } from "../utils";
 
 describe("toXML()", () => {
 	const errors: HMError[] = [];
-	const logger = (x: HMError) => errors.push(x);
+	const logger = (x: HMError): void => {
+		errors.push(x);
+	};
 	let parse: (input: string) => IRNode;
-	const makeParser = (schema: SchemaDefinition) => {
+	const makeParser = (schema: SchemaDefinition): void => {
 		const handler = new IRBlockHandler(new Schema(schema), logger);
 		const parser = new BlockParser(handler);
 		parse = (input: string): IRNode => {

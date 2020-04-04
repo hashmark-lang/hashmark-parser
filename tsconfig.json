@@ -11,5 +11,5 @@
 		"jsx": "react",
 		"noEmit": true
 	},
-	"include": ["src", "benchmark", "test"]
+	"include": ["src", "benchmark", "test", "*.ts"]
 }

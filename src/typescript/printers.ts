@@ -12,12 +12,12 @@ export function createImport(members: string[], importPath: string): string {
 export function createSchema(definition: SchemaDefinition): string {
 	// TODO! Temporary Hack
 	const schemaObject = JSON.stringify(definition, null, indentation)
-		.replace(/\"min\": null/g, '"min": Infinity')
-		.replace(/\"max\": null/g, '"max": Infinity');
+		.replace(/"min": null/g, '"min": Infinity')
+		.replace(/"max": null/g, '"max": Infinity');
 	return `const schema: SchemaDefinition = ${schemaObject};`;
 }
 
-export const createParserFunction = (type: string) => `
+export const createParserFunction = (type: string): string => `
 export function parseTyped(file: string): ${type} | HMError[] {
     const errors: HMError[] = [];
     const logger = (err: HMError) => errors.push(err);
@@ -33,7 +33,7 @@ export function createInterfaceMember(name: string, type: string): string {
 	return `${name}: ${type};`;
 }
 
-export const createInterface = (typeName: string, members: string[]) => `
+export const createInterface = (typeName: string, members: string[]): string => `
 export interface ${typeName} {
     ${members.join("\n" + indentation)}
 }`;

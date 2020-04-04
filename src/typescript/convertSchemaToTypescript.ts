@@ -62,9 +62,10 @@ export function convertSchemaToTypescript(
 
 	function argType(arg: ArgSchema): string {
 		switch (arg.type) {
-			case "parsed":
+			case "parsed": {
 				const refs = [...arg.validChildren].map((child) => inlineIdentifiers.get(child)!);
 				return createArrayType(createUnionType([...refs, "string"]));
+			}
 			case "date":
 				return "Date";
 			case "url":

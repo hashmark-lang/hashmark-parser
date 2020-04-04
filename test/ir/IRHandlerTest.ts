@@ -13,9 +13,8 @@ import { lineTag, prop, root } from "../../src/schema/schema-generators";
 import { getDinosSchema, getDocumentSchema, getEmptySchema, getTestSchema } from "../schemas";
 import { filePairs, makeTestParser, resourceFile } from "../utils";
 
-// tslint:disable-next-line:ban-types
-function assertError(errors: HMError[], expected: Function) {
-	const error = errors.find((err) => err instanceof expected)!;
+function assertError(errors: HMError[], expected: Function): void {
+	const error = errors.find((err) => err instanceof expected);
 	assert.exists(error, `Expected to see a ${expected.name} error in ${errors.join(", ")}`);
 }
 

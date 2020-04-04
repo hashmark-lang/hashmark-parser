@@ -62,7 +62,9 @@ export function deindent(multiline: string): string {
 
 export function makeTestParser(schema: SchemaDefinition): (input: string) => [HMError[], IRNode] {
 	const errors: HMError[] = [];
-	const logger = (error: HMError) => errors.push(error);
+	const logger = (error: HMError): void => {
+		errors.push(error);
+	};
 	const parse = makeParser(schema, logger);
 	return (input: string) => {
 		errors.length = 0;

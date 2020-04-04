@@ -12,7 +12,7 @@ import { InputPosition } from "./InputPosition";
  */
 export class BlockParser {
 	private readonly regex = /(?:\r\n|\n|\r|^)(\t*)(.*)/gm;
-	private readonly tagRegex = /(?:#([^ \[\r\n]+)(?: |$))?(.+)?/;
+	private readonly tagRegex = /(?:#([^ [\r\n]+)(?: |$))?(.+)?/;
 
 	constructor(private readonly handler: BlockHandler) {}
 

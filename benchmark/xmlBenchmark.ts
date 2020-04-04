@@ -1,4 +1,4 @@
-/* tslint:disable:no-console */
+/* eslint-disable no-console */
 import { Event, Suite } from "benchmark";
 import { toXML } from "../src/output/xml";
 import { getAllowAllSchema } from "../test/schemas";

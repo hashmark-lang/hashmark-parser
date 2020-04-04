@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+/* eslint-disable no-console */
 import { writeFileSync } from "fs";
 import { convertSchemaToTypescript, Schema, schemaSchema } from "./src";
 

@@ -108,7 +108,7 @@ export function getDocumentSchema(): SchemaDefinition {
 	};
 }
 
-export function getDinosSchema() {
+export function getDinosSchema(): SchemaDefinition {
 	const file = resourceFile("input", "schema_dinos.hm");
 	const schema = parseTyped(file.read());
 	if (schema instanceof Array) {
