@@ -2,7 +2,8 @@
   "docs": {
     "Getting started": [
       "what-is-hashml",
-      "using-hashml"
+      "using-hashml",
+      "generating-typescript"
     ],
     "Core concepts": [
       "markup-language-vs-applications",
