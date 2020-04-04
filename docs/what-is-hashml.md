@@ -1,89 +1,93 @@
 ---
 id: what-is-hashml
-title: What is HashML? 
-sidebar_label: What is HashML?
+title: What is HashML?
 ---
 
-HashML is a markup language. It's more structured than Markdown, but less verbose than XML. Here's what this document would look like in HashML:
+HashML is a markup language that stands out by a few core features:
 
-```
-#document What is HashML?
-	HashML is a markup language. It's more structured than Markdown, ...
+-   **Structured documents**: indentation-based, so that you can visually see the structure of the document
+-   **Lightweight syntax**: supports default tags and syntactic sugar so that you don't have to type too much
+-   **Built-in support for schemas**: validates data before giving it to your application, and gives detailed error messages
 
-	#code hashml
-		#document What is HashML?
-			...
-```
+Here is an example of a HashML document describing dinosaurs:
 
-The language is based on two main constructs: a `#` denotes a tag. Content indented under it is the body of that tag.
+```hashml
+#dinosaur Tyrannosaurus rex 🦖
+    The #link[Tyrannosaurus rex][https://en.wikipedia.org/wiki/Tyrannosaurus] is a massive, meat-eating dinosaur.
+	It lived in the Late Cretaceous epoch.
 
-HashML also has a few more advanced syntactic features. These are largely driven by schemas, which [we talk about in more detail in the schemas documentation](./schemas.md). For now, just know that a schema defines which tags exist, where they can appear (i.e. can a `#section` appear inside of `#code`?). It also gives instructions for how to parse some of the more advanced features.
-
-## Inline tags
-HashML also has support for inline tags:
-
-```
-Here's a #url[https://www.example.com][link to my website]
+#dinosaur Sauropod 🦕
+	The #link[sauropod][https://en.wikipedia.org/wiki/Sauropoda] is a massive, plant-eating dinosaur.
+	It lived in the Late Triassic to the Late Cretaceous epoch.
 ```
 
-To avoid being too verbose, HashML supports syntactic sugar for common inline tags, much like Markdown. If the schema defines bacticks (\`) as syntactic sugar for `#code`, the following two lines are equivalent:
+## Comparison to XML
 
-```
-Here's some #code[inline code]
-Here's some `inline code`
-```
+To understand the features of HashML, we can compare the above example to an equivalent XML document, which would look something like this:
 
-## Default tags
-Writing tags at the beginning of each line can be tedious:
+```xml
+<dinosaur>
+	<name>Tyrannosaurus rex 🦖</name>
+	<description>
+		<paragraph>
+            The <link><title>Tyrannosaurus rex</title><url>https://en.wikipedia.org/wiki/Tyrannosaurus</url></link>
+            is a massive, meat-eating dinosaur.
+        </paragraph>
+		<paragraph>It lived in the Late Cretaceous epoch.</paragraph>
+	</description>
+</dinosaur>
 
-```
-Shopping list:
-#list
-	#item Apples
-	#item Bananas
-	#item Carrots
-```
-
-To help with this situation, HashML supports default tags. For instance, if the schema for `#list` defines `#item` as its default tag, then the above can equivalently be written as:
-
-```
-Shopping list:
-#list
-	Apples
-	Bananas
-	Carrots
-```
-
-If the schema defines the default for `#item` as `#item`, we can even write nested lists:
-
-```
-Shopping list:
-#list
-	Fruits
-		Apples
-		Bananas
-	Vegetables
-		Carrots
+<dinosaur>
+	<name>Sauropod 🦕</name>
+	<description>
+		<paragraph>
+            The <link><title>sauropod</title><url>https://en.wikipedia.org/wiki/Sauropoda</url></link>
+            is a massive, plant-eating dinosaur.
+        </paragraph>
+		<paragraph>It lived in the Late Triassic to the Late Cretaceous epoch.</paragraph>
+	</description>
+</dinosaur>
 ```
 
-## Raw tags
-Sometimes, we'd like to write things that shouldn't be parsed by the HashML parser. This is the case for code, for instance: the indentation and hashtags shouldn't be understood by the parser as HashML code:
+Unlike XML, HashML does not need end tags &mdash; the end of a line is the end of the tag. Additionally, it can infer a default start tag from the schema: in this example, the `paragraph` tag doesn't need to be explicitly written in HashML.
 
-```
-#code python
-	# This is a Python comment, not HashML markup!
-	def test():
-		print("hello world)
-```
+Also note how the `paragraph` tags have been grouped under a `description` field in the above. The HashML schema can specify how to logically group tags under a single name. This feature is particularly convenient for applications that consume HashML.
 
-The schema allows us to define `#code` as a raw block, and then the above just works. This also works for inline tags: we can define `#code` as an inline tag taking a single raw argument:
+## Parser output
 
-```
-The schema allows us to define #code[#code] as a raw block
-```
+The parser produces the following JSON:
 
-We can combine this with sugar for inline tags:
-
-```
-The schema allows us to define `#code` as a raw block
+```json
+{
+	"$tag": "root",
+	"dinosaurs": [
+		{
+			"$tag": "dinosaur",
+			"name": "Tyrannosaurus rex 🦖",
+			"description": [
+				{
+					"$tag": "paragraph",
+					"text": [
+						"The ",
+						{
+							"$tag": "link",
+							"title": "Tyrannosaurus rex",
+							"url": "https://en.wikipedia.org/wiki/Tyrannosaurus"
+						},
+						" is a massive, meat-eating dinosaur."
+					]
+				},
+				{
+					"$tag": "paragraph",
+					"text": ["It lived in the Late Cretaceous epoch."]
+				}
+			]
+		},
+		{
+			"$tag": "dinosaur",
+			"name": "Sauropod 🦕",
+			"description": ...
+		}
+	]
+}
 ```
