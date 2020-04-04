@@ -19,6 +19,11 @@
 	"engines": {
 		"node": ">=12.0.0"
 	},
+	"files": [
+		"/dist",
+		"!/dist/**/*.js.map",
+		"!/dist/**/*.tsbuildinfo"
+	],
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^0.1.3",
 		"@types/benchmark": "^1.0.31",
