@@ -381,6 +381,9 @@
         "title": "Contributing",
         "sidebar_label": "Getting started"
       },
+      "generating-typescript": {
+        "title": "Generating TypeScript interfaces"
+      },
       "markup-language-vs-applications": {
         "title": "Markup language vs application",
         "sidebar_label": "Markup language vs applications"
@@ -391,7 +394,7 @@
       },
       "schemas": {
         "title": "HashML Schemas",
-        "sidebar_label": "HashML Schemas"
+        "sidebar_label": "Schemas"
       },
       "tag-types": {
         "title": "HashML tag types",
@@ -402,8 +405,7 @@
         "sidebar_label": "Using HashML"
       },
       "what-is-hashml": {
-        "title": "What is HashML?",
-        "sidebar_label": "What is HashML?"
+        "title": "What is HashML?"
       },
       "version-0.3.0/api/classes/version-0.3.0-_ir_irblockhandler_.irblockhandler": {
         "title": "IRBlockHandler",
