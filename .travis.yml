@@ -9,6 +9,10 @@ notifications:
 env:
   matrix:
     secure: f0Miqm9zC//imy3uTxTn2kMi9rUlxrTe/3VNyW2O2+nM8aXu3wcmlXX1/wsSBH4SiQcNSedsdRZcfldeTzcP/IT0VGXOMlqKKRlwFB99WDVETngPD9b5XYb0wT7ujC4nvB8iVQW9M24CDADbi41fbJVA1Mgi7u7p/BZTuYIXn8WfIj97jjihx2MmjuDXxZ7R01TJDulcFDAMH86PM2lRByj5WA6ZYqtBrljVgkQDU/cqbb6i16devxEeGAJK2XluFo5qN5xl+gbqDHlbIn/QC0vi+/B3fBdaLy2K/FGmXYsdmkJQ0w2dDhQ7p/+MOL8jfGCbRSZMa2614Zw6vUD8Z480rVUmd0wTJbA/S3DAZYB5dI5y+q3RgNaLNzJD7fh+2K2EihpHmX6+Sgg+9Ta7N9jkMVOMrusTMZe2oDwRhUznJjXzmomSAv2mEQS8z0t0+xVFRA2XNKRVFMkOtkwruLrE2ELbgwgCUX/2wFCG1u1auL6cfxp8werLGYxo4iwQSrQVtDsVTxsAMyWoQLfyzEAnMjwAbrTjgwQnGtZ0qb8cAJgj7XJo0yz46km6/CDTvUBbfApCDGzvMIN9tNwp11vjs6fTxG7ii4bOmxtUxG4Gj+U3LeVsgkCZnhmQnnumH7GJ7wBom9RaB0E0zvMOP5jgMdRinLwOFGZPUKF9MRE=
+before_install:
+  - cd website
+  - npm install
+  - cd ..
 script:
   - npm run build
   - npm run test
