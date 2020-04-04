@@ -8,7 +8,7 @@ import {
 	DisallowedInBlockError,
 	ErrorLogger,
 	HMError,
-	UnknownBlockTagError
+	UnknownBlockTagError,
 } from "../schema/errors";
 import { BlockSchema, Schema } from "../schema/Schema";
 import { ROOT } from "../schema/SchemaDefinition";
@@ -46,7 +46,7 @@ export class IRBlockHandler implements BlockHandler {
 	private pushBlock(tag: string, schema: BlockSchema): IRNode {
 		const headProp = schema.head ? { [schema.head.name]: schema.head.raw ? null : [] } : {};
 		const bodyProps = Object.fromEntries(
-			schema.bodyProps.map(prop => [prop.name, prop.isArrayType ? [] : null])
+			schema.bodyProps.map((prop) => [prop.name, prop.isArrayType ? [] : null])
 		);
 		const node = { $tag: tag, ...headProp, ...bodyProps };
 		const childCount = new Map<string, number>();

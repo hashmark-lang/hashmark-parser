@@ -1,5 +1,6 @@
 test/_resources
 dist
 website
+docs/api
 .nyc_output
 coverage

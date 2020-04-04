@@ -24,15 +24,19 @@ $ npm install @hashml/hashml
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--TypeScript-->
+
 ```ts
 import { Schema } from "@hashml/hashml";
 
 const schema = new Schema(file);
 ```
+
 <!--JavaScript-->
+
 ```js
 const { Schema } = require("@hashml/hashml");
 
 const schema = new Schema(file);
 ```
+
 <!--END_DOCUSAURUS_CODE_TABS-->

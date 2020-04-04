@@ -31,13 +31,13 @@ export function filePairs(
 	inputExtension: string = ".hm"
 ): Array<[File, File]> {
 	return filesIn(resourcePath("output", outputDir))
-		.filter(file => file.extension === outputExtension)
-		.map(file => [resourceFile("input", file.name + inputExtension), file]);
+		.filter((file) => file.extension === outputExtension)
+		.map((file) => [resourceFile("input", file.name + inputExtension), file]);
 }
 
 export function filesIn(dir: string): File[] {
 	return readdirSync(dir, { encoding: "utf-8" }).map(
-		fileName => new File(path.join(dir, fileName))
+		(fileName) => new File(path.join(dir, fileName))
 	);
 }
 
@@ -51,12 +51,12 @@ export function resourceFile(...paths: string[]): File {
 
 // De-indents a multiline string to match the indentation level of the first line
 export function deindent(multiline: string): string {
-	const lines = multiline.split(/\r\n|\n|\r/).filter(line => line.trim().length > 0);
+	const lines = multiline.split(/\r\n|\n|\r/).filter((line) => line.trim().length > 0);
 	if (lines.length <= 1) {
 		return multiline;
 	}
 	const indentation = lines[0].search(/[^\t]/);
-	const deindented = lines.map(line => line.substring(indentation)).join("\n");
+	const deindented = lines.map((line) => line.substring(indentation)).join("\n");
 	return deindented;
 }
 

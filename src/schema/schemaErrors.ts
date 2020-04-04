@@ -7,7 +7,7 @@ import {
 	IllegalTagNameError,
 	SchemaDefinitionError,
 	UndefinedBlockTagError,
-	UndefinedInlineTagError
+	UndefinedInlineTagError,
 } from "./errors";
 import { ParsedArgDefinition, ROOT, SchemaDefinition } from "./SchemaDefinition";
 
@@ -63,7 +63,7 @@ export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] 
 			const bodyContent = body
 				? Object.entries(body).map(([prop, content]) => ({
 						name: prop,
-						content: Object.keys(content)
+						content: Object.keys(content),
 				  }))
 				: [];
 
@@ -78,10 +78,10 @@ export function schemaErrors(schema: SchemaDefinition): SchemaDefinitionError[] 
 	}
 
 	for (const [tag, tagSchema] of Object.entries(schema.inline)) {
-		const propNames = tagSchema.args.map(arg => arg.name);
+		const propNames = tagSchema.args.map((arg) => arg.name);
 		const argContent = tagSchema.args
 			.filter((arg): arg is ParsedArgDefinition => !arg.raw)
-			.map(arg => ({ name: arg.name, content: arg.content }));
+			.map((arg) => ({ name: arg.name, content: arg.content }));
 
 		errors.push(
 			...duplicatePropNameErrors(tag, propNames), // Rule 1
@@ -108,13 +108,17 @@ function duplicatePropAssignmentErrors(
 	props: Array<{ name: string; content: string[] }>
 ): DuplicatePropAssignmentError[] {
 	const propsSets = props.map(({ name, content }) => ({ name, content: new Set(content) }));
-	const contentTags: Set<string> = new Set(props.flatMap(prop => prop.content));
+	const contentTags: Set<string> = new Set(props.flatMap((prop) => prop.content));
 	const errors: DuplicatePropAssignmentError[] = [];
 	for (const contentTag of contentTags) {
-		const assignments = propsSets.filter(propSet => propSet.content.has(contentTag));
+		const assignments = propsSets.filter((propSet) => propSet.content.has(contentTag));
 		if (assignments.length > 1) {
 			errors.push(
-				new DuplicatePropAssignmentError(tag, assignments.map(_ => _.name), contentTag)
+				new DuplicatePropAssignmentError(
+					tag,
+					assignments.map((_) => _.name),
+					contentTag
+				)
 			);
 		}
 	}
@@ -123,8 +127,8 @@ function duplicatePropAssignmentErrors(
 
 function illegalPropNameErrors(tag: string, propNames: string[]): IllegalPropNameError[] {
 	return propNames
-		.filter(name => !isValidPropName(name))
-		.map(name => new IllegalPropNameError(tag, name));
+		.filter((name) => !isValidPropName(name))
+		.map((name) => new IllegalPropNameError(tag, name));
 }
 
 function undefinedInlineTagErrors(
@@ -134,8 +138,8 @@ function undefinedInlineTagErrors(
 ): UndefinedInlineTagError[] {
 	return props.flatMap(({ name, content }) =>
 		content
-			.filter(ref => !inlineTags.has(ref))
-			.map(ref => new UndefinedInlineTagError(tag, name, ref))
+			.filter((ref) => !inlineTags.has(ref))
+			.map((ref) => new UndefinedInlineTagError(tag, name, ref))
 	);
 }
 
@@ -146,14 +150,14 @@ function undefinedBlockTagErrors(
 ): UndefinedBlockTagError[] {
 	return props.flatMap(({ name, content }) =>
 		content
-			.filter(ref => !blockTags.has(ref))
-			.map(ref => new UndefinedBlockTagError(tag, name, ref))
+			.filter((ref) => !blockTags.has(ref))
+			.map((ref) => new UndefinedBlockTagError(tag, name, ref))
 	);
 }
 
 function illegalTagNameErrors(tag: string): IllegalTagNameError[] {
 	const illegalChars = ["#", "[", " "];
 	return illegalChars
-		.filter(char => tag.includes(char))
-		.map(char => new IllegalTagNameError(tag, char));
+		.filter((char) => tag.includes(char))
+		.map((char) => new IllegalTagNameError(tag, char));
 }

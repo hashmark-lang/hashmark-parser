@@ -35,9 +35,9 @@ export const schemaSchema: SchemaDefinition = {
 			body: {
 				root: one(ROOT),
 				blocks: zeroOrMore(BLOCK),
-				inline: zeroOrMore(INLINE)
-			}
-		}
+				inline: zeroOrMore(INLINE),
+			},
+		},
 	},
 
 	blocks: {
@@ -46,9 +46,9 @@ export const schemaSchema: SchemaDefinition = {
 			props: {
 				body: {
 					defaultTag: optional(DEFAULT),
-					body: one(BODY)
-				}
-			}
+					body: one(BODY),
+				},
+			},
 		},
 
 		[BLOCK]: {
@@ -58,9 +58,9 @@ export const schemaSchema: SchemaDefinition = {
 				body: {
 					defaultTag: optional(DEFAULT),
 					head: optional(HEAD),
-					body: optional(BODY)
-				}
-			}
+					body: optional(BODY),
+				},
+			},
 		},
 		[DEFAULT]: stringTag("name"),
 		[HEAD]: {
@@ -72,16 +72,16 @@ export const schemaSchema: SchemaDefinition = {
 					optional(STRING_ARG),
 					optional(DATE_ARG),
 					optional(URL_ARG)
-				)
-			}
+				),
+			},
 		},
 		[BODY]: {
 			rawBody: false,
 			props: {
 				body: {
-					props: zeroOrMore(PROP)
-				}
-			}
+					props: zeroOrMore(PROP),
+				},
+			},
 		},
 		[PROP]: {
 			rawBody: false,
@@ -94,8 +94,8 @@ export const schemaSchema: SchemaDefinition = {
 					zeroOrMore(ONE),
 					zeroOrMore(ONE_OR_MORE),
 					zeroOrMore(ZERO_OR_MORE)
-				)
-			}
+				),
+			},
 		},
 		[OPTIONAL]: stringTag("target"),
 		[ONE]: stringTag("target"),
@@ -108,9 +108,9 @@ export const schemaSchema: SchemaDefinition = {
 				head: stringArg("name"),
 				body: {
 					args: one(ARGS),
-					sugar: optional(SUGAR)
-				}
-			}
+					sugar: optional(SUGAR),
+				},
+			},
 		},
 		[ARGS]: {
 			rawBody: false,
@@ -121,8 +121,8 @@ export const schemaSchema: SchemaDefinition = {
 					zeroOrMore(STRING_ARG),
 					zeroOrMore(DATE_ARG),
 					zeroOrMore(URL_ARG)
-				)
-			}
+				),
+			},
 		},
 
 		[PARSED_ARG]: {
@@ -130,8 +130,8 @@ export const schemaSchema: SchemaDefinition = {
 			defaultTag: ITEM,
 			props: {
 				head: stringArg("propName"),
-				body: prop("content", zeroOrMore(ITEM))
-			}
+				body: prop("content", zeroOrMore(ITEM)),
+			},
 		},
 		[ITEM]: stringTag("target"),
 		[STRING_ARG]: stringTag("propName"),
@@ -144,13 +144,13 @@ export const schemaSchema: SchemaDefinition = {
 				body: {
 					[START]: one(START),
 					[SEPARATOR]: optional(SEPARATOR),
-					[END]: one(END)
-				}
-			}
+					[END]: one(END),
+				},
+			},
 		},
 		[START]: stringTag("token"),
 		[SEPARATOR]: stringTag("token"),
-		[END]: stringTag("token")
+		[END]: stringTag("token"),
 	},
-	inline: {}
+	inline: {},
 };

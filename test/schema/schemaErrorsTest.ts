@@ -5,7 +5,7 @@ import {
 	IllegalPropNameError,
 	IllegalTagNameError,
 	UndefinedBlockTagError,
-	UndefinedInlineTagError
+	UndefinedInlineTagError,
 } from "../../src";
 import {
 	blockTag,
@@ -21,7 +21,7 @@ import {
 	stringArg,
 	stringTag,
 	urlArg,
-	zeroOrMore
+	zeroOrMore,
 } from "../../src/schema/schema-generators";
 import { ROOT, SchemaDefinition } from "../../src/schema/SchemaDefinition";
 import { schemaErrors } from "../../src/schema/schemaErrors";
@@ -52,9 +52,9 @@ describe("schemaErrors()", () => {
 				const schema: SchemaDefinition = {
 					root: root(prop("body", zeroOrMore("test"))),
 					blocks: {
-						["test"]: blockTag(stringArg("foo"), prop("foo"))
+						["test"]: blockTag(stringArg("foo"), prop("foo")),
 					},
-					inline: {}
+					inline: {},
 				};
 
 				const errors = schemaErrors(schema);
@@ -71,11 +71,11 @@ describe("schemaErrors()", () => {
 				const schema: SchemaDefinition = {
 					root: root(prop("body", zeroOrMore("test"))),
 					blocks: {
-						["test"]: lineTag("head", ["foo"])
+						["test"]: lineTag("head", ["foo"]),
 					},
 					inline: {
-						["foo"]: inline(stringArg("bar"), urlArg("bar"), dateArg("bar"))
-					}
+						["foo"]: inline(stringArg("bar"), urlArg("bar"), dateArg("bar")),
+					},
 				};
 
 				const errors = schemaErrors(schema);
@@ -102,9 +102,9 @@ describe("schemaErrors()", () => {
 								prop("qux", oneOrMore("bar"))
 							)
 						),
-						["bar"]: stringTag("head")
+						["bar"]: stringTag("head"),
 					},
-					inline: {}
+					inline: {},
 				};
 
 				const errors = schemaErrors(schema);
@@ -124,9 +124,9 @@ describe("schemaErrors()", () => {
 					root: root(prop("body", zeroOrMore("test"))),
 					blocks: {
 						["test"]: blockTag(undefined, prop("$foo", zeroOrMore("bar"))),
-						["bar"]: stringTag("prop")
+						["bar"]: stringTag("prop"),
 					},
-					inline: {}
+					inline: {},
 				};
 
 				const errors = schemaErrors(schema);
@@ -142,9 +142,9 @@ describe("schemaErrors()", () => {
 				const schema: SchemaDefinition = {
 					root: root(prop("body", zeroOrMore("test"))),
 					blocks: {
-						["test"]: rawBodyTag("$foo")
+						["test"]: rawBodyTag("$foo"),
 					},
-					inline: {}
+					inline: {},
 				};
 
 				const errors = schemaErrors(schema);
@@ -160,11 +160,11 @@ describe("schemaErrors()", () => {
 				const schema: SchemaDefinition = {
 					root: root(prop("body", zeroOrMore("block"))),
 					blocks: {
-						["block"]: lineTag("prop", ["test"])
+						["block"]: lineTag("prop", ["test"]),
 					},
 					inline: {
-						["test"]: inline(stringArg("$foo"))
-					}
+						["test"]: inline(stringArg("$foo")),
+					},
 				};
 
 				const errors = schemaErrors(schema);
@@ -180,9 +180,9 @@ describe("schemaErrors()", () => {
 				const schema: SchemaDefinition = {
 					root: root(prop("$body", zeroOrMore("test"))),
 					blocks: {
-						["test"]: stringTag("test")
+						["test"]: stringTag("test"),
 					},
-					inline: {}
+					inline: {},
 				};
 
 				const errors = schemaErrors(schema);
@@ -201,9 +201,9 @@ describe("schemaErrors()", () => {
 					root: root(prop("body", zeroOrMore("test"))),
 					blocks: {
 						["test"]: lineTag("head", ["unknown"]),
-						["unknown"]: stringTag("head")
+						["unknown"]: stringTag("head"),
 					},
-					inline: {}
+					inline: {},
 				};
 
 				const errors = schemaErrors(schema);
@@ -221,11 +221,11 @@ describe("schemaErrors()", () => {
 					root: root(prop("body", zeroOrMore("test"))),
 					blocks: {
 						["test"]: lineTag("head", ["inline"]),
-						["unknown"]: lineTag("head", ["inline"])
+						["unknown"]: lineTag("head", ["inline"]),
 					},
 					inline: {
-						["inline"]: inline(parsedArg("arg", ["unknown"]))
-					}
+						["inline"]: inline(parsedArg("arg", ["unknown"])),
+					},
 				};
 
 				const errors = schemaErrors(schema);
@@ -248,14 +248,14 @@ describe("schemaErrors()", () => {
 							rawBody: false,
 							props: {
 								body: {
-									["prop"]: oneOrMore("unknown")
-								}
-							}
-						}
+									["prop"]: oneOrMore("unknown"),
+								},
+							},
+						},
 					},
 					inline: {
-						["unknown"]: inline()
-					}
+						["unknown"]: inline(),
+					},
 				};
 
 				const errors = schemaErrors(schema);
@@ -276,14 +276,14 @@ describe("schemaErrors()", () => {
 							rawBody: false,
 							props: {
 								body: {
-									["prop"]: oneOrMore("root")
-								}
-							}
-						}
+									["prop"]: oneOrMore("root"),
+								},
+							},
+						},
 					},
 					inline: {
-						["root"]: inline()
-					}
+						["root"]: inline(),
+					},
 				};
 
 				const errors = schemaErrors(schema);
@@ -310,12 +310,12 @@ describe("schemaErrors()", () => {
 								props: {
 									body: {
 										// It is not an error in a prop:
-										["pr" + char + "op"]: {}
-									}
-								}
-							}
+										["pr" + char + "op"]: {},
+									},
+								},
+							},
 						},
-						inline: {}
+						inline: {},
 					};
 
 					const errors = schemaErrors(schema);

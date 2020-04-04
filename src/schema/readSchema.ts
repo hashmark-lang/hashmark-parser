@@ -6,15 +6,17 @@ import {
 	BodyPropDefinitions,
 	InlineDefinition,
 	RootDefinition,
-	SchemaDefinition
+	SchemaDefinition,
 } from "./SchemaDefinition";
 import * as SchemaSchema from "./schemaSchemaInterface";
 
 export function readSchema(root: SchemaSchema.Root): SchemaDefinition {
 	return {
 		root: convertRoot(root.root),
-		blocks: Object.fromEntries(root.blocks.map(block => [block.name, convertBlock(block)])),
-		inline: Object.fromEntries(root.inline.map(inline => [inline.name, convertInline(inline)]))
+		blocks: Object.fromEntries(root.blocks.map((block) => [block.name, convertBlock(block)])),
+		inline: Object.fromEntries(
+			root.inline.map((inline) => [inline.name, convertInline(inline)])
+		),
 	};
 }
 
@@ -22,8 +24,8 @@ function convertRoot(root: SchemaSchema.RootBlock): RootDefinition {
 	const res: RootDefinition = {
 		rawBody: false,
 		props: {
-			body: convertBody(root.body)
-		}
+			body: convertBody(root.body),
+		},
 	};
 	if (root.defaultTag) res.defaultTag = root.defaultTag.name;
 	return res;
@@ -32,7 +34,7 @@ function convertRoot(root: SchemaSchema.RootBlock): RootDefinition {
 function convertBlock(block: SchemaSchema.BlockBlock): BlockDefinition {
 	const res: BlockDefinition = {
 		rawBody: false,
-		props: {}
+		props: {},
 	};
 	if (block.head) res.props.head = convertHead(block.head);
 	if (block.body) res.props.body = convertBody(block.body);
@@ -52,32 +54,32 @@ function convertHead(head: SchemaSchema.HeadBlock): ArgDefinition {
 		return {
 			raw: false,
 			name,
-			content: convertItems(type.content)
+			content: convertItems(type.content),
 		};
 	} else {
 		return {
 			raw: true,
 			name,
-			type: type.$tag
+			type: type.$tag,
 		};
 	}
 }
 
 function convertBody(body: SchemaSchema.BodyBlock): BodyPropDefinitions {
 	return Object.fromEntries(
-		body.props.map(prop => [prop.name, convertPropContent(prop.content)])
+		body.props.map((prop) => [prop.name, convertPropContent(prop.content)])
 	);
 }
 
 function convertItems(items: SchemaSchema.ItemBlock[]): string[] {
-	return items.map(item => item.target);
+	return items.map((item) => item.target);
 }
 
 function convertPropContent(
 	propContent: SchemaSchema.PropBlock["content"]
 ): { [tag: string]: Cardinality } {
 	return Object.fromEntries(
-		propContent.map(content => [content.target, convertCardinality(content)])
+		propContent.map((content) => [content.target, convertCardinality(content)])
 	);
 }
 
@@ -102,14 +104,14 @@ function convertCardinality(
 
 function convertInline(inline: SchemaSchema.InlineBlock): InlineDefinition {
 	const res: InlineDefinition = {
-		args: convertArgs(inline.args)
+		args: convertArgs(inline.args),
 	};
 	if (inline.sugar) res.sugar = convertSugar(inline.sugar);
 	return res;
 }
 
 function convertArgs(args: SchemaSchema.ArgsBlock): ArgDefinition[] {
-	return args.args.map(arg => {
+	return args.args.map((arg) => {
 		const name = arg.propName;
 		if (arg.$tag === "hashml") {
 			return { raw: false, name, content: convertItems(arg.content) };
@@ -122,7 +124,7 @@ function convertArgs(args: SchemaSchema.ArgsBlock): ArgDefinition[] {
 function convertSugar(sugar: SchemaSchema.SugarBlock): SugarSyntax {
 	const res: SugarSyntax = {
 		start: sugar.start.token,
-		end: sugar.end.token
+		end: sugar.end.token,
 	};
 	if (sugar.separator) res.separator = sugar.separator.token;
 	return res;

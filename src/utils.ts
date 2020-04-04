@@ -17,7 +17,7 @@ export function stringToRegexp(regexp: string): RegExp {
  * @category RegExp
  */
 export function regexpUnion(...regExps: RegExp[]): RegExp {
-	return new RegExp("(" + regExps.map(_ => `(?:${_.source})`).join("|") + ")", "g");
+	return new RegExp("(" + regExps.map((_) => `(?:${_.source})`).join("|") + ")", "g");
 }
 
 /**

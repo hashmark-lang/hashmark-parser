@@ -154,23 +154,23 @@ const schema: SchemaDefinition = {
 				root: {
 					root: {
 						min: 1,
-						max: 1
-					}
+						max: 1,
+					},
 				},
 				blocks: {
 					block: {
 						min: 0,
-						max: Infinity
-					}
+						max: Infinity,
+					},
 				},
 				inline: {
 					inline: {
 						min: 0,
-						max: Infinity
-					}
-				}
-			}
-		}
+						max: Infinity,
+					},
+				},
+			},
+		},
 	},
 	blocks: {
 		root: {
@@ -180,17 +180,17 @@ const schema: SchemaDefinition = {
 					defaultTag: {
 						default: {
 							min: 0,
-							max: 1
-						}
+							max: 1,
+						},
 					},
 					body: {
 						body: {
 							min: 1,
-							max: 1
-						}
-					}
-				}
-			}
+							max: 1,
+						},
+					},
+				},
+			},
 		},
 		block: {
 			rawBody: false,
@@ -198,29 +198,29 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "name"
+					name: "name",
 				},
 				body: {
 					defaultTag: {
 						default: {
 							min: 0,
-							max: 1
-						}
+							max: 1,
+						},
 					},
 					head: {
 						head: {
 							min: 0,
-							max: 1
-						}
+							max: 1,
+						},
 					},
 					body: {
 						body: {
 							min: 0,
-							max: 1
-						}
-					}
-				}
-			}
+							max: 1,
+						},
+					},
+				},
+			},
 		},
 		default: {
 			rawBody: false,
@@ -228,9 +228,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "name"
-				}
-			}
+					name: "name",
+				},
+			},
 		},
 		head: {
 			rawBody: false,
@@ -239,23 +239,23 @@ const schema: SchemaDefinition = {
 					type: {
 						hashml: {
 							min: 0,
-							max: 1
+							max: 1,
 						},
 						string: {
 							min: 0,
-							max: 1
+							max: 1,
 						},
 						date: {
 							min: 0,
-							max: 1
+							max: 1,
 						},
 						url: {
 							min: 0,
-							max: 1
-						}
-					}
-				}
-			}
+							max: 1,
+						},
+					},
+				},
+			},
 		},
 		body: {
 			rawBody: false,
@@ -264,11 +264,11 @@ const schema: SchemaDefinition = {
 					props: {
 						prop: {
 							min: 0,
-							max: Infinity
-						}
-					}
-				}
-			}
+							max: Infinity,
+						},
+					},
+				},
+			},
 		},
 		prop: {
 			rawBody: false,
@@ -277,29 +277,29 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "name"
+					name: "name",
 				},
 				body: {
 					content: {
 						optional: {
 							min: 0,
-							max: Infinity
+							max: Infinity,
 						},
 						one: {
 							min: 0,
-							max: Infinity
+							max: Infinity,
 						},
 						oneOrMore: {
 							min: 0,
-							max: Infinity
+							max: Infinity,
 						},
 						zeroOrMore: {
 							min: 0,
-							max: Infinity
-						}
-					}
-				}
-			}
+							max: Infinity,
+						},
+					},
+				},
+			},
 		},
 		optional: {
 			rawBody: false,
@@ -307,9 +307,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "target"
-				}
-			}
+					name: "target",
+				},
+			},
 		},
 		one: {
 			rawBody: false,
@@ -317,9 +317,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "target"
-				}
-			}
+					name: "target",
+				},
+			},
 		},
 		oneOrMore: {
 			rawBody: false,
@@ -327,9 +327,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "target"
-				}
-			}
+					name: "target",
+				},
+			},
 		},
 		zeroOrMore: {
 			rawBody: false,
@@ -337,9 +337,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "target"
-				}
-			}
+					name: "target",
+				},
+			},
 		},
 		inline: {
 			rawBody: false,
@@ -347,23 +347,23 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "name"
+					name: "name",
 				},
 				body: {
 					args: {
 						args: {
 							min: 1,
-							max: 1
-						}
+							max: 1,
+						},
 					},
 					sugar: {
 						sugar: {
 							min: 0,
-							max: 1
-						}
-					}
-				}
-			}
+							max: 1,
+						},
+					},
+				},
+			},
 		},
 		args: {
 			rawBody: false,
@@ -372,23 +372,23 @@ const schema: SchemaDefinition = {
 					args: {
 						hashml: {
 							min: 0,
-							max: Infinity
+							max: Infinity,
 						},
 						string: {
 							min: 0,
-							max: Infinity
+							max: Infinity,
 						},
 						date: {
 							min: 0,
-							max: Infinity
+							max: Infinity,
 						},
 						url: {
 							min: 0,
-							max: Infinity
-						}
-					}
-				}
-			}
+							max: Infinity,
+						},
+					},
+				},
+			},
 		},
 		hashml: {
 			rawBody: false,
@@ -397,17 +397,17 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "propName"
+					name: "propName",
 				},
 				body: {
 					content: {
 						item: {
 							min: 0,
-							max: Infinity
-						}
-					}
-				}
-			}
+							max: Infinity,
+						},
+					},
+				},
+			},
 		},
 		item: {
 			rawBody: false,
@@ -415,9 +415,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "target"
-				}
-			}
+					name: "target",
+				},
+			},
 		},
 		string: {
 			rawBody: false,
@@ -425,9 +425,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "propName"
-				}
-			}
+					name: "propName",
+				},
+			},
 		},
 		date: {
 			rawBody: false,
@@ -435,9 +435,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "propName"
-				}
-			}
+					name: "propName",
+				},
+			},
 		},
 		url: {
 			rawBody: false,
@@ -445,9 +445,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "propName"
-				}
-			}
+					name: "propName",
+				},
+			},
 		},
 		sugar: {
 			rawBody: false,
@@ -456,23 +456,23 @@ const schema: SchemaDefinition = {
 					start: {
 						start: {
 							min: 1,
-							max: 1
-						}
+							max: 1,
+						},
 					},
 					separator: {
 						separator: {
 							min: 0,
-							max: 1
-						}
+							max: 1,
+						},
 					},
 					end: {
 						end: {
 							min: 1,
-							max: 1
-						}
-					}
-				}
-			}
+							max: 1,
+						},
+					},
+				},
+			},
 		},
 		start: {
 			rawBody: false,
@@ -480,9 +480,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "token"
-				}
-			}
+					name: "token",
+				},
+			},
 		},
 		separator: {
 			rawBody: false,
@@ -490,9 +490,9 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "token"
-				}
-			}
+					name: "token",
+				},
+			},
 		},
 		end: {
 			rawBody: false,
@@ -500,12 +500,12 @@ const schema: SchemaDefinition = {
 				head: {
 					raw: true,
 					type: "string",
-					name: "token"
-				}
-			}
-		}
+					name: "token",
+				},
+			},
+		},
 	},
-	inline: {}
+	inline: {},
 };
 
 export function parseTyped(file: string): Root | HMError[] {

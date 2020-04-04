@@ -21,8 +21,8 @@ export class InlineParser {
 	private isRaw?: boolean;
 
 	constructor(private readonly handler: InlineHandler, sugars: Sugar[] = []) {
-		const customTokens = sugars.map(_ => _.syntax).flatMap(Object.values);
-		this.sugarsByStart = new Map(sugars.map(_ => [_.syntax.start, _]));
+		const customTokens = sugars.map((_) => _.syntax).flatMap(Object.values);
+		this.sugarsByStart = new Map(sugars.map((_) => [_.syntax.start, _]));
 		this.regex = regexpUnion(
 			/\\./,
 			/#[^ \[]+\[?/,

@@ -24,7 +24,7 @@ new Suite("XML serialization")
 	.on("cycle", (event: Event) => {
 		console.log(String(event.target));
 	})
-	.on("complete", function(this: any[]) {
+	.on("complete", function (this: any[]) {
 		console.log("JSON/XML ratio: " + (this[1].stats.mean / this[0].stats.mean).toFixed(2));
 	})
 	// run async

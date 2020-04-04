@@ -13,7 +13,7 @@ describe("convertSchemaToTypescript()", () => {
 	const tests: Array<{ name: string; getSchema: () => SchemaDefinition; expected: File }> = [
 		{ name: "documentSchema", getSchema: getDocumentSchema, expected: expectedDocumentSchema },
 		{ name: "emptySchema", getSchema: getEmptySchema, expected: expectedEmptySchema },
-		{ name: "testSchema", getSchema: getTestSchema, expected: expectedTestSchema }
+		{ name: "testSchema", getSchema: getTestSchema, expected: expectedTestSchema },
 	];
 
 	for (const { name, getSchema, expected } of tests) {

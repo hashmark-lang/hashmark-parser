@@ -5,7 +5,7 @@ import {
 	DisallowedInArgError,
 	DisallowedInHeadError,
 	TooFewArgsError,
-	UnknownInlineTagError
+	UnknownInlineTagError,
 } from "../schema/errors";
 import { ArgSchema, InlineSchema, Schema } from "../schema/Schema";
 import { last } from "../utils";
@@ -58,7 +58,7 @@ export class IRInlineHandler implements InlineHandler {
 		}
 
 		const propNames = schema ? schema.propNames : [];
-		const props = Object.fromEntries(propNames.map(name => [name, []]));
+		const props = Object.fromEntries(propNames.map((name) => [name, []]));
 		const node = { $tag: tag, ...props };
 		parent.nodeList.push(node);
 		this.inlineElementStack.push({ node, schema, args: 0 });
@@ -88,7 +88,7 @@ export class IRInlineHandler implements InlineHandler {
 		const schema = parent.schema.args[index];
 		this.inlineGroupStack.push({
 			nodeList: parent.node[schema.name] as IRNodeList, // TODO remove cast
-			schema
+			schema,
 		});
 		return !schema.raw;
 	}

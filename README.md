@@ -1,4 +1,5 @@
 # HashML
+
 [![npm version](https://badge.fury.io/js/%40hashml%2Fhashml.svg)](https://www.npmjs.com/package/@hashml/hashml)
 [![Build Status](https://travis-ci.org/hashml/hashml.svg?branch=master)](https://travis-ci.org/hashml/hashml)
 [![Coverage Status](https://coveralls.io/repos/github/hashml/hashml/badge.svg?branch=master)](https://coveralls.io/github/hashml/hashml?branch=master)
@@ -6,6 +7,7 @@
 HashML is a lightweight XML-like markup language, with built-in schema validation.
 
 ## Installation
+
 You can install HashML using [npm](https://www.npmjs.com/) by running
 
 ```bash
@@ -13,6 +15,7 @@ npm install @hashml/hashml
 ```
 
 ## Example
+
 Here is an example of a HashML document describing dinosaurs:
 
 ```
@@ -107,7 +110,7 @@ HashML documents are parsed with a schema. The schema for the dinosaur descripti
 	#body
 		#prop meta
 			#optional emoji
-		
+
 		#prop description
 			#zeroOrMore paragraph
 
@@ -126,30 +129,32 @@ HashML documents are parsed with a schema. The schema for the dinosaur descripti
 		#url url
 ```
 
-
 You can read more about the HashML schemas in the docs.
 
 ## Usage
+
 ### Compiling a schema to TypeScript
+
 Use the CLI!
 
 ### Parsing HashML files
+
 To parse a HashML document from a Typescript program:
 
 ```typescript
 import { parse, ParsedSchema } from "@hashml/hashml";
 
 const file = "#tag example";
-const schemaFile = "#block tag"
+const schemaFile = "#block tag";
 const schemaSchemaFile = "#block block";
 
 // Parse with a schema:
 const schemaSchema = new ParsedSchema(parse(schemaSchemaFile));
 const schema = new ParsedSchema(parse(schemaFile, schemaSchema));
-const doc = parse(file, schema)
+const doc = parse(file, schema);
 
 // ... or parse without a schema:
-const noSchemaDoc = parse(file)
+const noSchemaDoc = parse(file);
 ```
 
 Parsing with a schema allows you to define syntactic sugar in the schema, like default elements and inline syntactic sugar.
@@ -169,4 +174,5 @@ const json: string = toJSON(doc);
 ```
 
 ## CLI
+
 See the [@hashml/cli](https://www.npmjs.com/package/@hashml/cli) package.

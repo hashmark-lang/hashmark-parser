@@ -13,7 +13,7 @@ import {
 	stringTag,
 	sugar,
 	urlArg,
-	zeroOrMore
+	zeroOrMore,
 } from "../src/schema/schema-generators";
 import { BodyPropDefinitions, INVALID_TAG, SchemaDefinition } from "../src/schema/SchemaDefinition";
 import { parseTyped } from "../src/schema/schemaSchemaInterface";
@@ -29,7 +29,7 @@ export function getTestSchema(): SchemaDefinition {
 		"rawFirstArg",
 		"tag\\",
 		"inline",
-		"link"
+		"link",
 	];
 
 	const blockProps: BodyPropDefinitions = prop("children", zeroOrMore(INVALID_TAG));
@@ -41,7 +41,7 @@ export function getTestSchema(): SchemaDefinition {
 			["rawHead"]: blockTag(stringArg("head"), blockProps),
 			["rawBody"]: rawBodyTag("content"),
 			["_default"]: blockContent,
-			[INVALID_TAG]: blockContent
+			[INVALID_TAG]: blockContent,
 		},
 		inline: {
 			["code"]: inlineSugar(sugar("`", "`"), stringArg("content")),
@@ -60,8 +60,8 @@ export function getTestSchema(): SchemaDefinition {
 			),
 			["tag\\"]: inline(parsedArg("arg", inlineTags)),
 			["inline"]: inline(parsedArg("arg", inlineTags)),
-			["link"]: inline(urlArg("url"), parsedArg("title", inlineTags))
-		}
+			["link"]: inline(urlArg("url"), parsedArg("title", inlineTags)),
+		},
 	};
 }
 
@@ -69,7 +69,7 @@ export function getEmptySchema(): SchemaDefinition {
 	return {
 		root: root({}),
 		blocks: {},
-		inline: {}
+		inline: {},
 	};
 }
 
@@ -92,7 +92,7 @@ export function getDocumentSchema(): SchemaDefinition {
 				"paragraph"
 			),
 			["id"]: stringTag("content"),
-			["code"]: rawBodyTag("content", stringArg("language"))
+			["code"]: rawBodyTag("content", stringArg("language")),
 		},
 		inline: {
 			["link"]: inlineSugar(
@@ -103,8 +103,8 @@ export function getDocumentSchema(): SchemaDefinition {
 			["bold"]: inlineSugar(sugar("*", "*"), parsedArg("text", ["link"])),
 			["strong"]: inline(parsedArg("text", ["link"])),
 			["code"]: inlineSugar(sugar("`", "`"), stringArg("content")),
-			["inline"]: inline(parsedArg("inlineContent", inlineTags))
-		}
+			["inline"]: inline(parsedArg("inlineContent", inlineTags)),
+		},
 	};
 }
 

@@ -6,7 +6,7 @@ import {
 	InlineDefinition,
 	ParsedBlockDefinition,
 	RawBlockDefinition,
-	RootDefinition
+	RootDefinition,
 } from "./SchemaDefinition";
 
 /////////////////
@@ -96,7 +96,7 @@ export function optional(tag: string): { [tag: string]: Cardinality } {
 export function root(body: BodyPropDefinitions, defaultTag?: string | undefined): RootDefinition {
 	const res: RootDefinition = {
 		rawBody: false,
-		props: { body }
+		props: { body },
 	};
 	if (defaultTag) res.defaultTag = defaultTag;
 	return res;
@@ -125,7 +125,7 @@ export function blockTag(
 ): ParsedBlockDefinition {
 	const res: ParsedBlockDefinition = {
 		rawBody: false,
-		props: {}
+		props: {},
 	};
 	if (head) res.props.head = head;
 	if (body) res.props.body = body;
@@ -137,8 +137,8 @@ export function rawBodyTag(rawPropName: string, head?: ArgDefinition): RawBlockD
 	const res: RawBlockDefinition = {
 		rawBody: true,
 		props: {
-			body: rawPropName
-		}
+			body: rawPropName,
+		},
 	};
 	if (head) res.props.head = head;
 	return res;

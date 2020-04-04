@@ -37,7 +37,7 @@ new Benchmark.Suite("compare")
 	.on("cycle", (event: Event) => {
 		console.log(String(event.target));
 	})
-	.on("complete", function(this: Benchmark[]) {
+	.on("complete", function (this: Benchmark[]) {
 		console.log("JSON/Hashml ratio: " + (this[1].stats.mean / this[0].stats.mean).toFixed(2));
 	})
 	// run async

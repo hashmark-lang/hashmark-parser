@@ -6,12 +6,12 @@ id: markup-language-vs-applications
 
 HashML is a **markup language**: it's a general-purpose language that can be used for a variety of applications. The HashML project consists of the language design, and an implementation of a parser for HashML documents.
 
-While there are many possible uses of HashML, one of our main goals for HashML was to be able to implement [HashDocs](https://github.com/hashml/hashdocs), a language for writing structured documents; HashDocs is just one **application** of HashML. 
+While there are many possible uses of HashML, one of our main goals for HashML was to be able to implement [HashDocs](https://github.com/hashml/hashdocs), a language for writing structured documents; HashDocs is just one **application** of HashML.
 
 **Schemas** define an application from the general markup language. In the case of HashDocs, for instance, the HashDocs schema defines a set of supported tags, and specifies which tags are legal in which context.
 
-
 ## Comparison with XML
+
 The XML **markup language** defines the general language semantics: for instance, it defines `<` and `>` brackets as delimiters for tags, and defines the semantics for encoding tag attributes. In other words, the XML specification contains all the information needed to write a lexical analyzer.
 
 DTD is a **schema language**. Just like XML defines the semantics for writing documents, DTD defines the semantics for writing schemas. These semantics allow us to write schema documents (also commonly referred to as DTDs; we’ll maintain the term schema document or schema file throughout this document).

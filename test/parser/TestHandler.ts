@@ -6,20 +6,20 @@ import { last } from "../../src/utils";
 const sugars = [
 	{
 		syntax: { start: "`", end: "`" },
-		tag: "code"
+		tag: "code",
 	},
 	{
 		syntax: { start: "*", end: "*" },
-		tag: "strong"
+		tag: "strong",
 	},
 	{
 		syntax: { start: "_", end: "_" },
-		tag: "emphasis"
+		tag: "emphasis",
 	},
 	{
 		syntax: { start: "{", separator: "|", end: "}" },
-		tag: "set"
-	}
+		tag: "set",
+	},
 ];
 
 export class TestHandler extends AstHandler {

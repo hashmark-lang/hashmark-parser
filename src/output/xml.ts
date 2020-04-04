@@ -26,7 +26,7 @@ function propToXML(tag: string, content: Prop, indentation: number): string {
 	} else if (content instanceof Date || content instanceof URL) {
 		return xmlTag(tag, indentation, content.toString());
 	} else if (content instanceof Array) {
-		const children = (content as Array<IRNode | string>).map(node =>
+		const children = (content as Array<IRNode | string>).map((node) =>
 			typeof node === "string"
 				? indent(escapeXML(node), indentation + 1)
 				: toXML(node, indentation + 1)

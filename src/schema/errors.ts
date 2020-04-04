@@ -34,7 +34,7 @@ export const enum ErrorCode {
 	DISALLOWED_ARG,
 	DISALLOWED_HEAD,
 	DISALLOWED_DEFAULT_TAG,
-	TOO_FEW_ARGS
+	TOO_FEW_ARGS,
 }
 
 //////////////////////////////
@@ -119,7 +119,7 @@ export abstract class ValidationError extends HMError {
 	readonly positions: InputPosition[];
 	constructor(code: ErrorCode, message: string, ...positions: InputPosition[]) {
 		super(code, message);
-		this.positions = positions.map(pos => ({ ...pos })); // Clone positions
+		this.positions = positions.map((pos) => ({ ...pos })); // Clone positions
 	}
 }
 

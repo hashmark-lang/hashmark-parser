@@ -6,7 +6,7 @@ import {
 	SchemaDefinition,
 	TooFewArgsError,
 	UnknownBlockTagError,
-	UnknownInlineTagError
+	UnknownInlineTagError,
 } from "../../src";
 import { IRNode } from "../../src/ir/IRNode";
 import { lineTag, prop, root } from "../../src/schema/schema-generators";
@@ -15,7 +15,7 @@ import { filePairs, makeTestParser, resourceFile } from "../utils";
 
 // tslint:disable-next-line:ban-types
 function assertError(errors: HMError[], expected: Function) {
-	const error = errors.find(err => err instanceof expected)!;
+	const error = errors.find((err) => err instanceof expected)!;
 	assert.exists(error, `Expected to see a ${expected.name} error in ${errors.join(", ")}`);
 }
 
@@ -25,7 +25,7 @@ describe("IRHandler", () => {
 			{ name: "empty-schema", getSchema: getEmptySchema },
 			{ name: "test-schema", getSchema: getTestSchema },
 			{ name: "document-schema", getSchema: getDocumentSchema },
-			{ name: "dino-schema", getSchema: getDinosSchema }
+			{ name: "dino-schema", getSchema: getDinosSchema },
 		];
 
 		for (const { name, getSchema } of testSchemas) {
@@ -105,7 +105,7 @@ describe("IRHandler", () => {
 				{ cardinality: { min: 1, max: 1 }, accepts: [false, true, false] },
 				{ cardinality: { min: 1, max: Infinity }, accepts: [false, true, true] },
 				{ cardinality: { min: 0, max: 1 }, accepts: [true, true, false] },
-				{ cardinality: { min: 0, max: Infinity }, accepts: [true, true, true] }
+				{ cardinality: { min: 0, max: Infinity }, accepts: [true, true, true] },
 			];
 
 			for (const { cardinality, accepts } of tests) {
@@ -115,9 +115,9 @@ describe("IRHandler", () => {
 						parse = makeTestParser({
 							root: root(prop("content", { ["child"]: cardinality })),
 							blocks: {
-								["child"]: lineTag("head", [])
+								["child"]: lineTag("head", []),
 							},
-							inline: {}
+							inline: {},
 						});
 					});
 

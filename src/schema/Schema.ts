@@ -6,7 +6,7 @@ import {
 	InlineDefinition,
 	INVALID_TAG,
 	ROOT,
-	SchemaDefinition
+	SchemaDefinition,
 } from "./SchemaDefinition";
 import { schemaErrors } from "./schemaErrors";
 
@@ -19,7 +19,7 @@ export class Schema {
 	constructor(schema: SchemaDefinition) {
 		const errors = schemaErrors(schema);
 		if (errors.length > 0) {
-			throw new Error("Invalid schema\n" + errors.map(e => e.toString()).join("\n"));
+			throw new Error("Invalid schema\n" + errors.map((e) => e.toString()).join("\n"));
 		}
 
 		this.rootSchema = new BlockSchema(ROOT, schema.root);
@@ -127,8 +127,8 @@ export class InlineSchema {
 	readonly args: ReadonlyArray<ArgSchema>;
 
 	constructor(readonly tag: string, schema: InlineDefinition) {
-		this.args = schema.args.map(arg => new ArgSchema(tag, arg));
-		this.propNames = schema.args.map(arg => arg.name);
+		this.args = schema.args.map((arg) => new ArgSchema(tag, arg));
+		this.propNames = schema.args.map((arg) => arg.name);
 	}
 }
 

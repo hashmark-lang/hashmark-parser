@@ -11,7 +11,7 @@ import {
 	createSchema,
 	createTypeAlias,
 	createUnionType,
-	disclaimer
+	disclaimer,
 } from "./printers";
 
 const ROOT_TYPE = "Root";
@@ -26,11 +26,19 @@ export function convertSchemaToTypescript(
 	definition: SchemaDefinition,
 	importPath: string = "@hashml/hashml"
 ): string {
-	const blockIdentifiers = createIdentifierMap(schema.blocks.map(_ => _.tag), "", "Block");
-	const inlineIdentifiers = createIdentifierMap(schema.inlines.map(_ => _.tag), "", "Inline");
+	const blockIdentifiers = createIdentifierMap(
+		schema.blocks.map((_) => _.tag),
+		"",
+		"Block"
+	);
+	const inlineIdentifiers = createIdentifierMap(
+		schema.inlines.map((_) => _.tag),
+		"",
+		"Inline"
+	);
 
 	function createBlock(typeName: string, block: BlockSchema): string {
-		const props = block.bodyProps.map(prop =>
+		const props = block.bodyProps.map((prop) =>
 			createInterfaceMember(prop.name, bodyPropType(prop))
 		);
 		if (block.head) props.push(createInterfaceMember(block.head.name, argType(block.head)));
@@ -38,13 +46,13 @@ export function convertSchemaToTypescript(
 	}
 
 	function createInline(typeName: string, inline: InlineSchema): string {
-		const props = inline.args.map(arg => createInterfaceMember(arg.name, argType(arg)));
+		const props = inline.args.map((arg) => createInterfaceMember(arg.name, argType(arg)));
 		return createTagType(typeName, inline.tag, props);
 	}
 
 	function bodyPropType(prop: BodyPropSchema): string {
 		if (prop.raw) return "string[]";
-		const refs = prop.children.map(child => blockIdentifiers.get(child)!);
+		const refs = prop.children.map((child) => blockIdentifiers.get(child)!);
 		if (prop.isArrayType) return createArrayType(createUnionType(refs));
 		if (prop.cardinality.max === 0) return "null";
 		if (prop.cardinality.min === 0) return createUnionType([...refs, "null"]);
@@ -55,7 +63,7 @@ export function convertSchemaToTypescript(
 	function argType(arg: ArgSchema): string {
 		switch (arg.type) {
 			case "parsed":
-				const refs = [...arg.validChildren].map(child => inlineIdentifiers.get(child)!);
+				const refs = [...arg.validChildren].map((child) => inlineIdentifiers.get(child)!);
 				return createArrayType(createUnionType([...refs, "string"]));
 			case "date":
 				return "Date";
@@ -75,8 +83,10 @@ export function convertSchemaToTypescript(
 		createUnionType([...inlineIdentifiers.values()])
 	);
 	const root = createBlock(ROOT_TYPE, schema.rootSchema);
-	const blocks = schema.blocks.map(block => createBlock(blockIdentifiers.get(block.tag)!, block));
-	const inlines = schema.inlines.map(inline =>
+	const blocks = schema.blocks.map((block) =>
+		createBlock(blockIdentifiers.get(block.tag)!, block)
+	);
+	const inlines = schema.inlines.map((inline) =>
 		createInline(inlineIdentifiers.get(inline.tag)!, inline)
 	);
 
@@ -91,7 +101,7 @@ export function convertSchemaToTypescript(
 			...blocks,
 			...inlines,
 			createSchema(definition),
-			parseFunction
+			parseFunction,
 		].join("\n") + "\n"
 	);
 }
@@ -102,7 +112,7 @@ function createIdentifierMap(
 	prefix: string = "",
 	suffix: string = ""
 ): ReadonlyMap<string, string> {
-	return new Map(names.map(name => [name, identifier(prefix, name, suffix)]));
+	return new Map(names.map((name) => [name, identifier(prefix, name, suffix)]));
 }
 
 function identifier(prefix: string, name: string, suffix: string): string {
@@ -112,6 +122,6 @@ function identifier(prefix: string, name: string, suffix: string): string {
 function createTagType(typeName: string, tagName: string, propsTypeMembers: string[]): string {
 	return createInterface(typeName, [
 		createInterfaceMember(TAG_KEY, createLiteralStringType(tagName)),
-		...propsTypeMembers
+		...propsTypeMembers,
 	]);
 }
