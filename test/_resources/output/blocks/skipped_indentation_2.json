@@ -1,0 +1,130 @@
+[
+    {
+        "tag": "block",
+        "label": "title",
+        "lineDelta": 1,
+        "tagStartColumn": 1,
+        "tagEndColumn": 7,
+        "labelStartColumn": 8,
+        "labelEndColumn": 13,
+        "errors": [],
+        "children": [
+            {
+                "tag": "head",
+                "label": null,
+                "lineDelta": 1,
+                "tagStartColumn": 3,
+                "tagEndColumn": 8,
+                "labelStartColumn": 9,
+                "labelEndColumn": 9,
+                "errors": [],
+                "children": [
+                    {
+                        "tag": null,
+                        "label": "inline",
+                        "lineDelta": 1,
+                        "tagStartColumn": 4,
+                        "tagEndColumn": 4,
+                        "labelStartColumn": 4,
+                        "labelEndColumn": 10,
+                        "errors": [],
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "tag": "inline",
+        "label": "inline",
+        "lineDelta": 3,
+        "tagStartColumn": 1,
+        "tagEndColumn": 8,
+        "labelStartColumn": 9,
+        "labelEndColumn": 15,
+        "errors": [],
+        "children": [
+            {
+                "tag": "arg",
+                "label": null,
+                "lineDelta": 1,
+                "tagStartColumn": 2,
+                "tagEndColumn": 6,
+                "labelStartColumn": 7,
+                "labelEndColumn": 7,
+                "errors": [],
+                "children": [
+                    {
+                        "tag": "content",
+                        "label": null,
+                        "lineDelta": 1,
+                        "tagStartColumn": 3,
+                        "tagEndColumn": 11,
+                        "labelStartColumn": 12,
+                        "labelEndColumn": 12,
+                        "errors": [],
+                        "children": [
+                            {
+                                "tag": null,
+                                "label": "bold",
+                                "lineDelta": 1,
+                                "tagStartColumn": 4,
+                                "tagEndColumn": 4,
+                                "labelStartColumn": 4,
+                                "labelEndColumn": 8,
+                                "errors": [],
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "tag": "arg",
+                "label": null,
+                "lineDelta": 3,
+                "tagStartColumn": 2,
+                "tagEndColumn": 6,
+                "labelStartColumn": 7,
+                "labelEndColumn": 7,
+                "errors": [],
+                "children": [
+                    {
+                        "tag": "raw",
+                        "label": null,
+                        "lineDelta": 1,
+                        "tagStartColumn": 3,
+                        "tagEndColumn": 7,
+                        "labelStartColumn": 8,
+                        "labelEndColumn": 8,
+                        "errors": [],
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "tag": "inline",
+        "label": "bold",
+        "lineDelta": 6,
+        "tagStartColumn": 1,
+        "tagEndColumn": 8,
+        "labelStartColumn": 9,
+        "labelEndColumn": 13,
+        "errors": [],
+        "children": [
+            {
+                "tag": "arg",
+                "label": null,
+                "lineDelta": 1,
+                "tagStartColumn": 2,
+                "tagEndColumn": 6,
+                "labelStartColumn": 7,
+                "labelEndColumn": 7,
+                "errors": [],
+                "children": []
+            }
+        ]
+    }
+]

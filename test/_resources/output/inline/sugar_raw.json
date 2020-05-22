@@ -1,0 +1,20 @@
+[
+    {
+        "tag": "code",
+        "startColumn": 1,
+        "endColumn": 2,
+        "args": [
+            [
+                "#notInterpreted[",
+                "lorem",
+                "]",
+                " ipsum ",
+                "*",
+                "dolor",
+                "*",
+                " sit"
+            ]
+        ]
+    },
+    "\n"
+]

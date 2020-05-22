@@ -1,0 +1,48 @@
+[
+    {
+        "tag": "section",
+        "label": "1",
+        "lineDelta": 1,
+        "tagStartColumn": 1,
+        "tagEndColumn": 9,
+        "labelStartColumn": 10,
+        "labelEndColumn": 11,
+        "errors": [],
+        "children": [
+            {
+                "tag": "section",
+                "label": "2",
+                "lineDelta": 1,
+                "tagStartColumn": 3,
+                "tagEndColumn": 11,
+                "labelStartColumn": 12,
+                "labelEndColumn": 13,
+                "errors": [],
+                "children": []
+            },
+            {
+                "tag": "section",
+                "label": "3",
+                "lineDelta": 1,
+                "tagStartColumn": 2,
+                "tagEndColumn": 10,
+                "labelStartColumn": 11,
+                "labelEndColumn": 12,
+                "errors": [],
+                "children": [
+                    {
+                        "tag": "section",
+                        "label": "4",
+                        "lineDelta": 1,
+                        "tagStartColumn": 3,
+                        "tagEndColumn": 11,
+                        "labelStartColumn": 12,
+                        "labelEndColumn": 13,
+                        "errors": [],
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

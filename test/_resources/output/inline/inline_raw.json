@@ -1,0 +1,34 @@
+[
+    {
+        "tag": "rawFirstArg",
+        "startColumn": 1,
+        "endColumn": 13,
+        "args": [
+            [
+                {
+                    "tag": "notATag",
+                    "startColumn": 14,
+                    "endColumn": 22,
+                    "args": [
+                        [
+                            "this is raw"
+                        ],
+                        [
+                            {
+                                "tag": "inline",
+                                "startColumn": 36,
+                                "endColumn": 43,
+                                "args": [
+                                    [
+                                        "this is not raw"
+                                    ]
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                "\n"
+            ]
+        ]
+    }
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "tag": "section",
+        "startColumn": 1,
+        "endColumn": 9,
+        "args": []
+    },
+    " My section\n\t",
+    {
+        "tag": "inline",
+        "startColumn": 22,
+        "endColumn": 29,
+        "args": [
+            [
+                "content"
+            ]
+        ]
+    },
+    " Text\nText\n"
+]

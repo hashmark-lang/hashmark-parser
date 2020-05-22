@@ -1,0 +1,20 @@
+[
+    {
+        "tag": "paragraph",
+        "startColumn": 1,
+        "endColumn": 11,
+        "args": []
+    },
+    " text ",
+    {
+        "tag": "inline",
+        "startColumn": 17,
+        "endColumn": 24,
+        "args": [
+            [
+                "attr"
+            ]
+        ]
+    },
+    " text\n"
+]

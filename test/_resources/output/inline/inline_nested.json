@@ -1,0 +1,23 @@
+[
+    {
+        "tag": "inline",
+        "startColumn": 1,
+        "endColumn": 8,
+        "args": [
+            [
+                {
+                    "tag": "inline",
+                    "startColumn": 9,
+                    "endColumn": 16,
+                    "args": [
+                        [
+                            "lorem"
+                        ]
+                    ]
+                },
+                " ipsum"
+            ]
+        ]
+    },
+    "\n"
+]

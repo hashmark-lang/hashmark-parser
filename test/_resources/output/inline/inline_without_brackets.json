@@ -1,0 +1,16 @@
+[
+    {
+        "tag": "paragraph",
+        "startColumn": 1,
+        "endColumn": 11,
+        "args": []
+    },
+    " lorem ",
+    {
+        "tag": "inline",
+        "startColumn": 18,
+        "endColumn": 25,
+        "args": []
+    },
+    " ipsum\n"
+]

@@ -1,0 +1,9 @@
+[
+    {
+        "tag": "tag]",
+        "startColumn": 1,
+        "endColumn": 6,
+        "args": []
+    },
+    " This should not cause an error\n"
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "tag": "tag",
+        "startColumn": 1,
+        "endColumn": 5,
+        "args": []
+    },
+    " ",
+    {
+        "tag": "tag",
+        "startColumn": 6,
+        "endColumn": 10,
+        "args": [
+            []
+        ]
+    },
+    " is not an error\n"
+]

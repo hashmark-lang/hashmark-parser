@@ -1,0 +1,16 @@
+[
+    {
+        "tag": "link",
+        "startColumn": 1,
+        "endColumn": 6,
+        "args": [
+            [
+                "www.example.com"
+            ],
+            [
+                "Example"
+            ]
+        ]
+    },
+    "\n"
+]

@@ -1,0 +1,46 @@
+[
+    {
+        "tag": null,
+        "label": "Hello",
+        "lineDelta": 1,
+        "tagStartColumn": 1,
+        "tagEndColumn": 1,
+        "labelStartColumn": 1,
+        "labelEndColumn": 6,
+        "errors": [],
+        "children": []
+    },
+    {
+        "tag": null,
+        "label": "World",
+        "lineDelta": 1,
+        "tagStartColumn": 1,
+        "tagEndColumn": 1,
+        "labelStartColumn": 1,
+        "labelEndColumn": 6,
+        "errors": [],
+        "children": []
+    },
+    {
+        "tag": null,
+        "label": "Hello",
+        "lineDelta": 2,
+        "tagStartColumn": 1,
+        "tagEndColumn": 1,
+        "labelStartColumn": 1,
+        "labelEndColumn": 6,
+        "errors": [],
+        "children": []
+    },
+    {
+        "tag": null,
+        "label": "World",
+        "lineDelta": 2,
+        "tagStartColumn": 1,
+        "tagEndColumn": 1,
+        "labelStartColumn": 1,
+        "labelEndColumn": 6,
+        "errors": [],
+        "children": []
+    }
+]

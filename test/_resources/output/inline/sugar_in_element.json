@@ -1,0 +1,45 @@
+[
+    "lorem ",
+    {
+        "tag": "inline",
+        "startColumn": 7,
+        "endColumn": 14,
+        "args": [
+            [
+                "ipsum ",
+                {
+                    "tag": "strong",
+                    "startColumn": 21,
+                    "endColumn": 22,
+                    "args": [
+                        [
+                            "dolor"
+                        ]
+                    ]
+                }
+            ]
+        ]
+    },
+    " sit ",
+    {
+        "tag": "inline",
+        "startColumn": 34,
+        "endColumn": 41,
+        "args": [
+            [
+                {
+                    "tag": "strong",
+                    "startColumn": 42,
+                    "endColumn": 43,
+                    "args": [
+                        [
+                            "amet"
+                        ]
+                    ]
+                },
+                " consectetur"
+            ]
+        ]
+    },
+    " adipiscing"
+]

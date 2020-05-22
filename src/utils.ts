@@ -1,4 +1,16 @@
 /**
+ * Make type `T` mutable.
+ *
+ * Use with caution...
+ *
+ * @see https://github.com/microsoft/TypeScript/issues/24509
+ */
+
+export type Mutable<T> = {
+	-readonly [P in keyof T]: T[P];
+};
+
+/**
  * Convert a string to a regexp, escaping any special characters.
  *
  * From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping

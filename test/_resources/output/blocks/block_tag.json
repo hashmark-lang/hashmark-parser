@@ -1,0 +1,25 @@
+[
+    {
+        "tag": "section",
+        "label": "Introduction",
+        "lineDelta": 1,
+        "tagStartColumn": 1,
+        "tagEndColumn": 9,
+        "labelStartColumn": 10,
+        "labelEndColumn": 22,
+        "errors": [],
+        "children": [
+            {
+                "tag": null,
+                "label": "Hello World",
+                "lineDelta": 1,
+                "tagStartColumn": 2,
+                "tagEndColumn": 2,
+                "labelStartColumn": 2,
+                "labelEndColumn": 13,
+                "errors": [],
+                "children": []
+            }
+        ]
+    }
+]

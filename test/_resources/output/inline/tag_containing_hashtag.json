@@ -1,0 +1,9 @@
+[
+    {
+        "tag": "tag#tag",
+        "startColumn": 1,
+        "endColumn": 9,
+        "args": []
+    },
+    " is not an error\n"
+]

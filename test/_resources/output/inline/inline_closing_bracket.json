@@ -1,0 +1,17 @@
+[
+    "]",
+    " ",
+    "][",
+    " test ",
+    {
+        "tag": "inline",
+        "startColumn": 11,
+        "endColumn": 18,
+        "args": [
+            [
+                "inline"
+            ]
+        ]
+    },
+    "\n"
+]

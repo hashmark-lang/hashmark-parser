@@ -1,0 +1,12 @@
+[
+    {
+        "tag": "strong",
+        "startColumn": 1,
+        "endColumn": 2,
+        "args": [
+            [
+                "hello"
+            ]
+        ]
+    }
+]
