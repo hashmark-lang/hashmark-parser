@@ -1,15 +1,13 @@
 [
     {
         "tag": "section",
-        "startColumn": 1,
-        "endColumn": 9,
+        "sugar": null,
         "args": []
     },
     " My section\n\t",
     {
         "tag": "inline",
-        "startColumn": 22,
-        "endColumn": 29,
+        "sugar": null,
         "args": [
             [
                 "content"

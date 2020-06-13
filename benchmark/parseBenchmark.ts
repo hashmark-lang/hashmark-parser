@@ -5,7 +5,7 @@ import { formatBytes, generateBenchmarkInput } from "./utils";
 
 const input = generateBenchmarkInput();
 console.log("Size of test input: " + formatBytes(input.length));
-const jsonStr = JSON.stringify(parse(input), (key, value) => (key.indexOf("Column") < 0 ? value : undefined));
+const jsonStr = JSON.stringify(parse(input, false));
 new Benchmark.Suite("compare")
 	.add("Parse Hashml", () => {
 		return parse(input);

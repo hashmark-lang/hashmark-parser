@@ -3,11 +3,6 @@
         "tag": null,
         "label": "Hello World",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 1,
-        "labelStartColumn": 1,
-        "labelEndColumn": 12,
-        "errors": [],
         "children": []
     }
 ]

@@ -5,15 +5,10 @@ import { last } from "../utils";
 const INLINE_TOKEN = /(\\.|#(?:[^ \[]+)\[?|]\[|[\]*_$`])/;
 const DEFAULT_SUGARS = new Map([["*", "strong"], ["_", "emphasis"], ["`", "code"], ["$", "math"]]);
 
-export function parseInline(
-	input: string,
-	start: number = 1,
-	sugars: Map<string, string> = DEFAULT_SUGARS
-): InlineContent {
+export function parseInline(input: string, sugars: Map<string, string> = DEFAULT_SUGARS): InlineContent {
 	const root: InlineContent = [];
 	const stack: SpanElement[] = [];
 	let content: InlineContent = root;
-	let column = start;
 	let inInline = false;
 	let currentSugar = null;
 	let isText = false;
@@ -41,7 +36,7 @@ export function parseInline(
 			// Start a new element (ex: ...#cite[...).
 			const endsWithBracket = last(token) === "[";
 			const tag = token.slice(1, endsWithBracket ? -1 : undefined);
-			const element: SpanElement = new SpanElement(tag, column, column + tag.length + 1);
+			const element: SpanElement = new SpanElement(tag);
 			content.push(element);
 			if (token[token.length - 1] === "[") {
 				content = element.addArg();
@@ -59,7 +54,7 @@ export function parseInline(
 		} else if (sugars.has(token)) {
 			// Open a sugared element (ex: ...*...).
 			// This is last because the map lookup is the most costly case.
-			const element: SpanElement = new SpanElement(sugars.get(token)!, column, column + 1);
+			const element: SpanElement = new SpanElement(sugars.get(token)!, token);
 			content.push(element);
 			content = element.addArg();
 			// Sugared elements cannot have children, so we don't need to push them on the stack.
@@ -67,7 +62,6 @@ export function parseInline(
 		} else {
 			content.push(token);
 		}
-		column += token.length;
 	}
 	return root;
 }

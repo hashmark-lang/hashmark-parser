@@ -3,21 +3,11 @@
         "tag": "section",
         "label": null,
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 9,
-        "labelStartColumn": 10,
-        "labelEndColumn": 10,
-        "errors": [],
         "children": [
             {
                 "tag": "paragraph",
                 "label": "some text",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 12,
-                "labelStartColumn": 13,
-                "labelEndColumn": 22,
-                "errors": [],
                 "children": []
             }
         ]

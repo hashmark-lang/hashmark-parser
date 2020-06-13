@@ -3,11 +3,6 @@
         "tag": "paragraph",
         "label": "Matthieu Bovel",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 11,
-        "labelStartColumn": 12,
-        "labelEndColumn": 26,
-        "errors": [],
         "children": []
     }
 ]

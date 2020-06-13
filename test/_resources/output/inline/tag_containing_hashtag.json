@@ -1,8 +1,7 @@
 [
     {
         "tag": "tag#tag",
-        "startColumn": 1,
-        "endColumn": 9,
+        "sugar": null,
         "args": []
     },
     " is not an error\n"

@@ -3,22 +3,12 @@
         "tag": null,
         "label": "..",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 1,
-        "labelStartColumn": 1,
-        "labelEndColumn": 3,
-        "errors": [],
         "children": []
     },
     {
         "tag": null,
         "label": ".",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 1,
-        "labelStartColumn": 1,
-        "labelEndColumn": 2,
-        "errors": [],
         "children": []
     }
 ]

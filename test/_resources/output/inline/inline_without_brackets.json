@@ -1,15 +1,13 @@
 [
     {
         "tag": "paragraph",
-        "startColumn": 1,
-        "endColumn": 11,
+        "sugar": null,
         "args": []
     },
     " lorem ",
     {
         "tag": "inline",
-        "startColumn": 18,
-        "endColumn": 25,
+        "sugar": null,
         "args": []
     },
     " ipsum\n"

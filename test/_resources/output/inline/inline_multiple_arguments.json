@@ -1,8 +1,7 @@
 [
     {
         "tag": "link",
-        "startColumn": 1,
-        "endColumn": 6,
+        "sugar": null,
         "args": [
             [
                 "www.example.com"

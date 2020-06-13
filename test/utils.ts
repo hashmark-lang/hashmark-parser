@@ -39,14 +39,18 @@ export function testSnapshots(dir: string, f: (input: string) => any) {
 	for (const [input, output] of pairs) {
 		it(input.name, () => {
 			const actual = JSON.stringify(f(input.read()), null, 4);
-			if (!output.exists) {
-				output.write(actual);
-				throw new Error(`Snapshot ${output.filePath} did not exist. Created it.`);
-			}
-			const expected = output.read().trim();
-			assert.strictEqual(actual, expected);
+			assertEqualsSnapshot(actual, output);
 		});
 	}
+}
+
+export function assertEqualsSnapshot(actual: string, snapshot: File) {
+	if (!snapshot.exists) {
+		snapshot.write(actual);
+		throw new Error(`Snapshot ${snapshot.filePath} did not exist. Created it.`);
+	}
+	const expected = snapshot.read().trim();
+	assert.strictEqual(actual.trim(), expected);
 }
 
 export function filesIn(dir: string): File[] {

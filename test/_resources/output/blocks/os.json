@@ -3,74 +3,39 @@
         "tag": "document",
         "label": "Operating Systems",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 10,
-        "labelStartColumn": 11,
-        "labelEndColumn": 28,
-        "errors": [],
         "children": [
             {
                 "tag": "author",
                 "label": "Matthieu Bovel",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 9,
-                "labelStartColumn": 10,
-                "labelEndColumn": 24,
-                "errors": [],
                 "children": []
             },
             {
                 "tag": "published",
                 "label": "now",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 12,
-                "labelStartColumn": 13,
-                "labelEndColumn": 16,
-                "errors": [],
                 "children": []
             },
             {
                 "tag": "section",
                 "label": "Introduction",
                 "lineDelta": 2,
-                "tagStartColumn": 2,
-                "tagEndColumn": 10,
-                "labelStartColumn": 11,
-                "labelEndColumn": 23,
-                "errors": [],
                 "children": [
                     {
                         "tag": "def",
                         "label": "Operating System",
                         "lineDelta": 2,
-                        "tagStartColumn": 3,
-                        "tagEndColumn": 7,
-                        "labelStartColumn": 8,
-                        "labelEndColumn": 24,
-                        "errors": [],
                         "children": [
                             {
                                 "tag": "abbr",
                                 "label": "OS",
                                 "lineDelta": 1,
-                                "tagStartColumn": 4,
-                                "tagEndColumn": 9,
-                                "labelStartColumn": 10,
-                                "labelEndColumn": 12,
-                                "errors": [],
                                 "children": []
                             },
                             {
                                 "tag": null,
                                 "label": "An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications.",
                                 "lineDelta": 2,
-                                "tagStartColumn": 4,
-                                "tagEndColumn": 4,
-                                "labelStartColumn": 4,
-                                "labelEndColumn": 138,
-                                "errors": [],
                                 "children": []
                             }
                         ]
@@ -79,11 +44,6 @@
                         "tag": "def",
                         "label": "Privileged mode",
                         "lineDelta": 5,
-                        "tagStartColumn": 3,
-                        "tagEndColumn": 7,
-                        "labelStartColumn": 8,
-                        "labelEndColumn": 23,
-                        "errors": [],
                         "children": []
                     }
                 ]

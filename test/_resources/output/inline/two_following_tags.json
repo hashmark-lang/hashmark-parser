@@ -1,15 +1,13 @@
 [
     {
         "tag": "tag",
-        "startColumn": 1,
-        "endColumn": 5,
+        "sugar": null,
         "args": []
     },
     " ",
     {
         "tag": "tag",
-        "startColumn": 6,
-        "endColumn": 10,
+        "sugar": null,
         "args": [
             []
         ]

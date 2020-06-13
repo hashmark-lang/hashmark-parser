@@ -3,43 +3,23 @@
         "tag": "list",
         "label": null,
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 6,
-        "labelStartColumn": 7,
-        "labelEndColumn": 7,
-        "errors": [],
         "children": [
             {
                 "tag": null,
                 "label": "Banana",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 2,
-                "labelStartColumn": 2,
-                "labelEndColumn": 8,
-                "errors": [],
                 "children": []
             },
             {
                 "tag": null,
                 "label": "Pear",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 2,
-                "labelStartColumn": 2,
-                "labelEndColumn": 6,
-                "errors": [],
                 "children": []
             },
             {
                 "tag": null,
                 "label": "Apple",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 2,
-                "labelStartColumn": 2,
-                "labelEndColumn": 7,
-                "errors": [],
                 "children": []
             }
         ]

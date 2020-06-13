@@ -1,8 +1,7 @@
 [
     {
         "tag": "strong",
-        "startColumn": 1,
-        "endColumn": 8,
+        "sugar": null,
         "args": [
             [
                 "id"

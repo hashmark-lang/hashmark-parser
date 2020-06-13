@@ -1,11 +1,11 @@
 import { last } from "../utils";
-import { BlockElement, ROOT_TAG } from "../ast/BlockElement";
+import { BlockElement } from "../ast/BlockElement";
 
 const LINE_PARTS = /(?:\r\n|\n|\r|^)(\t*)(.*)/gm;
 const TAG = /(?:#([^ \[\r\n]+)(?: |$))?(.+)?/;
 
-export function parse(input: string): BlockElement[] {
-	const root: BlockElement = new BlockElement(ROOT_TAG, null);
+export function parse(input: string, parseLabels: boolean = false): BlockElement[] {
+	const root: BlockElement = new BlockElement("$root", null);
 	const blockStack: BlockElement[] = [root];
 	const indentStack = [0];
 	const lineNumberStack = [0];
@@ -22,11 +22,8 @@ export function parse(input: string): BlockElement[] {
 		blockStack.length = indentStack.length;
 		const [, tag, label] = TAG.exec(lineContent)!;
 		const lineDelta = line - lineNumberStack.pop()!;
-		const tagStart = indent + 1;
-		const tagEnd = tagStart + (tag ? tag.length + 1 : 0);
-		const labelStart = tagEnd + (tag ? 1 : 0);
-		const labelEnd = labelStart + (label ? label.length : 0);
-		const element = new BlockElement(tag || null, label || null, lineDelta, tagStart, tagEnd, labelStart, labelEnd);
+		const element = new BlockElement(tag || null, label || null, lineDelta);
+		if (parseLabels) element.parseLabel();
 		last(blockStack).children.push(element);
 		blockStack.push(element);
 		indentStack.push(indent);

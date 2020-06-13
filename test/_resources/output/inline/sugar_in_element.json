@@ -2,15 +2,13 @@
     "lorem ",
     {
         "tag": "inline",
-        "startColumn": 7,
-        "endColumn": 14,
+        "sugar": null,
         "args": [
             [
                 "ipsum ",
                 {
                     "tag": "strong",
-                    "startColumn": 21,
-                    "endColumn": 22,
+                    "sugar": "*",
                     "args": [
                         [
                             "dolor"
@@ -23,14 +21,12 @@
     " sit ",
     {
         "tag": "inline",
-        "startColumn": 34,
-        "endColumn": 41,
+        "sugar": null,
         "args": [
             [
                 {
                     "tag": "strong",
-                    "startColumn": 42,
-                    "endColumn": 43,
+                    "sugar": "*",
                     "args": [
                         [
                             "amet"

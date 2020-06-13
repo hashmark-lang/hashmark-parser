@@ -3,44 +3,24 @@
         "tag": "tag\\#",
         "label": null,
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 7,
-        "labelStartColumn": 8,
-        "labelEndColumn": 8,
-        "errors": [],
         "children": []
     },
     {
         "tag": null,
         "label": "#tag\\[",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 1,
-        "labelStartColumn": 1,
-        "labelEndColumn": 7,
-        "errors": [],
         "children": []
     },
     {
         "tag": "tag\\\\",
         "label": null,
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 7,
-        "labelStartColumn": 8,
-        "labelEndColumn": 8,
-        "errors": [],
         "children": []
     },
     {
         "tag": "ta\\g",
         "label": null,
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 6,
-        "labelStartColumn": 7,
-        "labelEndColumn": 7,
-        "errors": [],
         "children": []
     }
 ]

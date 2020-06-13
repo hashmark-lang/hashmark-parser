@@ -1,14 +1,12 @@
 [
     {
         "tag": "rawFirstArg",
-        "startColumn": 1,
-        "endColumn": 13,
+        "sugar": null,
         "args": [
             [
                 {
                     "tag": "notATag",
-                    "startColumn": 14,
-                    "endColumn": 22,
+                    "sugar": null,
                     "args": [
                         [
                             "this is raw"
@@ -16,8 +14,7 @@
                         [
                             {
                                 "tag": "inline",
-                                "startColumn": 36,
-                                "endColumn": 43,
+                                "sugar": null,
                                 "args": [
                                     [
                                         "this is not raw"

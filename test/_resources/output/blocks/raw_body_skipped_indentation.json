@@ -3,31 +3,16 @@
         "tag": "rawBody",
         "label": null,
         "lineDelta": 1,
-        "tagStartColumn": 2,
-        "tagEndColumn": 10,
-        "labelStartColumn": 11,
-        "labelEndColumn": 11,
-        "errors": [],
         "children": [
             {
                 "tag": null,
                 "label": "Lorem",
                 "lineDelta": 1,
-                "tagStartColumn": 3,
-                "tagEndColumn": 3,
-                "labelStartColumn": 3,
-                "labelEndColumn": 8,
-                "errors": [],
                 "children": [
                     {
                         "tag": null,
                         "label": "Ipsum",
                         "lineDelta": 1,
-                        "tagStartColumn": 4,
-                        "tagEndColumn": 4,
-                        "labelStartColumn": 4,
-                        "labelEndColumn": 9,
-                        "errors": [],
                         "children": []
                     }
                 ]
@@ -36,22 +21,12 @@
                 "tag": null,
                 "label": "  Dolor",
                 "lineDelta": 2,
-                "tagStartColumn": 3,
-                "tagEndColumn": 3,
-                "labelStartColumn": 3,
-                "labelEndColumn": 10,
-                "errors": [],
                 "children": []
             },
             {
                 "tag": null,
                 "label": "Sit",
                 "lineDelta": 1,
-                "tagStartColumn": 3,
-                "tagEndColumn": 3,
-                "labelStartColumn": 3,
-                "labelEndColumn": 6,
-                "errors": [],
                 "children": []
             }
         ]
@@ -60,11 +35,6 @@
         "tag": null,
         "label": "Amet",
         "lineDelta": 5,
-        "tagStartColumn": 1,
-        "tagEndColumn": 1,
-        "labelStartColumn": 1,
-        "labelEndColumn": 5,
-        "errors": [],
         "children": []
     }
 ]

@@ -3,31 +3,16 @@
         "tag": "document",
         "label": "Document",
         "lineDelta": 1,
-        "tagStartColumn": 1,
-        "tagEndColumn": 10,
-        "labelStartColumn": 11,
-        "labelEndColumn": 19,
-        "errors": [],
         "children": [
             {
                 "tag": "definition",
                 "label": "Def",
                 "lineDelta": 1,
-                "tagStartColumn": 2,
-                "tagEndColumn": 13,
-                "labelStartColumn": 14,
-                "labelEndColumn": 17,
-                "errors": [],
                 "children": [
                     {
                         "tag": null,
                         "label": "Lorem",
                         "lineDelta": 1,
-                        "tagStartColumn": 3,
-                        "tagEndColumn": 3,
-                        "labelStartColumn": 3,
-                        "labelEndColumn": 8,
-                        "errors": [],
                         "children": []
                     }
                 ]

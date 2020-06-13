@@ -5,8 +5,7 @@
     " test ",
     {
         "tag": "inline",
-        "startColumn": 11,
-        "endColumn": 18,
+        "sugar": null,
         "args": [
             [
                 "inline"

@@ -1,15 +1,13 @@
 [
     {
         "tag": "paragraph",
-        "startColumn": 1,
-        "endColumn": 11,
+        "sugar": null,
         "args": []
     },
     " text ",
     {
         "tag": "inline",
-        "startColumn": 17,
-        "endColumn": 24,
+        "sugar": null,
         "args": [
             [
                 "attr"
