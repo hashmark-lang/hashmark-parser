@@ -1,16 +1,20 @@
-[
-    "]",
-    " ",
-    "][",
-    " test ",
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": [
-            [
-                "inline"
+{
+    "content": [
+        "]",
+        " ",
+        "][",
+        " test ",
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": [
+                {
+                    "content": [
+                        "inline"
+                    ]
+                }
             ]
-        ]
-    },
-    "\n"
-]
+        },
+        "\n"
+    ]
+}

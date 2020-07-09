@@ -1,0 +1,15 @@
+Line 1: Strong not allowed in title:
+#title *Operating Systems*
+       ^^^^^^^^^^^^^^^^^^^
+Line 2: 404 not found:
+#subtitle Notes from the course #link[Operating Systems and Networks][https://spcl.inf.ethz.ch/Teaching/2017-osnet/]
+                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Line 4: Invalid date:
+#published now
+           ^^^
+Line 6: Invalid tag:
+#section Introduction
+^^^^^^^^
+Line 14: Paragraph not allowed after section:
+Proudly typeset with Hashdocs.
+^

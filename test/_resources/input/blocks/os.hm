@@ -1,12 +1,14 @@
-#document Operating Systems
-	#author Matthieu Bovel
-	#published now
+#title *Operating Systems*
+#subtitle Notes from the course #link[Operating Systems and Networks][https://spcl.inf.ethz.ch/Teaching/2017-osnet/]
+#author Matthieu Bovel
+#published now
 
-	#section Introduction
+#section Introduction
+	#def Operating System
+		#abbr OS
 
-		#def Operating System
-			#abbr OS
+		An operating system is a special computer program that runs in privileged mode and manage access to resources for other applications.
 
-			An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications.
+	#def Privileged mode
 
-		#def Privileged mode
+Proudly typeset with Hashdocs.

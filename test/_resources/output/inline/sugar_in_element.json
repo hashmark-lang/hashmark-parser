@@ -1,41 +1,51 @@
-[
-    "lorem ",
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": [
-            [
-                "ipsum ",
+{
+    "content": [
+        "lorem ",
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": [
                 {
-                    "tag": "strong",
-                    "sugar": "*",
-                    "args": [
-                        [
-                            "dolor"
-                        ]
+                    "content": [
+                        "ipsum ",
+                        {
+                            "tag": "strong",
+                            "sugar": "*",
+                            "args": [
+                                {
+                                    "content": [
+                                        "dolor"
+                                    ]
+                                }
+                            ]
+                        }
                     ]
                 }
             ]
-        ]
-    },
-    " sit ",
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": [
-            [
+        },
+        " sit ",
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": [
                 {
-                    "tag": "strong",
-                    "sugar": "*",
-                    "args": [
-                        [
-                            "amet"
-                        ]
+                    "content": [
+                        {
+                            "tag": "strong",
+                            "sugar": "*",
+                            "args": [
+                                {
+                                    "content": [
+                                        "amet"
+                                    ]
+                                }
+                            ]
+                        },
+                        " consectetur"
                     ]
-                },
-                " consectetur"
+                }
             ]
-        ]
-    },
-    " adipiscing"
-]
+        },
+        " adipiscing"
+    ]
+}

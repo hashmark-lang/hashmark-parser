@@ -1,22 +1,25 @@
-[
-    {
-        "tag": "document",
-        "label": "Document",
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": "definition",
-                "label": "Def",
-                "lineDelta": 1,
-                "children": [
-                    {
-                        "tag": null,
-                        "label": "Lorem",
-                        "lineDelta": 1,
-                        "children": []
-                    }
-                ]
-            }
-        ]
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "document",
+            "label": "Document",
+            "lineDelta": 1,
+            "children": [
+                {
+                    "tag": "definition",
+                    "label": "Def",
+                    "lineDelta": 1,
+                    "children": [
+                        {
+                            "label": "Lorem",
+                            "lineDelta": 1,
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

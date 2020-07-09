@@ -1,18 +1,22 @@
-[
-    {
-        "tag": "paragraph",
-        "sugar": null,
-        "args": []
-    },
-    " text ",
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": [
-            [
-                "attr"
+{
+    "content": [
+        {
+            "tag": "paragraph",
+            "sugar": null,
+            "args": []
+        },
+        " text ",
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": [
+                {
+                    "content": [
+                        "attr"
+                    ]
+                }
             ]
-        ]
-    },
-    " text\n"
-]
+        },
+        " text\n"
+    ]
+}

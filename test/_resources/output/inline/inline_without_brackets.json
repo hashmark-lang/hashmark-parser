@@ -1,14 +1,16 @@
-[
-    {
-        "tag": "paragraph",
-        "sugar": null,
-        "args": []
-    },
-    " lorem ",
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": []
-    },
-    " ipsum\n"
-]
+{
+    "content": [
+        {
+            "tag": "paragraph",
+            "sugar": null,
+            "args": []
+        },
+        " lorem ",
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": []
+        },
+        " ipsum\n"
+    ]
+}

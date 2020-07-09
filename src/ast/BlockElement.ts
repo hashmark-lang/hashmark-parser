@@ -1,30 +1,33 @@
-import { InlineContent, getInlineContentSource } from "./InlineContent";
+import { InlineContent } from "./InlineContent";
 import { parseInline } from "../parser/parseInline";
 
 export class BlockElement {
+	public tagError?: string;
+	public labelError?: string;
+	private _parsedLabel?: InlineContent;
+
 	constructor(
-		readonly tag: string | null,
-		readonly label: InlineContent | string | null = null,
+		readonly tag?: string,
+		readonly label?: string,
 		readonly lineDelta: number = 0,
 		readonly children: BlockElement[] = []
 	) {}
 
-	get(tag: string) {
+	toJSON() {
+		return { tag: this.tag, label: this.label, lineDelta: this.lineDelta, children: this.children };
+	}
+
+	get(tag: string | undefined) {
 		return this.children.find(el => el.tag === tag);
 	}
 
-	getAll(tag: string) {
+	getAll(tag: string | undefined) {
 		return this.children.filter(el => el.tag === tag);
 	}
 
-	isLabelParsed() {
-		return typeof this.label === "object";
-	}
-
-	parseLabel() {
-		if (!this.label) throw new Error("Cannot parse null label");
-		if (typeof this.label !== "string") throw new Error("Label already parsed.");
-		(this as any).label = parseInline(this.label);
+	get parsedLabel(): InlineContent {
+		if (!this._parsedLabel) this._parsedLabel = parseInline(this.label || "");
+		return this._parsedLabel;
 	}
 
 	get source(): string {
@@ -36,8 +39,6 @@ export class BlockElement {
 	}
 
 	get labelSource(): string {
-		if (!this.label) return "";
-		if (typeof this.label === "string") return this.label;
-		return getInlineContentSource(this.label);
+		return this.label || "";
 	}
 }

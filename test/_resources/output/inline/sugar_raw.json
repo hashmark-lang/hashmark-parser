@@ -1,19 +1,23 @@
-[
-    {
-        "tag": "code",
-        "sugar": "`",
-        "args": [
-            [
-                "#notInterpreted[",
-                "lorem",
-                "]",
-                " ipsum ",
-                "*",
-                "dolor",
-                "*",
-                " sit"
+{
+    "content": [
+        {
+            "tag": "code",
+            "sugar": "`",
+            "args": [
+                {
+                    "content": [
+                        "#notInterpreted[",
+                        "lorem",
+                        "]",
+                        " ipsum ",
+                        "*",
+                        "dolor",
+                        "*",
+                        " sit"
+                    ]
+                }
             ]
-        ]
-    },
-    "\n"
-]
+        },
+        "\n"
+    ]
+}

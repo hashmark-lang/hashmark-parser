@@ -1,21 +1,24 @@
-[
-    {
-        "tag": "section",
-        "label": "Introduction",
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": "id",
-                "label": "intro",
-                "lineDelta": 1,
-                "children": []
-            },
-            {
-                "tag": null,
-                "label": "Hello World",
-                "lineDelta": 1,
-                "children": []
-            }
-        ]
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "section",
+            "label": "Introduction",
+            "lineDelta": 1,
+            "children": [
+                {
+                    "tag": "id",
+                    "label": "intro",
+                    "lineDelta": 1,
+                    "children": []
+                },
+                {
+                    "label": "Hello World",
+                    "lineDelta": 1,
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

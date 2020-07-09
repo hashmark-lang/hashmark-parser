@@ -1,40 +1,38 @@
-[
-    {
-        "tag": "rawBody",
-        "label": null,
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": null,
-                "label": "Lorem",
-                "lineDelta": 1,
-                "children": [
-                    {
-                        "tag": null,
-                        "label": "Ipsum",
-                        "lineDelta": 1,
-                        "children": []
-                    }
-                ]
-            },
-            {
-                "tag": null,
-                "label": "  Dolor",
-                "lineDelta": 2,
-                "children": []
-            },
-            {
-                "tag": null,
-                "label": "Sit",
-                "lineDelta": 1,
-                "children": []
-            }
-        ]
-    },
-    {
-        "tag": null,
-        "label": "Amet",
-        "lineDelta": 5,
-        "children": []
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "rawBody",
+            "lineDelta": 1,
+            "children": [
+                {
+                    "label": "Lorem",
+                    "lineDelta": 1,
+                    "children": [
+                        {
+                            "label": "Ipsum",
+                            "lineDelta": 1,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "label": "  Dolor",
+                    "lineDelta": 2,
+                    "children": []
+                },
+                {
+                    "label": "Sit",
+                    "lineDelta": 1,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "label": "Amet",
+            "lineDelta": 5,
+            "children": []
+        }
+    ]
+}

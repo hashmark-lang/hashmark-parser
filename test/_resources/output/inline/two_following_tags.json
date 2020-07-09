@@ -1,16 +1,20 @@
-[
-    {
-        "tag": "tag",
-        "sugar": null,
-        "args": []
-    },
-    " ",
-    {
-        "tag": "tag",
-        "sugar": null,
-        "args": [
-            []
-        ]
-    },
-    " is not an error\n"
-]
+{
+    "content": [
+        {
+            "tag": "tag",
+            "sugar": null,
+            "args": []
+        },
+        " ",
+        {
+            "tag": "tag",
+            "sugar": null,
+            "args": [
+                {
+                    "content": []
+                }
+            ]
+        },
+        " is not an error\n"
+    ]
+}

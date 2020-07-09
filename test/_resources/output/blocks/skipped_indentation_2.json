@@ -1,75 +1,71 @@
-[
-    {
-        "tag": "block",
-        "label": "title",
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": "head",
-                "label": null,
-                "lineDelta": 1,
-                "children": [
-                    {
-                        "tag": null,
-                        "label": "inline",
-                        "lineDelta": 1,
-                        "children": []
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "tag": "inline",
-        "label": "inline",
-        "lineDelta": 3,
-        "children": [
-            {
-                "tag": "arg",
-                "label": null,
-                "lineDelta": 1,
-                "children": [
-                    {
-                        "tag": "content",
-                        "label": null,
-                        "lineDelta": 1,
-                        "children": [
-                            {
-                                "tag": null,
-                                "label": "bold",
-                                "lineDelta": 1,
-                                "children": []
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "tag": "arg",
-                "label": null,
-                "lineDelta": 3,
-                "children": [
-                    {
-                        "tag": "raw",
-                        "label": null,
-                        "lineDelta": 1,
-                        "children": []
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "tag": "inline",
-        "label": "bold",
-        "lineDelta": 6,
-        "children": [
-            {
-                "tag": "arg",
-                "label": null,
-                "lineDelta": 1,
-                "children": []
-            }
-        ]
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "block",
+            "label": "title",
+            "lineDelta": 1,
+            "children": [
+                {
+                    "tag": "head",
+                    "lineDelta": 1,
+                    "children": [
+                        {
+                            "label": "inline",
+                            "lineDelta": 1,
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag": "inline",
+            "label": "inline",
+            "lineDelta": 3,
+            "children": [
+                {
+                    "tag": "arg",
+                    "lineDelta": 1,
+                    "children": [
+                        {
+                            "tag": "content",
+                            "lineDelta": 1,
+                            "children": [
+                                {
+                                    "label": "bold",
+                                    "lineDelta": 1,
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "arg",
+                    "lineDelta": 3,
+                    "children": [
+                        {
+                            "tag": "raw",
+                            "lineDelta": 1,
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag": "inline",
+            "label": "bold",
+            "lineDelta": 6,
+            "children": [
+                {
+                    "tag": "arg",
+                    "lineDelta": 1,
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

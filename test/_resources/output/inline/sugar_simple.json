@@ -1,11 +1,15 @@
-[
-    {
-        "tag": "strong",
-        "sugar": "*",
-        "args": [
-            [
-                "hello"
+{
+    "content": [
+        {
+            "tag": "strong",
+            "sugar": "*",
+            "args": [
+                {
+                    "content": [
+                        "hello"
+                    ]
+                }
             ]
-        ]
-    }
-]
+        }
+    ]
+}

@@ -1,8 +1,0 @@
-Line 3: Invalid date:
-	#published now
-	           ^^^
-
-Line 5: Invalid tag:
-	#section Introduction
-	^^^^^^^^
-

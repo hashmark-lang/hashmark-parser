@@ -1,7 +1,19 @@
 import { SpanElement } from "./SpanElement";
 
-export type InlineContent = Array<string | SpanElement>;
+export class InlineContent {
+	public error?: string;
 
-export function getInlineContentSource(content: InlineContent) {
-	return content.map(el => (typeof el === "string" ? el : el.source)).join("");
+	constructor(readonly content: Array<string | SpanElement> = []) {}
+
+	get(tag: string | undefined) {
+		return this.content.find(el => typeof el === "object" && el.tag === tag) as SpanElement | undefined;
+	}
+
+	getAll(tag: string | undefined) {
+		return this.content.filter(el => typeof el === "object" && el.tag === tag) as SpanElement[];
+	}
+
+	get source() {
+		return this.content.map(el => (typeof el === "string" ? el : el.source)).join("");
+	}
 }

@@ -1,12 +1,16 @@
-[
-    {
-        "tag": "strong",
-        "sugar": null,
-        "args": [
-            [
-                "id"
+{
+    "content": [
+        {
+            "tag": "strong",
+            "sugar": null,
+            "args": [
+                {
+                    "content": [
+                        "id"
+                    ]
+                }
             ]
-        ]
-    },
-    "\n"
-]
+        },
+        "\n"
+    ]
+}

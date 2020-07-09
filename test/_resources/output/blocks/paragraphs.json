@@ -1,26 +1,26 @@
-[
-    {
-        "tag": null,
-        "label": "Hello",
-        "lineDelta": 1,
-        "children": []
-    },
-    {
-        "tag": null,
-        "label": "World",
-        "lineDelta": 1,
-        "children": []
-    },
-    {
-        "tag": null,
-        "label": "Hello",
-        "lineDelta": 2,
-        "children": []
-    },
-    {
-        "tag": null,
-        "label": "World",
-        "lineDelta": 2,
-        "children": []
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "label": "Hello",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "label": "World",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "label": "Hello",
+            "lineDelta": 2,
+            "children": []
+        },
+        {
+            "label": "World",
+            "lineDelta": 2,
+            "children": []
+        }
+    ]
+}

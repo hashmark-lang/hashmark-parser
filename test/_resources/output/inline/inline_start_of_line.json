@@ -1,18 +1,22 @@
-[
-    {
-        "tag": "section",
-        "sugar": null,
-        "args": []
-    },
-    " My section\n\t",
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": [
-            [
-                "content"
+{
+    "content": [
+        {
+            "tag": "section",
+            "sugar": null,
+            "args": []
+        },
+        " My section\n\t",
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": [
+                {
+                    "content": [
+                        "content"
+                    ]
+                }
             ]
-        ]
-    },
-    " Text\nText\n"
-]
+        },
+        " Text\nText\n"
+    ]
+}

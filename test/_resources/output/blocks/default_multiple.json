@@ -1,27 +1,27 @@
-[
-    {
-        "tag": "list",
-        "label": null,
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": null,
-                "label": "Banana",
-                "lineDelta": 1,
-                "children": []
-            },
-            {
-                "tag": null,
-                "label": "Pear",
-                "lineDelta": 1,
-                "children": []
-            },
-            {
-                "tag": null,
-                "label": "Apple",
-                "lineDelta": 1,
-                "children": []
-            }
-        ]
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "list",
+            "lineDelta": 1,
+            "children": [
+                {
+                    "label": "Banana",
+                    "lineDelta": 1,
+                    "children": []
+                },
+                {
+                    "label": "Pear",
+                    "lineDelta": 1,
+                    "children": []
+                },
+                {
+                    "label": "Apple",
+                    "lineDelta": 1,
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

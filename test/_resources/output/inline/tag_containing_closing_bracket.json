@@ -1,8 +1,10 @@
-[
-    {
-        "tag": "tag]",
-        "sugar": null,
-        "args": []
-    },
-    " This should not cause an error\n"
-]
+{
+    "content": [
+        {
+            "tag": "tag]",
+            "sugar": null,
+            "args": []
+        },
+        " This should not cause an error\n"
+    ]
+}

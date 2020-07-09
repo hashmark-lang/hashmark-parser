@@ -1,14 +1,16 @@
-[
-    {
-        "tag": null,
-        "label": "..",
-        "lineDelta": 1,
-        "children": []
-    },
-    {
-        "tag": null,
-        "label": ".",
-        "lineDelta": 1,
-        "children": []
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "label": "..",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "label": ".",
+            "lineDelta": 1,
+            "children": []
+        }
+    ]
+}

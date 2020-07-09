@@ -1,53 +1,66 @@
-[
-    {
-        "tag": "document",
-        "label": "Operating Systems",
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": "author",
-                "label": "Matthieu Bovel",
-                "lineDelta": 1,
-                "children": []
-            },
-            {
-                "tag": "published",
-                "label": "now",
-                "lineDelta": 1,
-                "children": []
-            },
-            {
-                "tag": "section",
-                "label": "Introduction",
-                "lineDelta": 2,
-                "children": [
-                    {
-                        "tag": "def",
-                        "label": "Operating System",
-                        "lineDelta": 2,
-                        "children": [
-                            {
-                                "tag": "abbr",
-                                "label": "OS",
-                                "lineDelta": 1,
-                                "children": []
-                            },
-                            {
-                                "tag": null,
-                                "label": "An operating system is a special computer program that runs in privileged mode and manage access to ressources for other applications.",
-                                "lineDelta": 2,
-                                "children": []
-                            }
-                        ]
-                    },
-                    {
-                        "tag": "def",
-                        "label": "Privileged mode",
-                        "lineDelta": 5,
-                        "children": []
-                    }
-                ]
-            }
-        ]
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "title",
+            "label": "*Operating Systems*",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "tag": "subtitle",
+            "label": "Notes from the course #link[Operating Systems and Networks][https://spcl.inf.ethz.ch/Teaching/2017-osnet/]",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "tag": "author",
+            "label": "Matthieu Bovel",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "tag": "published",
+            "label": "now",
+            "lineDelta": 1,
+            "children": []
+        },
+        {
+            "tag": "section",
+            "label": "Introduction",
+            "lineDelta": 2,
+            "children": [
+                {
+                    "tag": "def",
+                    "label": "Operating System",
+                    "lineDelta": 1,
+                    "children": [
+                        {
+                            "tag": "abbr",
+                            "label": "OS",
+                            "lineDelta": 1,
+                            "children": []
+                        },
+                        {
+                            "label": "An operating system is a special computer program that runs in privileged mode and manage access to resources for other applications.",
+                            "lineDelta": 2,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "tag": "def",
+                    "label": "Privileged mode",
+                    "lineDelta": 5,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "label": "Proudly typeset with Hashdocs.",
+            "lineDelta": 8,
+            "children": []
+        }
+    ]
+}

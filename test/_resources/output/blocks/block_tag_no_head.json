@@ -1,15 +1,18 @@
-[
-    {
-        "tag": "section",
-        "label": null,
-        "lineDelta": 1,
-        "children": [
-            {
-                "tag": "paragraph",
-                "label": "some text",
-                "lineDelta": 1,
-                "children": []
-            }
-        ]
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "section",
+            "lineDelta": 1,
+            "children": [
+                {
+                    "tag": "paragraph",
+                    "label": "some text",
+                    "lineDelta": 1,
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

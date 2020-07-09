@@ -1,8 +1,11 @@
-[
-    {
-        "tag": null,
-        "label": "Hello World",
-        "lineDelta": 1,
-        "children": []
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "label": "Hello World",
+            "lineDelta": 1,
+            "children": []
+        }
+    ]
+}

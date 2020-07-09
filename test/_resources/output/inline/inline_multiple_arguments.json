@@ -1,15 +1,21 @@
-[
-    {
-        "tag": "link",
-        "sugar": null,
-        "args": [
-            [
-                "www.example.com"
-            ],
-            [
-                "Example"
+{
+    "content": [
+        {
+            "tag": "link",
+            "sugar": null,
+            "args": [
+                {
+                    "content": [
+                        "www.example.com"
+                    ]
+                },
+                {
+                    "content": [
+                        "Example"
+                    ]
+                }
             ]
-        ]
-    },
-    "\n"
-]
+        },
+        "\n"
+    ]
+}

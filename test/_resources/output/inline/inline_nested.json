@@ -1,21 +1,27 @@
-[
-    {
-        "tag": "inline",
-        "sugar": null,
-        "args": [
-            [
+{
+    "content": [
+        {
+            "tag": "inline",
+            "sugar": null,
+            "args": [
                 {
-                    "tag": "inline",
-                    "sugar": null,
-                    "args": [
-                        [
-                            "lorem"
-                        ]
+                    "content": [
+                        {
+                            "tag": "inline",
+                            "sugar": null,
+                            "args": [
+                                {
+                                    "content": [
+                                        "lorem"
+                                    ]
+                                }
+                            ]
+                        },
+                        " ipsum"
                     ]
-                },
-                " ipsum"
+                }
             ]
-        ]
-    },
-    "\n"
-]
+        },
+        "\n"
+    ]
+}

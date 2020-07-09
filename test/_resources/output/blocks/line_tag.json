@@ -1,8 +1,12 @@
-[
-    {
-        "tag": "paragraph",
-        "label": "Matthieu Bovel",
-        "lineDelta": 1,
-        "children": []
-    }
-]
+{
+    "tag": "$root",
+    "lineDelta": 0,
+    "children": [
+        {
+            "tag": "paragraph",
+            "label": "Matthieu Bovel",
+            "lineDelta": 1,
+            "children": []
+        }
+    ]
+}

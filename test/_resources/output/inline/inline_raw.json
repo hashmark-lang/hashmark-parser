@@ -1,31 +1,41 @@
-[
-    {
-        "tag": "rawFirstArg",
-        "sugar": null,
-        "args": [
-            [
+{
+    "content": [
+        {
+            "tag": "rawFirstArg",
+            "sugar": null,
+            "args": [
                 {
-                    "tag": "notATag",
-                    "sugar": null,
-                    "args": [
-                        [
-                            "this is raw"
-                        ],
-                        [
-                            {
-                                "tag": "inline",
-                                "sugar": null,
-                                "args": [
-                                    [
-                                        "this is not raw"
+                    "content": [
+                        {
+                            "tag": "notATag",
+                            "sugar": null,
+                            "args": [
+                                {
+                                    "content": [
+                                        "this is raw"
                                     ]
-                                ]
-                            }
-                        ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "tag": "inline",
+                                            "sugar": null,
+                                            "args": [
+                                                {
+                                                    "content": [
+                                                        "this is not raw"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "\n"
                     ]
-                },
-                "\n"
+                }
             ]
-        ]
-    }
-]
+        }
+    ]
+}
