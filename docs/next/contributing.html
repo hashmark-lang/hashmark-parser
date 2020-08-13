@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Contributing · HashML</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Installing"/><meta name="docsearch:version" content="next"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Contributing · HashML"/><meta property="og:type" content="website"/><meta property="og:url" content="https://hashml.github.io/hashml/"/><meta property="og:description" content="## Installing"/><meta property="og:image" content="https://hashml.github.io/hashml/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://hashml.github.io/hashml/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/hashml/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/hashml/js/scrollSpy.js"></script><link rel="stylesheet" href="/hashml/css/main.css"/><script src="/hashml/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/hashml/"><img class="logo" src="/hashml/img/favicon.ico" alt="HashML"/><h2 class="headerTitleWithLogo">HashML</h2></a><a href="/hashml/versions"><h3>next</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/hashml/docs/next/what-is-hashml" target="_self">Docs</a></li><li class=""><a href="/hashml/docs/next/api/" target="_self">API</a></li><li class=""><a href="https://github.com/hashml/hashml" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Contributing</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/next/what-is-hashml">What is HashML?</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/using-hashml">Using HashML</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/generating-typescript">Generating TypeScript interfaces</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Core concepts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/next/markup-language-vs-applications">Markup language vs applications</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/tag-types">Tag types</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/schemas">Schemas</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/schema-schemas">Schema schema</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/hashml/docs/next/contributing">Getting started</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Contributing</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="installing"></a><a href="#installing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installing</h2>
+<p>HashML requires at least Node 12. You can check your Node version by running:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> node -v</span>
+</code></pre>
+<p>To clone and install the project, run:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> git <span class="hljs-built_in">clone</span> https://github.com/hashml/hashml</span>
+<span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">cd</span> hashml</span>
+<span class="hljs-meta">$</span><span class="bash"> npm install</span>
+<span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">cd</span> website</span>
+<span class="hljs-meta">$</span><span class="bash"> npm install</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="npm-commands"></a><a href="#npm-commands" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>NPM commands</h2>
+<h3><a class="anchor" aria-hidden="true" id="core-project"></a><a href="#core-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Core project</h3>
+<table>
+<thead>
+<tr><th><code>npm run ...</code></th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>build</code></td><td>Compile TypeScript sources and builds the website</td></tr>
+<tr><td><code>build:ts</code></td><td>Compile the TypeScript files in <code>src</code> to <code>dist</code></td></tr>
+<tr><td><code>build:site</code></td><td>Build the website to <code>website/build</code></td></tr>
+<tr><td><code>build:site:api</code></td><td>Build Markdown files in <code>docs/api</code> from TypeDoc comments in <code>src</code></td></tr>
+<tr><td><code>build:site:static</code></td><td>Build static assets <code>website/build</code>. Uses result of <code>build:site:api</code></td></tr>
+<tr><td><code>clean</code></td><td>Delete all built files</td></tr>
+<tr><td><code>clean:ts</code></td><td>Delete the built TypeScript files</td></tr>
+<tr><td><code>clean:site</code></td><td>Delete the built website files</td></tr>
+<tr><td><code>clean:site:api</code></td><td>Delete the built TypeDoc files</td></tr>
+<tr><td><code>clean:site:static</code></td><td>Delete the built static website files</td></tr>
+<tr><td><code>fix</code></td><td>Run all fixes</td></tr>
+<tr><td><code>fix:lint</code></td><td>Run linting fixes</td></tr>
+<tr><td><code>fix:format</code></td><td>Run formatting fixes</td></tr>
+<tr><td><code>benchmark</code></td><td>Run all benchmarks</td></tr>
+<tr><td><code>benchmark:xml</code></td><td>Run XML output benchmark</td></tr>
+<tr><td><code>benchmark:parse</code></td><td>Run parsing benchmark</td></tr>
+<tr><td><code>test</code></td><td>Run unit tests, lint tests and format tests</td></tr>
+<tr><td><code>test:unit</code></td><td>Run unit tests</td></tr>
+<tr><td><code>test:lint</code></td><td>Test source files for linting errors</td></tr>
+<tr><td><code>test:format</code></td><td>Test source files for formatting errors</td></tr>
+<tr><td><code>test:package</code></td><td>Test <code>package.json</code> for file path errors</td></tr>
+<tr><td><code>test:tslint-config</code></td><td>Test that <code>tslint.json</code> does not contain rules conflicting with formatting rules</td></tr>
+<tr><td><code>generate</code></td><td>Generate schema schema interfaces and parsing function</td></tr>
+</tbody>
+</table>
+<h3><a class="anchor" aria-hidden="true" id="documentation-website"></a><a href="#documentation-website" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Documentation website</h3>
+<p>The <code>website</code> directory contains the code for the <a href="https://docusaurus.io/">Docusaurus website</a>. This directory is an NPM module with its own <code>package.json</code>. You can run the following commands from the <code>website</code> directory:</p>
+<table>
+<thead>
+<tr><th><code>npm run ...</code></th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>start</code></td><td>Serve and watch the website.</td></tr>
+<tr><td><code>examples</code></td><td>Generate example code. See Docusaurus documentation.</td></tr>
+<tr><td><code>version x.x.x</code></td><td>Freeze a documentation version</td></tr>
+<tr><td><code>rename-version x.x.x y.y.y</code></td><td>Rename a frozen version <code>x.x.x</code> to <code>y.y.y</code></td></tr>
+</tbody>
+</table>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/hashml/docs/next/schema-schemas"><span class="arrow-prev">← </span><span>Schema schema</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#installing">Installing</a></li><li><a href="#npm-commands">NPM commands</a><ul class="toc-headings"><li><a href="#core-project">Core project</a></li><li><a href="#documentation-website">Documentation website</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/hashml/" class="nav-home"><img src="/hashml/img/favicon.ico" alt="HashML" width="66" height="58"/></a><div><h5>Docs</h5><a href="/hashml/docs/en/what-is-hashml">Getting started</a><a href="/hashml/docs/en/markup-language-vs-applications">Core concepts</a><a href="/hashml/docs/en/contributing">Contributing</a><a href="/hashml/api">API Reference</a></div><div><h5>Community</h5><a href="/hashml/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="https://github.com/hashml/hashml">GitHub</a><a href="https://github.com/hashml/hashml/releases">Releases</a><a class="github-button" href="https://github.com/hashml/hashml" data-icon="octicon-star" data-count-href="/hashml/hashml/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">MIT License, Copyright © 2020 HashML</section></footer></div></body></html>

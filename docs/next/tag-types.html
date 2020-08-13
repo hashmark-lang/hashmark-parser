@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>HashML tag types · HashML</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Block tags"/><meta name="docsearch:version" content="next"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="HashML tag types · HashML"/><meta property="og:type" content="website"/><meta property="og:url" content="https://hashml.github.io/hashml/"/><meta property="og:description" content="## Block tags"/><meta property="og:image" content="https://hashml.github.io/hashml/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://hashml.github.io/hashml/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/hashml/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/hashml/js/scrollSpy.js"></script><link rel="stylesheet" href="/hashml/css/main.css"/><script src="/hashml/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/hashml/"><img class="logo" src="/hashml/img/favicon.ico" alt="HashML"/><h2 class="headerTitleWithLogo">HashML</h2></a><a href="/hashml/versions"><h3>next</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/hashml/docs/next/what-is-hashml" target="_self">Docs</a></li><li class=""><a href="/hashml/docs/next/api/" target="_self">API</a></li><li class=""><a href="https://github.com/hashml/hashml" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Core concepts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/next/what-is-hashml">What is HashML?</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/using-hashml">Using HashML</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/generating-typescript">Generating TypeScript interfaces</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Core concepts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/next/markup-language-vs-applications">Markup language vs applications</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/hashml/docs/next/tag-types">Tag types</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/schemas">Schemas</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/next/schema-schemas">Schema schema</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/next/contributing">Getting started</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">HashML tag types</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="block-tags"></a><a href="#block-tags" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Block tags</h2>
+<p>Each line of HashML has a tag. In the following, the first line is tagged as a <code>#list</code>; the following lines are tagged as <code>#item</code>:</p>
+<pre><code class="hljs css language-hashml"><span class="hljs-name">#list</span> Shopping list
+    <span class="hljs-name">#item</span> Apples
+    <span class="hljs-name">#item</span> Bananas
+    <span class="hljs-name">#item</span> Carrots
+</code></pre>
+<p>A block tag can have a <em>head</em> describing the item, and can have a <em>body</em> indented under it:</p>
+<p><img src="/hashml/docs/assets/tag-terminology.svg" alt="Tag, head and content of a block tag"></p>
+<p>The schema defines whether a block tag can have a head, and what items (if any) are allowed in its body.</p>
+<h2><a class="anchor" aria-hidden="true" id="inline-tags"></a><a href="#inline-tags" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inline tags</h2>
+<p>HashML also has support for inline tags, which can appear in the head of a block tag. The arguments of an inline tag are given in square brackets:</p>
+<pre><code class="hljs"><span class="hljs-name">#paragraph</span> Here's a <span class="hljs-name">#url</span><span class="hljs-string">[https://www.example.com]</span><span class="hljs-string">[link to my website]</span>!
+</code></pre>
+<p>The schema defines which inline tags are allowed in the head of a given block tag, how many arguments an inline tag has, and of what type</p>
+<p>To avoid being too verbose, HashML supports syntactic sugar for common inline tags, much like Markdown. If the schema defines bacticks as syntactic sugar for <code>#code</code>, the following two lines are equivalent:</p>
+<pre><code class="hljs css language-hashml">Here's some <span class="hljs-name">#code</span><span class="hljs-string">[inline code]</span>
+Here's some `inline code`
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="default-tags"></a><a href="#default-tags" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Default tags</h2>
+<p>Writing tags at the beginning of each line can be tedious:</p>
+<pre><code class="hljs css language-hashml"><span class="hljs-name">#list</span> Shopping list
+    <span class="hljs-name">#item</span> Apples
+    <span class="hljs-name">#item</span> Bananas
+    <span class="hljs-name">#item</span> Carrots
+</code></pre>
+<p>To help with this situation, HashML supports default tags. For instance, if the schema for <code>#list</code> defines <code>#item</code> as its default tag, then the above can equivalently be written as:</p>
+<pre><code class="hljs css language-hashml"><span class="hljs-name">#list</span>
+    Apples
+    Bananas
+    Carrots
+</code></pre>
+<p>Default items can have default body items as well. For instance, if the schema defines the default for <code>#item</code> as <code>#item</code>, we can write nested lists:</p>
+<pre><code class="hljs css language-hashml"><span class="hljs-name">#list</span>
+    Fruits
+        Apples
+        Bananas
+    Vegetables
+        Carrots
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="raw-tags"></a><a href="#raw-tags" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Raw tags</h2>
+<p>Sometimes, we'd like to write things that shouldn't be parsed by the HashML parser. This is the case for code, for instance: the indentation and hashtags shouldn't be understood by the parser as HashML code:</p>
+<pre><code class="hljs css language-hashml"><span class="hljs-name">#code</span> python
+    # This is a Python comment, not HashML markup!
+    def test():
+        print("hello world)
+</code></pre>
+<p>The schema allows us to define <code>#code</code> as a raw block, and then the above just works. This also works for inline tags: we can define <code>#code</code> as an inline tag taking a single raw argument:</p>
+<pre><code class="hljs css language-hashml">The schema allows us to define <span class="hljs-name">#code</span><span class="hljs-string">[#code]</span> as a raw block
+</code></pre>
+<p>We can combine this with sugar for inline tags:</p>
+<pre><code class="hljs css language-hashml">The schema allows us to define `<span class="hljs-name">#code</span>` as a raw block
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/hashml/docs/next/markup-language-vs-applications"><span class="arrow-prev">← </span><span>Markup language vs applications</span></a><a class="docs-next button" href="/hashml/docs/next/schemas"><span>Schemas</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#block-tags">Block tags</a></li><li><a href="#inline-tags">Inline tags</a></li><li><a href="#default-tags">Default tags</a></li><li><a href="#raw-tags">Raw tags</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/hashml/" class="nav-home"><img src="/hashml/img/favicon.ico" alt="HashML" width="66" height="58"/></a><div><h5>Docs</h5><a href="/hashml/docs/en/what-is-hashml">Getting started</a><a href="/hashml/docs/en/markup-language-vs-applications">Core concepts</a><a href="/hashml/docs/en/contributing">Contributing</a><a href="/hashml/api">API Reference</a></div><div><h5>Community</h5><a href="/hashml/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="https://github.com/hashml/hashml">GitHub</a><a href="https://github.com/hashml/hashml/releases">Releases</a><a class="github-button" href="https://github.com/hashml/hashml" data-icon="octicon-star" data-count-href="/hashml/hashml/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">MIT License, Copyright © 2020 HashML</section></footer></div></body></html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>HashML Schemas · HashML</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="HashML places a lot of importance on schemas. A schema describes the supported tags, and places constraints on where they can appear. HashML schemas are written in HashML. The supported tags are described by the schema schema, which is available in [`src/schema-schema.hm`](../src/schema-schema.hm)."/><meta name="docsearch:version" content="0.3.0"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="HashML Schemas · HashML"/><meta property="og:type" content="website"/><meta property="og:url" content="https://hashml.github.io/hashml/"/><meta property="og:description" content="HashML places a lot of importance on schemas. A schema describes the supported tags, and places constraints on where they can appear. HashML schemas are written in HashML. The supported tags are described by the schema schema, which is available in [`src/schema-schema.hm`](../src/schema-schema.hm)."/><meta property="og:image" content="https://hashml.github.io/hashml/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://hashml.github.io/hashml/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/hashml/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/hashml/js/scrollSpy.js"></script><link rel="stylesheet" href="/hashml/css/main.css"/><script src="/hashml/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/hashml/"><img class="logo" src="/hashml/img/favicon.ico" alt="HashML"/><h2 class="headerTitleWithLogo">HashML</h2></a><a href="/hashml/versions"><h3>0.3.0</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/hashml/docs/what-is-hashml" target="_self">Docs</a></li><li class=""><a href="/hashml/docs/api/" target="_self">API</a></li><li class=""><a href="https://github.com/hashml/hashml" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Core concepts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/what-is-hashml">What is HashML?</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/using-hashml">Using HashML</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Core concepts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/markup-language-vs-applications">Markup language vs applications</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/tag-types">Tag types</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/hashml/docs/schemas">HashML Schemas</a></li><li class="navListItem"><a class="navItem" href="/hashml/docs/schema-schemas">Schema schema</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/hashml/docs/contributing">Getting started</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">HashML Schemas</h1></header><article><div><span><p>HashML places a lot of importance on schemas. A schema describes the supported tags, and places constraints on where they can appear. HashML schemas are written in HashML. The supported tags are described by the schema schema, which is available in <a href="../src/schema-schema.hm"><code>src/schema-schema.hm</code></a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="example"></a><a href="#example" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h2>
+<p>A schema looks like this:</p>
+<pre><code class="hljs"><span class="hljs-name">#block</span> root
+    <span class="hljs-name">#content</span> 
+        <span class="hljs-name">#one</span> document 
+
+<span class="hljs-name">#block</span> document
+    <span class="hljs-name">#default</span> paragraph
+    <span class="hljs-name">#content</span>
+        <span class="hljs-name">#zeroOrMore</span> section
+        <span class="hljs-name">#zeroOrMore</span> paragraph
+
+<span class="hljs-name">#block</span> section
+    <span class="hljs-name">#default</span> paragraph
+    <span class="hljs-name">#content</span>
+        <span class="hljs-name">#zeroOrMore</span> paragraph
+
+<span class="hljs-name">#block</span> paragraph
+    <span class="hljs-name">#head</span>
+        <span class="hljs-name">#zeroOrMore</span> code
+
+<span class="hljs-name">#inline</span> code
+    <span class="hljs-name">#sugar</span>
+        <span class="hljs-name">#start</span> `
+        <span class="hljs-name">#end</span> `
+    <span class="hljs-name">#arg</span>
+        <span class="hljs-name">#raw</span>
+</code></pre>
+<p>The first block describes the root (a reserved name indicating the top-level of the document), which must contain exactly one <code>#document</code>. The document can contain any number of <code>#section</code> and <code>#paragraph</code>. The schema also says that if omitted, the default tag inside of a <code>#document</code> should be paragraph.</p>
+<p>Schemas use <code>#zeroOrMore</code> as the <a href="/hashml/docs/what-is-hashml#default-tags">default tag</a> for <code>#content</code>, so we could rewrite the <code>#block document</code> as:</p>
+<pre><code class="hljs"><span class="hljs-name">#block</span> document
+    <span class="hljs-name">#default</span> paragraph
+    <span class="hljs-name">#content</span>
+        section
+        paragraph
+</code></pre>
+<p>Schemas can also define the <a href="/hashml/docs/what-is-hashml#inline-tags">syntactic sugar for inline tags</a>. The above defines backticks (`) as the sugar for <code>#code</code>. You could also write your own schema in which <code>&amp;hello&amp;</code> means <code>#uppercase[hello]</code>, for instance.</p>
+<h2><a class="anchor" aria-hidden="true" id="schema-validation"></a><a href="#schema-validation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Schema validation</h2>
+<p>HashML documents can be validated by the schema. This means that you can check whether a document respects the tag descriptions in the schema, and whether the restrictions imposed by the <code>#content</code> field of blocks is respected.</p>
+<p>Since schemas are themselves HashML documents, there is a schema schema that can validate schemas. The schema schema also validates itself, as it is also a valid schema. This is very useful when writing schemas, and can help you catch all sorts of errors.</p>
+<p>Schema validation gives a list of errors, and can tell you exactly why a document isn't compliant with the schema.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/hashml/docs/tag-types"><span class="arrow-prev">← </span><span>Tag types</span></a><a class="docs-next button" href="/hashml/docs/schema-schemas"><span>Schema schema</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#example">Example</a></li><li><a href="#schema-validation">Schema validation</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/hashml/" class="nav-home"><img src="/hashml/img/favicon.ico" alt="HashML" width="66" height="58"/></a><div><h5>Docs</h5><a href="/hashml/docs/en/what-is-hashml">Getting started</a><a href="/hashml/docs/en/markup-language-vs-applications">Core concepts</a><a href="/hashml/docs/en/contributing">Contributing</a><a href="/hashml/api">API Reference</a></div><div><h5>Community</h5><a href="/hashml/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="https://github.com/hashml/hashml">GitHub</a><a href="https://github.com/hashml/hashml/releases">Releases</a><a class="github-button" href="https://github.com/hashml/hashml" data-icon="octicon-star" data-count-href="/hashml/hashml/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">MIT License, Copyright © 2020 HashML</section></footer></div></body></html>
